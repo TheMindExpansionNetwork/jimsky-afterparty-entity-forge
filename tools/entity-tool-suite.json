@@ -370,6 +370,33 @@
       "money_actions_enabled": false,
       "external_delivery_enabled": false,
       "training_or_gpu_enabled": false
+    },
+    {
+      "id": "handoff-integrity-auditor",
+      "name": "Handoff Integrity Auditor",
+      "requires_human_approval": true,
+      "closed_until_human_yes": true,
+      "input_contract": [
+        "approved next-action route id",
+        "selected revenue or dataset handoff artifact",
+        "repo-local proof paths",
+        "latest verifier output reference"
+      ],
+      "output_contract": [
+        "draft-only integrity checklist fields",
+        "proof path verification list",
+        "tool contract id coverage list",
+        "closed-gate blocker reminder block"
+      ],
+      "verification": [
+        "wake_operator_handoff_integrity_checklist stays draft_only_not_sent",
+        "integrity checklist proof paths and tool contract ids exist before use",
+        "no follow-up/invoice/checkout/HF upload/public post/GPU/training claims introduced"
+      ],
+      "human_handoff": "Awake operator approves the route, exact proof packet, verifier output, recipient or repo id if any, and expiration before any external action.",
+      "money_actions_enabled": false,
+      "external_delivery_enabled": false,
+      "training_or_gpu_enabled": false
     }
   ],
   "safety": "No spend, outreach, payment collection, fake revenue, fake affiliation, secret exposure, training, GPU jobs, or wallet actions while unattended.",

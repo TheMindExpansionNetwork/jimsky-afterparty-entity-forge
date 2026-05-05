@@ -207,6 +207,22 @@ assert any('do not create or send invoices unattended' in item.lower() for item 
 for forbidden in ['creating checkout or payment links','creating or sending an invoice','starting a manual invoice workflow','sending follow-up messages','claiming revenue before payment is verified','claiming affiliation or sponsorship','uploading private data or publishing datasets','printing HF tokens or credential-store contents','starting GPU/training/model-download jobs','public posting','mutating cron jobs']:
     assert forbidden in manual_invoice.get('forbidden_until_approval',[]), forbidden
 assert 'verify_entity_pipeline.py' in manual_invoice.get('verification_note','')
+handoff_integrity=rm.get('wake_operator_handoff_integrity_checklist',{})
+assert handoff_integrity.get('status') == 'draft_only_not_sent'
+assert 'handoff' in handoff_integrity.get('purpose','').lower()
+assert 'wake_operator_next_action_router.route_id' in handoff_integrity.get('allowed_trigger','')
+for field in ['approved_route_id','approved_human_operator','proof_paths_checked','tool_contract_ids_checked','site_mirror_checked','verifier_command_output_path','approval_expires_utc']:
+    assert field in handoff_integrity.get('checklist_fields',[]), field
+for rel in handoff_integrity.get('required_proof_paths',[]):
+    assert not rel.startswith('/') and '..' not in Path(rel).parts
+    assert (root/rel).exists(), f"handoff integrity proof path missing: {rel}"
+expected_handoff_tools={'buyer-proof-faq-builder','post-demo-outcome-router','scope-quote-sheet-builder','private-demo-delivery-receipt-kit','wake-operator-next-action-router','private-followup-draft-builder','manual-invoice-planning-checklist-builder','handoff-integrity-auditor'}
+assert expected_handoff_tools <= set(handoff_integrity.get('required_tool_contract_ids',[]))
+assert len(handoff_integrity.get('must_confirm_before_external_use',[])) >= 5
+assert any('money_actions_enabled=false' in item for item in handoff_integrity.get('must_confirm_before_external_use',[]))
+for forbidden in ['sending or scheduling follow-up messages','creating checkout or payment links','creating or sending invoices','starting a manual invoice workflow','claiming revenue before payment is verified','claiming affiliation or sponsorship','Hugging Face upload or public dataset release','printing HF tokens or credential-store contents','starting GPU/training/model-download jobs','public posting','mutating cron jobs']:
+    assert forbidden in handoff_integrity.get('forbidden_until_approval',[]), forbidden
+assert 'verify_entity_pipeline.py' in handoff_integrity.get('verification_note','')
 lead_schema=rm.get('local_lead_schema',[])
 assert any(f.get('field')=='approval_status' and f.get('default')=='draft_only' for f in lead_schema)
 dataset_release=rm.get('dataset_release_readiness',{})
@@ -302,6 +318,7 @@ assert 'private-demo-delivery-receipt-kit' in tool_ids
 assert 'wake-operator-next-action-router' in tool_ids
 assert 'private-followup-draft-builder' in tool_ids
 assert 'manual-invoice-planning-checklist-builder' in tool_ids
+assert 'handoff-integrity-auditor' in tool_ids
 post_demo_tool=next(tool for tool in tm.get('tools',[]) if tool.get('id')=='post-demo-outcome-router')
 assert post_demo_tool.get('requires_human_approval') is True
 assert any('post_demo_outcome_capture' in item for item in post_demo_tool.get('verification',[]))
@@ -331,8 +348,14 @@ assert any('wake_operator_manual_invoice_planning_checklist' in item for item in
 assert manual_invoice_tool.get('money_actions_enabled') is False
 assert manual_invoice_tool.get('external_delivery_enabled') is False
 assert manual_invoice_tool.get('training_or_gpu_enabled') is False
+handoff_tool=next(tool for tool in tm.get('tools',[]) if tool.get('id')=='handoff-integrity-auditor')
+assert handoff_tool.get('requires_human_approval') is True
+assert any('wake_operator_handoff_integrity_checklist' in item for item in handoff_tool.get('verification',[]))
+assert handoff_tool.get('money_actions_enabled') is False
+assert handoff_tool.get('external_delivery_enabled') is False
+assert handoff_tool.get('training_or_gpu_enabled') is False
 tool_doc=(root/'docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md').read_text()
-for phrase in ['### 14. Manual Invoice Planning Checklist Builder','approve_manual_invoice_planning','no invoice creation/sending','every external money action stays closed']:
+for phrase in ['### 14. Manual Invoice Planning Checklist Builder','approve_manual_invoice_planning','no invoice creation/sending','every external money action stays closed','### 15. Handoff Integrity Auditor','wake_operator_handoff_integrity_checklist','no follow-up sending']:
     assert phrase in tool_doc, phrase
 assert 'payment links or checkout activation' in tm.get('forbidden_unattended_actions', [])
 for tool in tm.get('tools', []):
@@ -350,11 +373,12 @@ for rel in ['site/index.html','docs/index.html']:
     assert 'Money actions remain closed until human approval' in page
     assert 'revenue-handoff-lanes' in page
     assert 'Prep-Only Revenue Handoff Lanes' in page
-    assert 'Private follow-up drafts and manual invoice planning' in page
+    assert 'Private follow-up drafts, manual invoice planning, and handoff integrity checks' in page
     assert 'no sending, invoice creation, checkout/payment links' in page
     assert 'HF upload, token printing, GPU/training, model downloads' in page
-    for tool_name in ['Dataset Release Auditor','Buyer Proof FAQ Builder','Post-Demo Outcome Router','Scope Quote Sheet Builder','Private Demo Delivery Receipt Kit','Wake Operator Next Action Router','Private Follow-up Draft Builder','Manual Invoice Planning Checklist Builder']:
+    for tool_name in ['Dataset Release Auditor','Buyer Proof FAQ Builder','Post-Demo Outcome Router','Scope Quote Sheet Builder','Private Demo Delivery Receipt Kit','Wake Operator Next Action Router','Private Follow-up Draft Builder','Manual Invoice Planning Checklist Builder','Handoff Integrity Auditor']:
         assert tool_name in page, f"site/docs tool-suite mirror missing {tool_name} in {rel}"
+    assert 'handoff integrity checks' in page, f"site/docs handoff integrity copy missing in {rel}"
 rows=[]
 for line in (root/'datasets/logo-seed/metadata.jsonl').read_text().splitlines():
     if line.strip(): rows.append(json.loads(line))

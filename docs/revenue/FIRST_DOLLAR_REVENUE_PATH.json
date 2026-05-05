@@ -25,7 +25,7 @@
     "datasets/logo-seed/metadata.jsonl"
   ],
   "tool_suite_manifest": "tools/entity-tool-suite.json",
-  "prep_only_increment": "2026-05-05-manual-invoice-planning-checklist-v1",
+  "prep_only_increment": "2026-05-05-handoff-integrity-auditor-v1",
   "buyer_facing_offer_draft": {
     "headline": "Turn your AI agent idea into a safe, forkable entity launch kit.",
     "audience": [
@@ -901,5 +901,59 @@
       "claiming remote streaming is verified before an awake upload check passes"
     ],
     "human_handoff": "If the awake operator approves a private HF upload later, run the local checks first, upload privately with an environment token that is never printed, then record repo_id/private/file_count/streaming status in this proof repo."
+  },
+  "wake_operator_handoff_integrity_checklist": {
+    "status": "draft_only_not_sent",
+    "purpose": "Before any awake operator uses the private follow-up, manual invoice planning, HF dataset check, or buyer proof FAQ lanes, confirm the handoff still matches repo-local proof and every external action remains separately approval-gated.",
+    "allowed_trigger": "wake_operator_next_action_router.route_id in [approve_private_followup_draft, approve_manual_invoice_planning, approve_private_hf_dataset_check, keep_building_repo_proof]",
+    "checklist_fields": [
+      "approved_route_id",
+      "approved_human_operator",
+      "proof_paths_checked",
+      "tool_contract_ids_checked",
+      "site_mirror_checked",
+      "verifier_command_output_path",
+      "approval_expires_utc"
+    ],
+    "required_proof_paths": [
+      "docs/proof/AFTERPARTY_PROOF_LEDGER.json",
+      "docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json",
+      "tools/entity-tool-suite.json",
+      "docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md",
+      "site/index.html",
+      "docs/index.html",
+      "scripts/verify_entity_pipeline.py"
+    ],
+    "required_tool_contract_ids": [
+      "buyer-proof-faq-builder",
+      "post-demo-outcome-router",
+      "scope-quote-sheet-builder",
+      "private-demo-delivery-receipt-kit",
+      "wake-operator-next-action-router",
+      "private-followup-draft-builder",
+      "manual-invoice-planning-checklist-builder",
+      "handoff-integrity-auditor"
+    ],
+    "must_confirm_before_external_use": [
+      "The selected route has a matching tool contract with money_actions_enabled=false, external_delivery_enabled=false, and training_or_gpu_enabled=false.",
+      "Every proof path referenced by the selected buyer-facing draft exists in the repo at review time.",
+      "The static site and docs mirror still say money actions remain closed until human approval.",
+      "The verifier command passes after any edits and before any manual use.",
+      "No checkout/payment URL, invoice creation, follow-up send, HF upload, token print, public post, GPU/training, model download, spend, wallet, or cron mutation was performed unattended."
+    ],
+    "forbidden_until_approval": [
+      "sending or scheduling follow-up messages",
+      "creating checkout or payment links",
+      "creating or sending invoices",
+      "starting a manual invoice workflow",
+      "claiming revenue before payment is verified",
+      "claiming affiliation or sponsorship",
+      "Hugging Face upload or public dataset release",
+      "printing HF tokens or credential-store contents",
+      "starting GPU/training/model-download jobs",
+      "public posting",
+      "mutating cron jobs"
+    ],
+    "verification_note": "Run PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py and git diff --check before any awake operator uses a revenue/data handoff outside the repo."
   }
 }

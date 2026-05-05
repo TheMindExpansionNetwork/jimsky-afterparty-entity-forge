@@ -83,6 +83,11 @@ This increment adds `contract_version: 2026-05-05.prep_only.v1` in `tools/entity
 - Outputs: planning fields, proof paths to attach, explicit exclusions, copy constraints, and closed-gate reminder block.
 - Closed gate: no invoice creation/sending, checkout/payment links, follow-up sending, revenue/affiliation claim, HF upload/token printing, GPU/training/model downloads, public posting, or cron mutation without fresh awake approval.
 
+### 15. Handoff Integrity Auditor
+- Purpose: audit a selected revenue/data handoff before an awake operator uses it outside the repo.
+- Outputs: proof-path checks, tool-contract coverage, site/docs mirror confirmation, and closed-gate blockers.
+- Closed gate: no follow-up sending, invoice creation/sending, checkout/payment links, HF upload/token printing, public posting, GPU/training/model downloads, revenue/affiliation claim, or cron mutation without fresh awake approval.
+
 ## First awake command
 
 Review the public explainer page, then pick one route:
@@ -137,3 +142,7 @@ The checkout matrix is prep-only: it helps an awake operator choose `private_dem
 ## Manual invoice planning checklist
 
 `docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes `wake_operator_manual_invoice_planning_checklist`, paired with the `manual-invoice-planning-checklist-builder` tool contract. It is a **local planning artifact only** for the `approve_manual_invoice_planning` route: it records approved receipt/scope/tier fields, proof paths to attach, explicit exclusions, and invoice-copy constraints. It does not create or send invoices, checkout links, payment links, follow-ups, public posts, uploads, GPU/training jobs, or revenue/affiliation claims; every external money action stays closed until a separate awake human approval.
+
+## Handoff integrity auditor
+
+`docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes `wake_operator_handoff_integrity_checklist`, paired with the `handoff-integrity-auditor` tool contract. It is a **draft-only, not-sent** integrity check for private follow-up, manual invoice planning, HF dataset checks, buyer proof FAQ, or proof-building routes. It verifies proof paths, tool contract ids, site/docs mirror language, and verifier output while keeping follow-up sending, invoice creation/sending, checkout/payment links, HF upload/token printing, public posting, GPU/training/model downloads, revenue/affiliation claims, and cron mutation closed until separate awake approval.
