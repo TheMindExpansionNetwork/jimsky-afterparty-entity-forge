@@ -221,6 +221,7 @@ assert expected_handoff_tools <= set(handoff_integrity.get('required_tool_contra
 assert 'evidence-snapshot-archive-index-builder' in handoff_integrity.get('required_tool_contract_ids',[])
 assert 'evidence-snapshot-reuse-decision-matrix-builder' in handoff_integrity.get('required_tool_contract_ids',[])
 assert 'buyer-proof-packet-draft-builder' in handoff_integrity.get('required_tool_contract_ids',[])
+assert 'dataset-handoff-draft-builder' in handoff_integrity.get('required_tool_contract_ids',[])
 assert len(handoff_integrity.get('must_confirm_before_external_use',[])) >= 5
 assert any('money_actions_enabled=false' in item for item in handoff_integrity.get('must_confirm_before_external_use',[]))
 for forbidden in ['sending or scheduling follow-up messages','creating checkout or payment links','creating or sending invoices','starting a manual invoice workflow','claiming revenue before payment is verified','claiming affiliation or sponsorship','Hugging Face upload or public dataset release','printing HF tokens or credential-store contents','starting GPU/training/model-download jobs','public posting','mutating cron jobs']:
@@ -297,6 +298,26 @@ assert any('exactly one archive_entry_id' in item for item in buyer_packet.get('
 for forbidden in ['sending or scheduling the buyer proof packet','creating checkout or payment links','creating or sending invoices','starting a manual invoice workflow','claiming revenue before payment is verified','claiming affiliation or sponsorship','Hugging Face upload or public dataset release','printing HF tokens or credential-store contents','starting GPU/training/model-download jobs','public posting','outreach automation','mutating cron jobs','using buyer proof packet drafts as public/buyer copy without awake approval']:
     assert forbidden in buyer_packet.get('forbidden_until_approval',[]), forbidden
 assert 'verify_entity_pipeline.py' in buyer_packet.get('verification_note','')
+dataset_handoff=rm.get('wake_operator_dataset_handoff_draft',{})
+assert dataset_handoff.get('status') == 'draft_only_local_dataset_handoff_not_uploaded'
+assert 'dataset handoff' in dataset_handoff.get('purpose','').lower()
+assert dataset_handoff.get('allowed_trigger','').startswith('wake_operator_evidence_snapshot_reuse_decision_matrix.proposed_reuse_route == prepare_dataset_handoff_draft')
+for field in ['handoff_id','archive_entry_id','snapshot_id','approved_human_operator','approved_dataset_or_repo_context','local_manifest_path','image_root_path','expected_rows','expected_images','proof_paths_rechecked','verifier_command','verifier_result','private_default_repo_id_if_approved_later','approval_expires_utc']:
+    assert field in dataset_handoff.get('handoff_fields',[]), field
+for rel in dataset_handoff.get('required_proof_paths',[]):
+    assert not rel.startswith('/') and '..' not in Path(rel).parts
+    assert (root/rel).exists(), f"dataset handoff proof path missing: {rel}"
+assert len(dataset_handoff.get('local_check_steps',[])) >= 4
+assert any('expected_rows == 10' in item for item in dataset_handoff.get('local_check_steps',[]))
+assert any('expected_images == 10' in item for item in dataset_handoff.get('local_check_steps',[]))
+assert any('verify_entity_pipeline.py' in item for item in dataset_handoff.get('local_check_steps',[]))
+assert len(dataset_handoff.get('safe_copy_blocks',[])) >= 4
+assert any('no upload or remote streaming check' in item.lower() for item in dataset_handoff.get('safe_copy_blocks',[]))
+assert len(dataset_handoff.get('must_confirm_before_handoff_use',[])) >= 5
+assert any('exactly one archive_entry_id' in item for item in dataset_handoff.get('must_confirm_before_handoff_use',[]))
+for forbidden in ['Hugging Face upload','public dataset release','private media movement','printing HF tokens or credential-store contents','starting GPU/training/model-download jobs','claiming remote streaming is verified','sending or scheduling dataset handoff messages','creating checkout or payment links','claiming revenue before payment is verified','claiming affiliation or sponsorship','public posting','outreach automation','mutating cron jobs','using dataset handoff drafts as public/buyer copy without awake approval']:
+    assert forbidden in dataset_handoff.get('forbidden_until_approval',[]), forbidden
+assert 'verify_entity_pipeline.py' in dataset_handoff.get('verification_note','')
 lead_schema=rm.get('local_lead_schema',[])
 assert any(f.get('field')=='approval_status' and f.get('default')=='draft_only' for f in lead_schema)
 dataset_release=rm.get('dataset_release_readiness',{})
@@ -398,6 +419,7 @@ assert 'evidence-snapshot-notes-template-builder' in tool_ids
 assert 'evidence-snapshot-archive-index-builder' in tool_ids
 assert 'evidence-snapshot-reuse-decision-matrix-builder' in tool_ids
 assert 'buyer-proof-packet-draft-builder' in tool_ids
+assert 'dataset-handoff-draft-builder' in tool_ids
 post_demo_tool=next(tool for tool in tm.get('tools',[]) if tool.get('id')=='post-demo-outcome-router')
 assert post_demo_tool.get('requires_human_approval') is True
 assert any('post_demo_outcome_capture' in item for item in post_demo_tool.get('verification',[]))
@@ -463,8 +485,14 @@ assert any('wake_operator_buyer_proof_packet_draft' in item for item in buyer_pa
 assert buyer_packet_tool.get('money_actions_enabled') is False
 assert buyer_packet_tool.get('external_delivery_enabled') is False
 assert buyer_packet_tool.get('training_or_gpu_enabled') is False
+dataset_handoff_tool=next(tool for tool in tm.get('tools',[]) if tool.get('id')=='dataset-handoff-draft-builder')
+assert dataset_handoff_tool.get('requires_human_approval') is True
+assert any('wake_operator_dataset_handoff_draft' in item for item in dataset_handoff_tool.get('verification',[]))
+assert dataset_handoff_tool.get('money_actions_enabled') is False
+assert dataset_handoff_tool.get('external_delivery_enabled') is False
+assert dataset_handoff_tool.get('training_or_gpu_enabled') is False
 tool_doc=(root/'docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md').read_text()
-for phrase in ['### 14. Manual Invoice Planning Checklist Builder','approve_manual_invoice_planning','no invoice creation/sending','every external money action stays closed','### 15. Handoff Integrity Auditor','wake_operator_handoff_integrity_checklist','no follow-up sending','### 16. Evidence Snapshot Builder','wake_operator_evidence_snapshot_checklist','no sending/scheduling','### 17. Evidence Snapshot Notes Template Builder','EVIDENCE_SNAPSHOT_OPERATOR_NOTES_TEMPLATE.md','notes are not sent','### 18. Evidence Snapshot Archive Index Builder','wake_operator_evidence_snapshot_archive_index','archive entries are not sent','### 19. Evidence Snapshot Reuse Decision Matrix Builder','wake_operator_evidence_snapshot_reuse_decision_matrix','reuse decisions are not sent','### 20. Buyer Proof Packet Draft Builder','wake_operator_buyer_proof_packet_draft','buyer proof packet drafts are not sent']:
+for phrase in ['### 14. Manual Invoice Planning Checklist Builder','approve_manual_invoice_planning','no invoice creation/sending','every external money action stays closed','### 15. Handoff Integrity Auditor','wake_operator_handoff_integrity_checklist','no follow-up sending','### 16. Evidence Snapshot Builder','wake_operator_evidence_snapshot_checklist','no sending/scheduling','### 17. Evidence Snapshot Notes Template Builder','EVIDENCE_SNAPSHOT_OPERATOR_NOTES_TEMPLATE.md','notes are not sent','### 18. Evidence Snapshot Archive Index Builder','wake_operator_evidence_snapshot_archive_index','archive entries are not sent','### 19. Evidence Snapshot Reuse Decision Matrix Builder','wake_operator_evidence_snapshot_reuse_decision_matrix','reuse decisions are not sent','### 20. Buyer Proof Packet Draft Builder','wake_operator_buyer_proof_packet_draft','buyer proof packet drafts are not sent','### 21. Dataset Handoff Draft Builder','wake_operator_dataset_handoff_draft','dataset handoff drafts do not upload to Hugging Face']:
     assert phrase in tool_doc, phrase
 assert 'payment links or checkout activation' in tm.get('forbidden_unattended_actions', [])
 for tool in tm.get('tools', []):
@@ -482,16 +510,17 @@ for rel in ['site/index.html','docs/index.html']:
     assert 'Money actions remain closed until human approval' in page
     assert 'revenue-handoff-lanes' in page
     assert 'Prep-Only Revenue Handoff Lanes' in page
-    assert 'Private follow-up drafts, manual invoice planning, handoff integrity checks, evidence snapshots, local evidence snapshot archive indexes, evidence snapshot reuse decision matrices, and buyer proof packet drafts' in page
+    assert 'Private follow-up drafts, manual invoice planning, handoff integrity checks, evidence snapshots, local evidence snapshot archive indexes, evidence snapshot reuse decision matrices, buyer proof packet drafts, and dataset handoff drafts' in page
     assert 'no sending, invoice creation, checkout/payment links' in page
     assert 'HF upload, token printing, GPU/training, model downloads' in page
-    for tool_name in ['Dataset Release Auditor','Buyer Proof FAQ Builder','Post-Demo Outcome Router','Scope Quote Sheet Builder','Private Demo Delivery Receipt Kit','Wake Operator Next Action Router','Private Follow-up Draft Builder','Manual Invoice Planning Checklist Builder','Handoff Integrity Auditor','Evidence Snapshot Builder','Evidence Snapshot Notes Template Builder','Evidence Snapshot Archive Index Builder','Evidence Snapshot Reuse Decision Matrix Builder','Buyer Proof Packet Draft Builder']:
+    for tool_name in ['Dataset Release Auditor','Buyer Proof FAQ Builder','Post-Demo Outcome Router','Scope Quote Sheet Builder','Private Demo Delivery Receipt Kit','Wake Operator Next Action Router','Private Follow-up Draft Builder','Manual Invoice Planning Checklist Builder','Handoff Integrity Auditor','Evidence Snapshot Builder','Evidence Snapshot Notes Template Builder','Evidence Snapshot Archive Index Builder','Evidence Snapshot Reuse Decision Matrix Builder','Buyer Proof Packet Draft Builder','Dataset Handoff Draft Builder']:
         assert tool_name in page, f"site/docs tool-suite mirror missing {tool_name} in {rel}"
     assert 'handoff integrity checks' in page, f"site/docs handoff integrity copy missing in {rel}"
     assert 'evidence snapshots' in page, f"site/docs evidence snapshot copy missing in {rel}"
     assert 'local evidence snapshot archive indexes' in page, f"site/docs archive index copy missing in {rel}"
     assert 'reuse decision matrices' in page, f"site/docs reuse decision matrix copy missing in {rel}"
     assert 'buyer proof packet drafts' in page, f"site/docs buyer proof packet copy missing in {rel}"
+    assert 'dataset handoff drafts' in page, f"site/docs dataset handoff copy missing in {rel}"
 rows=[]
 for line in (root/'datasets/logo-seed/metadata.jsonl').read_text().splitlines():
     if line.strip(): rows.append(json.loads(line))

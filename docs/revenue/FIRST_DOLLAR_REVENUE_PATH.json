@@ -25,7 +25,7 @@
     "datasets/logo-seed/metadata.jsonl"
   ],
   "tool_suite_manifest": "tools/entity-tool-suite.json",
-  "prep_only_increment": "2026-05-05-buyer-proof-packet-draft-v1",
+  "prep_only_increment": "2026-05-05-dataset-handoff-draft-v1",
   "buyer_facing_offer_draft": {
     "headline": "Turn your AI agent idea into a safe, forkable entity launch kit.",
     "audience": [
@@ -937,7 +937,8 @@
       "evidence-snapshot-notes-template-builder",
       "evidence-snapshot-archive-index-builder",
       "evidence-snapshot-reuse-decision-matrix-builder",
-      "buyer-proof-packet-draft-builder"
+      "buyer-proof-packet-draft-builder",
+      "dataset-handoff-draft-builder"
     ],
     "must_confirm_before_external_use": [
       "The selected route has a matching tool contract with money_actions_enabled=false, external_delivery_enabled=false, and training_or_gpu_enabled=false.",
@@ -1222,5 +1223,73 @@
       "using buyer proof packet drafts as public/buyer copy without awake approval"
     ],
     "verification_note": "Run PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py and git diff --check before any awake operator uses this buyer proof packet draft outside the repo."
+  },
+  "wake_operator_dataset_handoff_draft": {
+    "status": "draft_only_local_dataset_handoff_not_uploaded",
+    "purpose": "Prepare a local dataset handoff draft from one approved evidence snapshot reuse decision, without uploading to Hugging Face, moving private media, printing tokens, starting training/GPU/model downloads, posting publicly, or claiming remote streaming while unattended.",
+    "allowed_trigger": "wake_operator_evidence_snapshot_reuse_decision_matrix.proposed_reuse_route == prepare_dataset_handoff_draft and an awake-approved archive_entry_id exists",
+    "handoff_fields": [
+      "handoff_id",
+      "archive_entry_id",
+      "snapshot_id",
+      "approved_human_operator",
+      "approved_dataset_or_repo_context",
+      "local_manifest_path",
+      "image_root_path",
+      "expected_rows",
+      "expected_images",
+      "proof_paths_rechecked",
+      "verifier_command",
+      "verifier_result",
+      "private_default_repo_id_if_approved_later",
+      "approval_expires_utc"
+    ],
+    "required_proof_paths": [
+      "datasets/logo-seed/metadata.jsonl",
+      "assets/brand/logo-seed/contact_sheet.jpg",
+      "docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json",
+      "docs/revenue/EVIDENCE_SNAPSHOT_OPERATOR_NOTES_TEMPLATE.md",
+      "tools/entity-tool-suite.json",
+      "docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md",
+      "site/index.html",
+      "docs/index.html",
+      "scripts/verify_entity_pipeline.py"
+    ],
+    "local_check_steps": [
+      "Parse datasets/logo-seed/metadata.jsonl and confirm expected_rows == 10 before any handoff leaves the repo.",
+      "Open every referenced PNG under datasets/logo-seed/images and confirm expected_images == 10.",
+      "Confirm each caption is non-empty, non-secret, and describes Afterparty Forge 2045 concept art only.",
+      "Run PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py and git diff --check immediately before an awake operator uses the handoff draft."
+    ],
+    "safe_copy_blocks": [
+      "This is a local dataset handoff draft for awake review only; no upload or remote streaming check has happened unattended.",
+      "The default future Hugging Face repo policy is private, token-bearing commands must use secure environment variables, and tokens must never be printed.",
+      "Local proof can cite metadata row count, contact sheet path, verifier command, and closed-gate status; remote HF availability stays yellow until an awake upload and streaming check are verified.",
+      "The handoff may prepare questions for a human-approved private upload but cannot perform upload, public release, training, GPU work, or model downloads."
+    ],
+    "must_confirm_before_handoff_use": [
+      "The selected reuse route is prepare_dataset_handoff_draft and exactly one archive_entry_id is named.",
+      "Every dataset proof path exists in the current repo state and was rechecked after the latest verifier run.",
+      "The handoff states that HF upload, public dataset release, private media movement, token printing, GPU/training, model downloads, and remote streaming claims are closed until separate awake approval.",
+      "The approved dataset/repo context, private-default repo id if any, and expiration were chosen by an awake operator before external use.",
+      "The verifier command passed immediately before the handoff is used outside the repo."
+    ],
+    "forbidden_until_approval": [
+      "Hugging Face upload",
+      "public dataset release",
+      "private media movement",
+      "printing HF tokens or credential-store contents",
+      "starting GPU/training/model-download jobs",
+      "claiming remote streaming is verified",
+      "sending or scheduling dataset handoff messages",
+      "creating checkout or payment links",
+      "claiming revenue before payment is verified",
+      "claiming affiliation or sponsorship",
+      "public posting",
+      "outreach automation",
+      "mutating cron jobs",
+      "using dataset handoff drafts as public/buyer copy without awake approval"
+    ],
+    "verification_note": "Run PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py and git diff --check before any awake operator uses this dataset handoff draft outside the repo."
   }
 }

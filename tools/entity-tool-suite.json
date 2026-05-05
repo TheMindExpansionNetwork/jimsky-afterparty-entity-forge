@@ -532,6 +532,33 @@
       "money_actions_enabled": false,
       "external_delivery_enabled": false,
       "training_or_gpu_enabled": false
+    },
+    {
+      "id": "dataset-handoff-draft-builder",
+      "name": "Dataset Handoff Draft Builder",
+      "requires_human_approval": true,
+      "closed_until_human_yes": true,
+      "input_contract": [
+        "approved archive entry id",
+        "selected evidence snapshot id",
+        "approved dataset or repo context",
+        "latest verifier result"
+      ],
+      "output_contract": [
+        "draft-only local dataset handoff fields",
+        "local parse/open-image checklist",
+        "private-default HF approval fields",
+        "closed-gate reminder block"
+      ],
+      "verification": [
+        "wake_operator_dataset_handoff_draft stays draft_only_local_dataset_handoff_not_uploaded",
+        "dataset handoff proof paths and reuse-decision dependency exist before use",
+        "no HF upload/token printing/public release/private media movement/GPU/training/model-download claims introduced"
+      ],
+      "human_handoff": "Awake operator approves the dataset/repo context, private-default repo id if any, secure token environment, exact upload scope, verifier result, and expiration before any upload or external handoff.",
+      "money_actions_enabled": false,
+      "external_delivery_enabled": false,
+      "training_or_gpu_enabled": false
     }
   ],
   "safety": "No spend, outreach, payment collection, fake revenue, fake affiliation, secret exposure, training, GPU jobs, or wallet actions while unattended.",

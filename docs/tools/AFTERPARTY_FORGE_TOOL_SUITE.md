@@ -118,6 +118,12 @@ This increment adds `contract_version: 2026-05-05.prep_only.v1` in `tools/entity
 - Outputs: draft-only packet fields, proof-path rechecks, safe copy blocks, forbidden copy reminders, and approval expiration fields.
 - Closed gate: buyer proof packet drafts are not sent, posted, attached to invoices, converted into checkout copy, used for HF upload claims, used for revenue/affiliation proof, or used for outreach without separate awake approval.
 
+### 21. Dataset Handoff Draft Builder
+- Purpose: convert one approved evidence snapshot reuse decision into a local dataset handoff draft for awake review.
+- Artifact: `wake_operator_dataset_handoff_draft` in `docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json`.
+- Outputs: draft-only dataset handoff fields, local parse/open-image checklist, private-default HF approval fields, and closed-gate reminders.
+- Closed gate: dataset handoff drafts do not upload to Hugging Face, publish datasets, move private media, print tokens, start GPU/training/model downloads, send handoff messages, claim remote streaming, or create buyer/public copy without separate awake approval.
+
 ## First awake command
 
 Review the public explainer page, then pick one route:
