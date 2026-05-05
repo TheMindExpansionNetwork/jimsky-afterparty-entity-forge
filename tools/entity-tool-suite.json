@@ -155,6 +155,32 @@
       "money_actions_enabled": false,
       "external_delivery_enabled": false,
       "training_or_gpu_enabled": false
+    },
+    {
+      "id": "dataset-release-auditor",
+      "name": "Dataset Release Auditor",
+      "requires_human_approval": true,
+      "closed_until_human_yes": true,
+      "input_contract": [
+        "local dataset manifest path",
+        "image root path",
+        "expected row and image counts",
+        "approved private Hugging Face repo id if an awake upload already happened"
+      ],
+      "output_contract": [
+        "local parse/open-image check summary",
+        "private-default HF streaming check plan",
+        "closed-gate release blocker list",
+        "awake-operator handoff fields"
+      ],
+      "verification": [
+        "hf_dataset_streaming_check_plan exists and is local-only by default",
+        "upload/training/GPU/model-download gates remain closed"
+      ],
+      "human_handoff": "Awake operator approves repo_id, upload scope, token-bearing environment, privacy, and whether remote streaming verification may run.",
+      "money_actions_enabled": false,
+      "external_delivery_enabled": false,
+      "training_or_gpu_enabled": false
     }
   ],
   "safety": "No spend, outreach, payment collection, fake revenue, fake affiliation, secret exposure, training, GPU jobs, or wallet actions while unattended.",

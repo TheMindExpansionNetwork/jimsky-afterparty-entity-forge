@@ -101,6 +101,24 @@ for rec in dataset_release.get('sample_image_records',[]):
 for forbidden in ['Hugging Face upload','public dataset release','GPU or training job','claiming dataset availability on HF']:
     assert forbidden in dataset_release.get('forbidden_until_approval',[])
 assert any('verify_entity_pipeline.py' in item for item in dataset_release.get('pre_release_checklist',[]))
+hf_plan=rm.get('hf_dataset_streaming_check_plan',{})
+assert hf_plan.get('status') == 'local_check_plan_ready_upload_closed_until_human_yes'
+assert hf_plan.get('source_manifest') == 'datasets/logo-seed/metadata.jsonl'
+assert (root/hf_plan.get('source_manifest','')).exists()
+assert hf_plan.get('image_root') == 'datasets/logo-seed/images'
+assert (root/hf_plan.get('image_root','')).exists()
+assert hf_plan.get('expected_rows') == 10
+assert hf_plan.get('expected_images') == 10
+assert len(hf_plan.get('local_checks',[])) >= 4
+assert any('verify_entity_pipeline.py' in item for item in hf_plan.get('local_checks',[]))
+remote_checks=hf_plan.get('optional_hf_remote_checks_after_human_upload',{})
+assert set(remote_checks.get('requires_token_env',[])) == {'HF_TOKEN','HUGGINGFACE_HUB_TOKEN'}
+assert remote_checks.get('default_privacy') == 'private'
+assert 'repo_id_placeholder' in remote_checks
+assert len(remote_checks.get('checks',[])) >= 3
+for forbidden in ['Hugging Face upload','public dataset release','GPU or training job','printing HF tokens or credential-store contents','claiming remote streaming is verified before an awake upload check passes']:
+    assert forbidden in hf_plan.get('forbidden_until_approval',[])
+assert 'awake operator approves' in hf_plan.get('human_handoff','').lower()
 pl=json.loads((root/'docs/proof/AFTERPARTY_PROOF_LEDGER.json').read_text())
 assert pl.get('status') == 'prep_only_claims_mapped_closed_gates'
 assert pl.get('closed_gates',{}).get('payment_links') is False
@@ -139,7 +157,8 @@ for phrase in ['manual-post only','auto_post_enabled: false','claim_revenue: fal
     assert phrase in xdoc, phrase
 tm=json.loads((root/'tools/entity-tool-suite.json').read_text())
 assert tm.get('contract_version') == '2026-05-05.prep_only.v1'
-assert len(tm.get('tools',[])) >= 6
+assert len(tm.get('tools',[])) >= 7
+assert 'dataset-release-auditor' in {tool.get('id') for tool in tm.get('tools',[])}
 assert 'payment links or checkout activation' in tm.get('forbidden_unattended_actions', [])
 for tool in tm.get('tools', []):
     assert tool.get('closed_until_human_yes') is True
@@ -163,7 +182,7 @@ for r in rows:
     assert p.exists(), p
     im=Image.open(p); im.verify()
     assert r.get('text') and 'Afterparty Forge 2045' in r['text']
-patterns=[r'ghp_[A-Za-z0-9_]{20,}',r'github_pat_[A-Za-z0-9_]{20,}',r'sk-[A-Za-z0-9_-]{20,}',r'hf_[A-Za-z0-9_]{20,}',r'BEGIN (RSA |OPENSSH |EC |)PRIVATE KEY']
+patterns=[r'ghp_[A-Za-z0-9_]{20,}',r'github_pat_[A-Za-z0-9_]{20,}',r'sk-[A-Za-z0-9_-]{20,}',r'\bhf_[A-Za-z0-9]{20,}\b',r'BEGIN (RSA |OPENSSH |EC |)PRIVATE KEY']
 for p in root.rglob('*'):
     if any(part in {'.git','__pycache__'} for part in p.parts) or not p.is_file() or p.suffix.lower() in {'.png','.jpg','.jpeg','.zip'}: continue
     txt=p.read_text(errors='ignore')[:1000000]

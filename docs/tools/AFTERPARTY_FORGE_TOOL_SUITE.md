@@ -40,6 +40,11 @@ This increment adds `contract_version: 2026-05-05.prep_only.v1` in `tools/entity
 - Outputs: Unicode HUD scripts, visual cards, narrated videos, interface copy.
 - Closed gate: no fake status screenshots.
 
+### 7. Dataset Release Auditor
+- Purpose: prepare local image/text dataset verification and a private-default Hugging Face streaming check handoff.
+- Outputs: local parse/open-image checklist, HF repo privacy/streaming check plan, release blockers.
+- Closed gate: no unattended HF upload, private media movement, GPU/training, model downloads, token printing, or remote-verified claims.
+
 ## First awake command
 
 Review the public explainer page, then pick one route:
@@ -59,3 +64,7 @@ The checkout matrix is prep-only: it helps an awake operator choose `private_dem
 ## Local lead scoring rubric
 
 `docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes a `local_lead_scoring_rubric` for **human-supplied leads only**. It scores explicit interest, proof availability, offer fit, low-risk scope, and awake-operator capacity to decide whether a lead is a private-demo candidate, needs more proof, or should not be contacted unattended. The rubric is draft-only and explicitly forbids scraping, outreach/forms, checkout/payment links, revenue/affiliation claims, private uploads, and GPU/training jobs until a human approves the exact next action.
+
+## Hugging Face dataset streaming check plan
+
+`docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes `hf_dataset_streaming_check_plan` for the logo-seed image/text lane. It is a **local verification and awake-operator handoff only**: parse 10 metadata rows, open 10 local PNGs, confirm captions, then run `PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py`. Optional remote streaming checks are documented for a later human-approved private Hugging Face upload using `HF_TOKEN`/`HUGGINGFACE_HUB_TOKEN` from the secure environment, but unattended upload, public release, private media movement, GPU/training, model downloads, token printing, and remote-verified claims remain closed.

@@ -364,5 +364,42 @@
       "model download",
       "claiming dataset availability on HF"
     ]
+  },
+  "hf_dataset_streaming_check_plan": {
+    "status": "local_check_plan_ready_upload_closed_until_human_yes",
+    "purpose": "Prepare an awake operator to validate the logo-seed image/text lane locally and, only after approval, verify a private Hugging Face dataset stream without starting upload, GPU, model download, or training during unattended runs.",
+    "source_manifest": "datasets/logo-seed/metadata.jsonl",
+    "image_root": "datasets/logo-seed/images",
+    "expected_rows": 10,
+    "expected_images": 10,
+    "local_checks": [
+      "Parse datasets/logo-seed/metadata.jsonl and confirm exactly 10 rows.",
+      "Open every referenced PNG with PIL and verify 1024x1024 dimensions.",
+      "Confirm every caption is non-empty and references Afterparty Forge 2045.",
+      "Run PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py before packaging or upload."
+    ],
+    "optional_hf_remote_checks_after_human_upload": {
+      "requires_token_env": [
+        "HF_TOKEN",
+        "HUGGINGFACE_HUB_TOKEN"
+      ],
+      "default_privacy": "private",
+      "repo_id_placeholder": "TheMindExpansionNetwork/afterparty-forge-logo-seed-private",
+      "checks": [
+        "HfApi.dataset_info(repo_id, token=token) reports private=true.",
+        "Remote file list includes README.md, metadata.jsonl, and images/*.png.",
+        "datasets.load_dataset(repo_id, streaming=True, token=token) yields the expected file_name and text fields."
+      ]
+    },
+    "forbidden_until_approval": [
+      "Hugging Face upload",
+      "public dataset release",
+      "private media upload",
+      "GPU or training job",
+      "model download",
+      "printing HF tokens or credential-store contents",
+      "claiming remote streaming is verified before an awake upload check passes"
+    ],
+    "human_handoff": "If the awake operator approves a private HF upload later, run the local checks first, upload privately with an environment token that is never printed, then record repo_id/private/file_count/streaming status in this proof repo."
   }
 }
