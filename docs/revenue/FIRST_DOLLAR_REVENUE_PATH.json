@@ -933,7 +933,8 @@
       "private-followup-draft-builder",
       "manual-invoice-planning-checklist-builder",
       "handoff-integrity-auditor",
-      "evidence-snapshot-builder"
+      "evidence-snapshot-builder",
+      "evidence-snapshot-notes-template-builder"
     ],
     "must_confirm_before_external_use": [
       "The selected route has a matching tool contract with money_actions_enabled=false, external_delivery_enabled=false, and training_or_gpu_enabled=false.",
@@ -987,7 +988,8 @@
       "The verifier command passed after the latest repo edits and before the snapshot is referenced externally.",
       "Every proof path in the selected handoff exists and matches a green/yellow truth label from the proof ledger.",
       "The static site/docs mirror still shows closed-gate language for revenue/data handoffs.",
-      "No checkout/payment URL, invoice creation, follow-up send, HF upload, token print, public post, GPU/training, model download, spend, wallet, or cron mutation was performed unattended."
+      "No checkout/payment URL, invoice creation, follow-up send, HF upload, token print, public post, GPU/training, model download, spend, wallet, or cron mutation was performed unattended.",
+      "If operator_notes_path is used, it must be based on docs/revenue/EVIDENCE_SNAPSHOT_OPERATOR_NOTES_TEMPLATE.md and kept local/private until a separate awake approval."
     ],
     "forbidden_until_approval": [
       "sending or scheduling the snapshot",
@@ -1000,8 +1002,18 @@
       "printing HF tokens or credential-store contents",
       "starting GPU/training/model-download jobs",
       "public posting",
-      "mutating cron jobs"
+      "mutating cron jobs",
+      "using operator notes as public/buyer copy without awake approval"
     ],
-    "verification_note": "Run PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py and git diff --check before any awake operator attaches this evidence snapshot to a buyer, dataset, or launch handoff."
+    "verification_note": "Run PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py and git diff --check before any awake operator attaches this evidence snapshot to a buyer, dataset, or launch handoff.",
+    "operator_notes_template_path": "docs/revenue/EVIDENCE_SNAPSHOT_OPERATOR_NOTES_TEMPLATE.md",
+    "operator_notes_template_status": "draft_only_local_notes_not_sent",
+    "operator_notes_template_required_sections": [
+      "Required Header",
+      "Proof Paths Checked",
+      "Safe Note Body",
+      "Closed Gates To Repeat",
+      "Forbidden Copy"
+    ]
   }
 }

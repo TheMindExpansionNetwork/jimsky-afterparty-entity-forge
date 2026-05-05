@@ -424,6 +424,33 @@
       "money_actions_enabled": false,
       "external_delivery_enabled": false,
       "training_or_gpu_enabled": false
+    },
+    {
+      "id": "evidence-snapshot-notes-template-builder",
+      "name": "Evidence Snapshot Notes Template Builder",
+      "requires_human_approval": true,
+      "closed_until_human_yes": true,
+      "input_contract": [
+        "approved next-action route id",
+        "selected existing proof paths",
+        "latest verifier result",
+        "operator notes template path"
+      ],
+      "output_contract": [
+        "draft-only local operator notes file",
+        "proof path checklist",
+        "closed-gate confirmation block",
+        "single next human decision prompt"
+      ],
+      "verification": [
+        "operator notes template path exists and is draft_only_local_notes_not_sent",
+        "wake_operator_evidence_snapshot_checklist references the template path",
+        "no sending/invoice/checkout/HF upload/public post/GPU/training claims introduced"
+      ],
+      "human_handoff": "Awake operator approves the route, exact local notes content, recipient or repo id if any, verifier output, and expiration before any external use.",
+      "money_actions_enabled": false,
+      "external_delivery_enabled": false,
+      "training_or_gpu_enabled": false
     }
   ],
   "safety": "No spend, outreach, payment collection, fake revenue, fake affiliation, secret exposure, training, GPU jobs, or wallet actions while unattended.",

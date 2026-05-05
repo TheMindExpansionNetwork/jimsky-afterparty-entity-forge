@@ -91,7 +91,13 @@ This increment adds `contract_version: 2026-05-05.prep_only.v1` in `tools/entity
 ### 16. Evidence Snapshot Builder
 - Purpose: prepare a local evidence snapshot that ties a selected revenue/data handoff to current proof paths and verifier output.
 - Outputs: snapshot fields, proof path checklist, closed-gate confirmations, and approval expiration fields.
-- Closed gate: no sending/scheduling, invoice creation/sending, checkout/payment links, HF upload/token printing, public posting, GPU/training/model downloads, revenue/affiliation claim, or cron mutation without fresh awake approval.
+- Closed gate: no sending/scheduling, invoice creation/sending, checkout/payment links, HF upload/token printing, public posting, GPU/training/model downloads, revenue/affiliation claim, or cron mutation without separate awake approval.
+
+### 17. Evidence Snapshot Notes Template Builder
+- Purpose: give the awake operator a local notes template for turning an evidence snapshot into a private review note without inventing buyer/public copy.
+- Outputs: draft-only local operator notes, proof-path checklist, closed-gate confirmation block, and one next human decision prompt.
+- Artifact: `docs/revenue/EVIDENCE_SNAPSHOT_OPERATOR_NOTES_TEMPLATE.md`.
+- Closed gate: notes are not sent, posted, attached to invoices, used as checkout copy, used for HF upload claims, or treated as revenue/affiliation proof without separate awake approval.
 
 ## First awake command
 
@@ -155,3 +161,7 @@ The checkout matrix is prep-only: it helps an awake operator choose `private_dem
 ## Evidence snapshot checklist
 
 `docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes `wake_operator_evidence_snapshot_checklist`, paired with the `evidence-snapshot-builder` tool contract. It is a **draft-only, local/private review artifact** for attaching current proof paths and verifier output to a selected next-action route. It keeps sending/scheduling, invoice creation/sending, checkout/payment links, HF upload/token printing, public posting, GPU/training/model downloads, revenue/affiliation claims, and cron mutation closed until separate awake approval.
+
+## Evidence snapshot operator notes template
+
+`docs/revenue/EVIDENCE_SNAPSHOT_OPERATOR_NOTES_TEMPLATE.md` now gives the awake operator a local notes template for evidence snapshots, paired with the `evidence-snapshot-notes-template-builder` contract. It is **draft-only and local/private**: notes are not sent, posted, used as invoice or checkout copy, used to claim HF upload/streaming, or used as revenue/affiliation proof until a separate awake approval and verification record exists.
