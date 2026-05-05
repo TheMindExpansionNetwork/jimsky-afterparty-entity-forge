@@ -124,6 +124,13 @@ This increment adds `contract_version: 2026-05-05.prep_only.v1` in `tools/entity
 - Outputs: draft-only dataset handoff fields, local parse/open-image checklist, private-default HF approval fields, and closed-gate reminders.
 - Closed gate: dataset handoff drafts do not upload to Hugging Face, publish datasets, move private media, print tokens, start GPU/training/model downloads, send handoff messages, claim remote streaming, or create buyer/public copy without separate awake approval.
 
+
+### 22. Public Copy Draft Builder
+- Purpose: convert one approved evidence snapshot reuse decision into a local public-copy draft for awake review.
+- Artifact: `wake_operator_public_copy_draft` in `docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json`.
+- Outputs: draft-only public copy fields, proof-path rechecks, safe copy blocks, forbidden copy reminders, and approval expiration fields.
+- Closed gate: public copy drafts are not posted, scheduled, sent, boosted, converted into checkout copy, used for HF upload claims, used for revenue/affiliation proof, or used for outreach without separate awake approval.
+
 ## First awake command
 
 Review the public explainer page, then pick one route:
@@ -194,3 +201,7 @@ The checkout matrix is prep-only: it helps an awake operator choose `private_dem
 ## Evidence snapshot reuse decision matrix
 
 `docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes `wake_operator_evidence_snapshot_reuse_decision_matrix`, paired with the `evidence-snapshot-reuse-decision-matrix-builder` contract. It is a **draft-only, local/private reuse decision matrix** for an already approved evidence snapshot archive entry. It can route a snapshot toward a private operator note, buyer proof packet draft, dataset handoff draft, or public-copy draft, but it does not send, post, invoice, upload, claim revenue, claim affiliation, start GPU/training/model downloads, or mutate cron without a separate awake approval.
+
+## Public copy draft lane
+
+`docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes `wake_operator_public_copy_draft`, paired with the `public-copy-draft-builder` contract. It is a **draft-only, local/private public-copy planning lane** for an already approved evidence snapshot reuse decision. It can prepare proof-backed copy blocks for awake review, but it does not post, schedule, send outreach, boost, create checkout/payment links, claim revenue, claim affiliation, upload to Hugging Face, start GPU/training/model downloads, or mutate cron without a separate awake approval.

@@ -559,6 +559,33 @@
       "money_actions_enabled": false,
       "external_delivery_enabled": false,
       "training_or_gpu_enabled": false
+    },
+    {
+      "id": "public-copy-draft-builder",
+      "name": "Public Copy Draft Builder",
+      "requires_human_approval": true,
+      "closed_until_human_yes": true,
+      "input_contract": [
+        "approved archive entry id",
+        "selected evidence snapshot id",
+        "approved page or channel context",
+        "latest verifier result"
+      ],
+      "output_contract": [
+        "draft-only public copy fields",
+        "green/yellow proof path summary",
+        "safe copy and forbidden copy blocks",
+        "closed-gate approval reminder"
+      ],
+      "verification": [
+        "wake_operator_public_copy_draft stays draft_only_local_copy_not_posted",
+        "public copy proof paths and reuse-decision dependency exist before use",
+        "no posting/outreach/payment/HF upload/GPU/training/revenue/affiliation claims introduced"
+      ],
+      "human_handoff": "Awake operator approves the page/channel context, exact copy, proof paths, verifier result, posting/publishing scope if any, and expiration before any external use.",
+      "money_actions_enabled": false,
+      "external_delivery_enabled": false,
+      "training_or_gpu_enabled": false
     }
   ],
   "safety": "No spend, outreach, payment collection, fake revenue, fake affiliation, secret exposure, training, GPU jobs, or wallet actions while unattended.",

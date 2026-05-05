@@ -25,7 +25,7 @@
     "datasets/logo-seed/metadata.jsonl"
   ],
   "tool_suite_manifest": "tools/entity-tool-suite.json",
-  "prep_only_increment": "2026-05-05-dataset-handoff-draft-v1",
+  "prep_only_increment": "2026-05-05-public-copy-draft-v1",
   "buyer_facing_offer_draft": {
     "headline": "Turn your AI agent idea into a safe, forkable entity launch kit.",
     "audience": [
@@ -264,7 +264,7 @@
     "wake_operator_private_demo_packet": {
       "status": "draft_only_not_sent",
       "purpose": "Give the awake operator a single bounded packet to approve before any private demo, buyer message, payment discussion, public post, upload, GPU/training, or outreach action.",
-      "packet_title": "Afterparty Forge 2045 — Private Demo Packet",
+      "packet_title": "Afterparty Forge 2045 \u2014 Private Demo Packet",
       "audience": "human-approved private demo recipient only",
       "operator_script_intro": "This is a private, verifier-backed proof walkthrough. It has not earned revenue, does not imply affiliation, and does not enable payments, outreach, upload, GPU, or training without a separate awake approval.",
       "demo_assets": [
@@ -295,10 +295,10 @@
         }
       ],
       "three_minute_flow": [
-        "30s — state private/demo-only scope and closed gates.",
-        "60s — open proof ledger and point at one green claim plus one yellow claim that still needs approval.",
-        "60s — show the tool suite contracts and explain that money/outreach/upload/GPU switches are false.",
-        "30s — ask the awake operator to pick private_demo_only, manual_invoice_after_yes, or keep_building_proof."
+        "30s \u2014 state private/demo-only scope and closed gates.",
+        "60s \u2014 open proof ledger and point at one green claim plus one yellow claim that still needs approval.",
+        "60s \u2014 show the tool suite contracts and explain that money/outreach/upload/GPU switches are false.",
+        "30s \u2014 ask the awake operator to pick private_demo_only, manual_invoice_after_yes, or keep_building_proof."
       ],
       "approval_required_before_use": [
         "approved_demo_recipient",
@@ -938,7 +938,8 @@
       "evidence-snapshot-archive-index-builder",
       "evidence-snapshot-reuse-decision-matrix-builder",
       "buyer-proof-packet-draft-builder",
-      "dataset-handoff-draft-builder"
+      "dataset-handoff-draft-builder",
+      "public-copy-draft-builder"
     ],
     "must_confirm_before_external_use": [
       "The selected route has a matching tool contract with money_actions_enabled=false, external_delivery_enabled=false, and training_or_gpu_enabled=false.",
@@ -1291,5 +1292,60 @@
       "using dataset handoff drafts as public/buyer copy without awake approval"
     ],
     "verification_note": "Run PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py and git diff --check before any awake operator uses this dataset handoff draft outside the repo."
+  },
+  "wake_operator_public_copy_draft": {
+    "status": "draft_only_local_copy_not_posted",
+    "purpose": "Prepare local public-copy draft fields from one approved evidence snapshot reuse decision, without posting, publishing outside existing GitHub/Pages workflows, sending outreach, creating payment links, claiming revenue, claiming affiliation, uploading datasets, printing tokens, or starting GPU/training/model-download work while unattended.",
+    "allowed_trigger": "wake_operator_evidence_snapshot_reuse_decision_matrix.proposed_reuse_route == prepare_public_copy_draft_after_approval and an awake-approved archive_entry_id exists",
+    "copy_fields": [
+      "copy_draft_id",
+      "archive_entry_id",
+      "snapshot_id",
+      "approved_human_operator",
+      "approved_page_or_channel_context",
+      "proof_paths_rechecked",
+      "verifier_command",
+      "verifier_result",
+      "safe_public_copy_blocks",
+      "forbidden_public_copy_blocks",
+      "approval_expires_utc"
+    ],
+    "required_proof_paths": [
+      "docs/proof/AFTERPARTY_PROOF_LEDGER.json",
+      "docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json",
+      "tools/entity-tool-suite.json",
+      "docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md",
+      "site/index.html",
+      "docs/index.html",
+      "scripts/verify_entity_pipeline.py"
+    ],
+    "safe_public_copy_blocks": [
+      "This is a local public-copy draft for awake review only; it has not been posted, scheduled, boosted, or sent.",
+      "Public copy may describe repo-local proof, static Pages/GitHub surfaces, logo-seed metadata, and closed-gate verifier discipline only.",
+      "Green claims must point to repo-local proof paths and current verifier output; yellow HF/revenue/affiliation/external-delivery claims remain pending human verification.",
+      "The draft must repeat that payment, outreach, uploads, GPU/training, model downloads, and revenue/affiliation claims remain closed until a separate human approval and verification record."
+    ],
+    "must_confirm_before_public_copy_use": [
+      "The selected reuse route is prepare_public_copy_draft_after_approval and exactly one archive_entry_id is named.",
+      "Every proof path in the copy draft exists in the current repo state and was rechecked after the latest verifier run.",
+      "The public-copy draft avoids revenue, affiliation, checkout/payment, outreach, HF upload/remote streaming, GPU/training, model-download, and paid-provider claims unless separately verified by an awake operator.",
+      "The approved page/channel context, exact copy path, and expiration were chosen by an awake operator before external use.",
+      "The verifier command passed immediately before the copy is posted, published, or shared outside the repo."
+    ],
+    "forbidden_until_approval": [
+      "posting or scheduling public copy",
+      "sending outreach or DMs",
+      "paid promotion or spend",
+      "creating checkout or payment links",
+      "creating or sending invoices",
+      "claiming revenue before payment is verified",
+      "claiming affiliation or sponsorship",
+      "Hugging Face upload or public dataset release",
+      "printing HF tokens or credential-store contents",
+      "starting GPU/training/model-download jobs",
+      "mutating cron jobs",
+      "using public-copy drafts as published or buyer copy without awake approval"
+    ],
+    "verification_note": "Run PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py and git diff --check before any awake operator uses this public-copy draft outside the repo."
   }
 }
