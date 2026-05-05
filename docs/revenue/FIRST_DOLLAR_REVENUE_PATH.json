@@ -25,7 +25,7 @@
     "datasets/logo-seed/metadata.jsonl"
   ],
   "tool_suite_manifest": "tools/entity-tool-suite.json",
-  "prep_only_increment": "2026-05-05-evidence-snapshot-checklist-v1",
+  "prep_only_increment": "2026-05-05-evidence-snapshot-archive-index-v1",
   "buyer_facing_offer_draft": {
     "headline": "Turn your AI agent idea into a safe, forkable entity launch kit.",
     "audience": [
@@ -934,7 +934,8 @@
       "manual-invoice-planning-checklist-builder",
       "handoff-integrity-auditor",
       "evidence-snapshot-builder",
-      "evidence-snapshot-notes-template-builder"
+      "evidence-snapshot-notes-template-builder",
+      "evidence-snapshot-archive-index-builder"
     ],
     "must_confirm_before_external_use": [
       "The selected route has a matching tool contract with money_actions_enabled=false, external_delivery_enabled=false, and training_or_gpu_enabled=false.",
@@ -1015,5 +1016,51 @@
       "Closed Gates To Repeat",
       "Forbidden Copy"
     ]
+  },
+  "wake_operator_evidence_snapshot_archive_index": {
+    "status": "draft_only_local_index_not_sent",
+    "purpose": "Let the awake operator maintain a repo-local archive index of evidence snapshots and operator notes after approved private review, without sending, invoicing, uploading, posting, or claiming revenue while unattended.",
+    "allowed_trigger": "wake_operator_evidence_snapshot_checklist.status == draft_only_not_sent and operator_notes_template_status == draft_only_local_notes_not_sent",
+    "index_fields": [
+      "archive_entry_id",
+      "snapshot_id",
+      "snapshot_created_utc",
+      "approved_route_id",
+      "operator_notes_path",
+      "proof_paths_checked",
+      "verifier_command",
+      "verifier_result",
+      "git_commit_or_pages_reference",
+      "closed_gates_confirmed",
+      "approval_expires_utc"
+    ],
+    "required_proof_paths": [
+      "docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json",
+      "docs/revenue/EVIDENCE_SNAPSHOT_OPERATOR_NOTES_TEMPLATE.md",
+      "tools/entity-tool-suite.json",
+      "docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md",
+      "scripts/verify_entity_pipeline.py"
+    ],
+    "must_confirm_before_archive_use": [
+      "The archive index is local/private review material and is not a public gallery, invoice attachment, checkout page, follow-up queue, or HF upload manifest.",
+      "Every operator_notes_path is based on docs/revenue/EVIDENCE_SNAPSHOT_OPERATOR_NOTES_TEMPLATE.md and remains local/private until a separate awake approval.",
+      "The verifier command passed for the repo state named by git_commit_or_pages_reference before the entry is used outside the repo.",
+      "No checkout/payment URL, invoice creation, follow-up send, HF upload, token print, public post, GPU/training, model download, spend, wallet, or cron mutation was performed unattended."
+    ],
+    "forbidden_until_approval": [
+      "sending or scheduling archive entries",
+      "creating checkout or payment links",
+      "creating or sending invoices",
+      "starting a manual invoice workflow",
+      "claiming revenue before payment is verified",
+      "claiming affiliation or sponsorship",
+      "Hugging Face upload or public dataset release",
+      "printing HF tokens or credential-store contents",
+      "starting GPU/training/model-download jobs",
+      "public posting",
+      "mutating cron jobs",
+      "using archive entries as public/buyer copy without awake approval"
+    ],
+    "verification_note": "Run PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py and git diff --check before any awake operator relies on this local evidence snapshot archive index."
   }
 }

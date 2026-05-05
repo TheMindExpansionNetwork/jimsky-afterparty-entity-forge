@@ -99,6 +99,12 @@ This increment adds `contract_version: 2026-05-05.prep_only.v1` in `tools/entity
 - Artifact: `docs/revenue/EVIDENCE_SNAPSHOT_OPERATOR_NOTES_TEMPLATE.md`.
 - Closed gate: notes are not sent, posted, attached to invoices, used as checkout copy, used for HF upload claims, or treated as revenue/affiliation proof without separate awake approval.
 
+### 18. Evidence Snapshot Archive Index Builder
+- Purpose: maintain a local/private index of evidence snapshots and operator notes after approved review.
+- Artifact: `wake_operator_evidence_snapshot_archive_index` in `docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json`.
+- Outputs: draft-only archive entry fields, proof path checklist, verifier result reference, and closed-gate confirmation block.
+- Closed gate: archive entries are not sent, posted, attached to invoices, converted into checkout copy, used for HF upload claims, or treated as revenue/affiliation proof without separate awake approval.
+
 ## First awake command
 
 Review the public explainer page, then pick one route:

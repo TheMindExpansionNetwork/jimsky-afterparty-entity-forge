@@ -218,6 +218,7 @@ for rel in handoff_integrity.get('required_proof_paths',[]):
     assert (root/rel).exists(), f"handoff integrity proof path missing: {rel}"
 expected_handoff_tools={'buyer-proof-faq-builder','post-demo-outcome-router','scope-quote-sheet-builder','private-demo-delivery-receipt-kit','wake-operator-next-action-router','private-followup-draft-builder','manual-invoice-planning-checklist-builder','handoff-integrity-auditor','evidence-snapshot-builder','evidence-snapshot-notes-template-builder'}
 assert expected_handoff_tools <= set(handoff_integrity.get('required_tool_contract_ids',[]))
+assert 'evidence-snapshot-archive-index-builder' in handoff_integrity.get('required_tool_contract_ids',[])
 assert len(handoff_integrity.get('must_confirm_before_external_use',[])) >= 5
 assert any('money_actions_enabled=false' in item for item in handoff_integrity.get('must_confirm_before_external_use',[]))
 for forbidden in ['sending or scheduling follow-up messages','creating checkout or payment links','creating or sending invoices','starting a manual invoice workflow','claiming revenue before payment is verified','claiming affiliation or sponsorship','Hugging Face upload or public dataset release','printing HF tokens or credential-store contents','starting GPU/training/model-download jobs','public posting','mutating cron jobs']:
@@ -246,6 +247,20 @@ for phrase in ['draft_only_local_notes_not_sent','No sending or scheduling the s
     assert phrase in notes_template, phrase
 assert 'using operator notes as public/buyer copy without awake approval' in evidence_snapshot.get('forbidden_until_approval',[])
 assert 'verify_entity_pipeline.py' in evidence_snapshot.get('verification_note','')
+archive_index=rm.get('wake_operator_evidence_snapshot_archive_index',{})
+assert archive_index.get('status') == 'draft_only_local_index_not_sent'
+assert 'archive index' in archive_index.get('purpose','').lower()
+assert archive_index.get('allowed_trigger','').startswith('wake_operator_evidence_snapshot_checklist.status == draft_only_not_sent')
+for field in ['archive_entry_id','snapshot_id','snapshot_created_utc','approved_route_id','operator_notes_path','proof_paths_checked','verifier_command','verifier_result','git_commit_or_pages_reference','closed_gates_confirmed','approval_expires_utc']:
+    assert field in archive_index.get('index_fields',[]), field
+for rel in archive_index.get('required_proof_paths',[]):
+    assert not rel.startswith('/') and '..' not in Path(rel).parts
+    assert (root/rel).exists(), f"archive index proof path missing: {rel}"
+assert len(archive_index.get('must_confirm_before_archive_use',[])) >= 4
+assert any('not a public gallery' in item.lower() for item in archive_index.get('must_confirm_before_archive_use',[]))
+for forbidden in ['sending or scheduling archive entries','creating checkout or payment links','creating or sending invoices','starting a manual invoice workflow','claiming revenue before payment is verified','claiming affiliation or sponsorship','Hugging Face upload or public dataset release','printing HF tokens or credential-store contents','starting GPU/training/model-download jobs','public posting','mutating cron jobs','using archive entries as public/buyer copy without awake approval']:
+    assert forbidden in archive_index.get('forbidden_until_approval',[]), forbidden
+assert 'verify_entity_pipeline.py' in archive_index.get('verification_note','')
 lead_schema=rm.get('local_lead_schema',[])
 assert any(f.get('field')=='approval_status' and f.get('default')=='draft_only' for f in lead_schema)
 dataset_release=rm.get('dataset_release_readiness',{})
@@ -344,6 +359,7 @@ assert 'manual-invoice-planning-checklist-builder' in tool_ids
 assert 'handoff-integrity-auditor' in tool_ids
 assert 'evidence-snapshot-builder' in tool_ids
 assert 'evidence-snapshot-notes-template-builder' in tool_ids
+assert 'evidence-snapshot-archive-index-builder' in tool_ids
 post_demo_tool=next(tool for tool in tm.get('tools',[]) if tool.get('id')=='post-demo-outcome-router')
 assert post_demo_tool.get('requires_human_approval') is True
 assert any('post_demo_outcome_capture' in item for item in post_demo_tool.get('verification',[]))
@@ -391,8 +407,14 @@ assert any('operator notes template path exists' in item for item in notes_tool.
 assert notes_tool.get('money_actions_enabled') is False
 assert notes_tool.get('external_delivery_enabled') is False
 assert notes_tool.get('training_or_gpu_enabled') is False
+archive_tool=next(tool for tool in tm.get('tools',[]) if tool.get('id')=='evidence-snapshot-archive-index-builder')
+assert archive_tool.get('requires_human_approval') is True
+assert any('wake_operator_evidence_snapshot_archive_index' in item for item in archive_tool.get('verification',[]))
+assert archive_tool.get('money_actions_enabled') is False
+assert archive_tool.get('external_delivery_enabled') is False
+assert archive_tool.get('training_or_gpu_enabled') is False
 tool_doc=(root/'docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md').read_text()
-for phrase in ['### 14. Manual Invoice Planning Checklist Builder','approve_manual_invoice_planning','no invoice creation/sending','every external money action stays closed','### 15. Handoff Integrity Auditor','wake_operator_handoff_integrity_checklist','no follow-up sending','### 16. Evidence Snapshot Builder','wake_operator_evidence_snapshot_checklist','no sending/scheduling','### 17. Evidence Snapshot Notes Template Builder','EVIDENCE_SNAPSHOT_OPERATOR_NOTES_TEMPLATE.md','notes are not sent']:
+for phrase in ['### 14. Manual Invoice Planning Checklist Builder','approve_manual_invoice_planning','no invoice creation/sending','every external money action stays closed','### 15. Handoff Integrity Auditor','wake_operator_handoff_integrity_checklist','no follow-up sending','### 16. Evidence Snapshot Builder','wake_operator_evidence_snapshot_checklist','no sending/scheduling','### 17. Evidence Snapshot Notes Template Builder','EVIDENCE_SNAPSHOT_OPERATOR_NOTES_TEMPLATE.md','notes are not sent','### 18. Evidence Snapshot Archive Index Builder','wake_operator_evidence_snapshot_archive_index','archive entries are not sent']:
     assert phrase in tool_doc, phrase
 assert 'payment links or checkout activation' in tm.get('forbidden_unattended_actions', [])
 for tool in tm.get('tools', []):
@@ -410,13 +432,14 @@ for rel in ['site/index.html','docs/index.html']:
     assert 'Money actions remain closed until human approval' in page
     assert 'revenue-handoff-lanes' in page
     assert 'Prep-Only Revenue Handoff Lanes' in page
-    assert 'Private follow-up drafts, manual invoice planning, handoff integrity checks, and evidence snapshots' in page
+    assert 'Private follow-up drafts, manual invoice planning, handoff integrity checks, evidence snapshots, and local evidence snapshot archive indexes' in page
     assert 'no sending, invoice creation, checkout/payment links' in page
     assert 'HF upload, token printing, GPU/training, model downloads' in page
-    for tool_name in ['Dataset Release Auditor','Buyer Proof FAQ Builder','Post-Demo Outcome Router','Scope Quote Sheet Builder','Private Demo Delivery Receipt Kit','Wake Operator Next Action Router','Private Follow-up Draft Builder','Manual Invoice Planning Checklist Builder','Handoff Integrity Auditor','Evidence Snapshot Builder','Evidence Snapshot Notes Template Builder']:
+    for tool_name in ['Dataset Release Auditor','Buyer Proof FAQ Builder','Post-Demo Outcome Router','Scope Quote Sheet Builder','Private Demo Delivery Receipt Kit','Wake Operator Next Action Router','Private Follow-up Draft Builder','Manual Invoice Planning Checklist Builder','Handoff Integrity Auditor','Evidence Snapshot Builder','Evidence Snapshot Notes Template Builder','Evidence Snapshot Archive Index Builder']:
         assert tool_name in page, f"site/docs tool-suite mirror missing {tool_name} in {rel}"
     assert 'handoff integrity checks' in page, f"site/docs handoff integrity copy missing in {rel}"
     assert 'evidence snapshots' in page, f"site/docs evidence snapshot copy missing in {rel}"
+    assert 'local evidence snapshot archive indexes' in page, f"site/docs archive index copy missing in {rel}"
 rows=[]
 for line in (root/'datasets/logo-seed/metadata.jsonl').read_text().splitlines():
     if line.strip(): rows.append(json.loads(line))

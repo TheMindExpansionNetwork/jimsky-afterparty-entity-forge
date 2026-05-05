@@ -451,6 +451,33 @@
       "money_actions_enabled": false,
       "external_delivery_enabled": false,
       "training_or_gpu_enabled": false
+    },
+    {
+      "id": "evidence-snapshot-archive-index-builder",
+      "name": "Evidence Snapshot Archive Index Builder",
+      "requires_human_approval": true,
+      "closed_until_human_yes": true,
+      "input_contract": [
+        "approved evidence snapshot id",
+        "operator notes template path",
+        "selected repo-local proof paths",
+        "latest verifier result"
+      ],
+      "output_contract": [
+        "draft-only local archive index entry",
+        "proof path checklist",
+        "closed-gate confirmation block",
+        "single awake-operator reuse decision"
+      ],
+      "verification": [
+        "wake_operator_evidence_snapshot_archive_index stays draft_only_local_index_not_sent",
+        "archive index proof paths and notes template exist before use",
+        "no sending/invoice/checkout/HF upload/public post/GPU/training claims introduced"
+      ],
+      "human_handoff": "Awake operator approves whether any local archive entry may be converted into a private note, buyer proof packet, dataset handoff, or public copy after fresh verification.",
+      "money_actions_enabled": false,
+      "external_delivery_enabled": false,
+      "training_or_gpu_enabled": false
     }
   ],
   "safety": "No spend, outreach, payment collection, fake revenue, fake affiliation, secret exposure, training, GPU jobs, or wallet actions while unattended.",
