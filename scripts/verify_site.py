@@ -41,6 +41,31 @@ REQUIRED_RELAUNCH_NEEDLES = [
     'If any field is blank, keep the action closed.',
     'public posting, outreach, spend, training, GPU work, or model downloads without explicit approval',
 ]
+REQUIRED_X_THREAD_DOC_NEEDLES = [
+    'draft-only, manual-post only',
+    'auto_post_enabled: false',
+    'public_posting: false',
+    'Do you approve posting exactly one of these draft threads',
+    'No tweet may imply OpenAI affiliation, revenue earned, live customers, public launch, or remote upload',
+    'Blocked without approval',
+]
+X_THREAD_RISKY_FLAGS = [
+    'auto_post_enabled',
+    'public_posting',
+    'outreach',
+    'paid_promotion',
+    'claim_revenue',
+    'claim_affiliation',
+    'starts_gpu',
+    'starts_paid_api',
+    'publishes_stream',
+    'records_audio',
+    'uploads_private_media',
+    'downloads_models',
+    'starts_training',
+    'submits_hackathon',
+    'mutates_cron',
+]
 
 
 class LinkCollector(HTMLParser):
@@ -108,6 +133,40 @@ def verify_relaunch_doc() -> None:
             fail(f'{path.relative_to(ROOT)} risky flag appears open: {risky}')
 
 
+def verify_x_thread_drafts() -> None:
+    doc_path = ROOT / 'docs/social/X_THREAD_DRAFTS.md'
+    manifest_path = ROOT / 'site/data/x-thread-drafts.json'
+    if not doc_path.exists():
+        fail(f'missing {doc_path.relative_to(ROOT)}')
+    if not manifest_path.exists():
+        fail(f'missing {manifest_path.relative_to(ROOT)}')
+    doc_text = doc_path.read_text(encoding='utf-8')
+    for needle in REQUIRED_X_THREAD_DOC_NEEDLES:
+        if needle not in doc_text:
+            fail(f'{doc_path.relative_to(ROOT)} missing X-thread safety needle: {needle}')
+    manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+    if manifest.get('status') != 'x_thread_drafts_manual_post_only_closed_until_human_yes':
+        fail('x thread manifest status is not closed-until-human-yes')
+    if manifest.get('manual_post_required') is not True:
+        fail('x thread manifest must require manual posting')
+    if manifest.get('requires_human_approval') is not True:
+        fail('x thread manifest must require human approval')
+    flags = manifest.get('risky_flags') or {}
+    for flag in X_THREAD_RISKY_FLAGS:
+        if flag == 'auto_post_enabled':
+            if manifest.get(flag) is not False:
+                fail(f'x thread manifest risky flag appears open: {flag}')
+        elif flags.get(flag) is not False:
+            fail(f'x thread manifest risky flag appears open or missing: {flag}')
+    if len(manifest.get('threads') or []) < 3:
+        fail('x thread manifest must include at least three draft thread entries')
+    if len(manifest.get('blocked_without_approval') or []) < 5:
+        fail('x thread manifest needs a substantial blocked-without-approval list')
+    for proof in manifest.get('proof_paths') or []:
+        if not (ROOT / proof).exists():
+            fail(f'x thread manifest proof path missing: {proof}')
+
+
 def run_entity_verifier() -> None:
     result = subprocess.run(
         [sys.executable, 'scripts/verify_entity_pipeline.py'],
@@ -132,6 +191,7 @@ def main() -> None:
         verify_html(path)
     verify_json_files()
     verify_relaunch_doc()
+    verify_x_thread_drafts()
     run_entity_verifier()
     print('VERIFY OK site relaunch surfaces closed-gate links/json/entity')
 

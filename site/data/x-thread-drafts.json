@@ -1,0 +1,63 @@
+{
+  "pack_id": "afterparty-forge-2045-x-thread-drafts",
+  "status": "x_thread_drafts_manual_post_only_closed_until_human_yes",
+  "updated_utc": "2026-05-05T08:04:51Z",
+  "manual_post_required": true,
+  "auto_post_enabled": false,
+  "requires_human_approval": true,
+  "risky_flags": {
+    "public_posting": false,
+    "outreach": false,
+    "paid_promotion": false,
+    "claim_revenue": false,
+    "claim_affiliation": false,
+    "starts_gpu": false,
+    "starts_paid_api": false,
+    "publishes_stream": false,
+    "records_audio": false,
+    "uploads_private_media": false,
+    "downloads_models": false,
+    "starts_training": false,
+    "submits_hackathon": false,
+    "mutates_cron": false
+  },
+  "human_approval_question": "Do you approve posting exactly one of these draft threads from the named account, with no paid boost, no replies/DMs, no checkout links, and no claims beyond the repo-local proof paths listed here?",
+  "proof_paths": [
+    "docs/social/X_THREAD_DRAFTS.md",
+    "scripts/verify_site.py",
+    "docs/launch/RELAUNCH_PACKAGE_DRAFT.md",
+    "docs/proof/AFTERPARTY_PROOF_LEDGER.json",
+    "docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json",
+    "tools/entity-tool-suite.json"
+  ],
+  "blocked_without_approval": [
+    "Post, schedule, like, reply, quote, DM, or boost on X/Twitter.",
+    "Add checkout/payment links or claim revenue.",
+    "Claim OpenAI, venue, artist, sponsor, platform, or customer affiliation.",
+    "Upload private media, record audio/video, or start livestreams.",
+    "Start GPU jobs, training, model downloads, paid APIs, or cron mutations."
+  ],
+  "threads": [
+    {
+      "id": "launch_miss_rebound_proof",
+      "title": "Launch-miss rebound proof",
+      "status": "draft_only_not_posted",
+      "post_count": 5,
+      "claims_source": "docs/proof/AFTERPARTY_PROOF_LEDGER.json"
+    },
+    {
+      "id": "buyer_safe_proof_posture",
+      "title": "Buyer-safe proof posture",
+      "status": "draft_only_not_posted",
+      "post_count": 5,
+      "claims_source": "docs/proof/AFTERPARTY_PROOF_LEDGER.json"
+    },
+    {
+      "id": "faceless_video_training_angle",
+      "title": "Faceless-video training angle",
+      "status": "draft_only_not_posted",
+      "post_count": 5,
+      "claims_source": "docs/launch/RELAUNCH_PACKAGE_DRAFT.md"
+    }
+  ]
+}
