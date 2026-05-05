@@ -1,0 +1,94 @@
+{
+  "status": "private_demo_buyer_script_draft_only_closed_until_human_yes",
+  "manual_demo_required": true,
+  "auto_outreach_enabled": false,
+  "auto_payment_enabled": false,
+  "requires_human_approval": true,
+  "human_approval_question": "Do you approve running this exact private Afterparty Forge 2045 buyer demo manually with one named recipient, with no recording, no public posting, no outreach automation, no payment link, no invoice, no upload, no GPU/training, and no claim of OpenAI affiliation or verified revenue?",
+  "proof_paths": [
+    "site/index.html",
+    "docs/index.html",
+    "docs/revenue/PRIVATE_DEMO_BUYER_SAFE_SCRIPT.md",
+    "site/data/private-demo-buyer-script.json",
+    "docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json",
+    "docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md",
+    "tools/entity-tool-suite.json",
+    "docs/social/X_THREAD_DRAFTS.md",
+    "docs/youtube/CAPTIONS_TRANSCRIPTS_PACK.md",
+    "docs/launch/SCREEN_CHECKLIST.md",
+    "scripts/verify_site.py"
+  ],
+  "demo_beats": [
+    {
+      "timebox": "0:00-0:15",
+      "title": "Frame the proof room",
+      "operator_line": "Afterparty Forge 2045 turns a messy launch into controlled local proof: assets, scripts, verifier checks, and closed gates."
+    },
+    {
+      "timebox": "0:15-0:35",
+      "title": "Show visible proof",
+      "operator_line": "Open the proof hub cards for the entity tool suite, X drafts, captions pack, and launch screen checklist."
+    },
+    {
+      "timebox": "0:35-0:55",
+      "title": "Show safety discipline",
+      "operator_line": "Open the manifest and point out that public posting, outreach, upload, payment, GPU, and training flags are false."
+    },
+    {
+      "timebox": "0:55-1:15",
+      "title": "Run verifier",
+      "operator_line": "Run PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_site.py and read the VERIFY OK marker only if it passes."
+    },
+    {
+      "timebox": "1:15-1:30",
+      "title": "Ask one bounded next-step question",
+      "operator_line": "Which one lane should we polish next for your real launch: screen-share proof, private buyer script, captions pack, or offer copy?"
+    }
+  ],
+  "terminal_proof_commands": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_site.py",
+    "git diff --check",
+    "git status --short --branch",
+    "python3 -m json.tool site/data/private-demo-buyer-script.json >/tmp/private-demo-buyer-script.json"
+  ],
+  "expected_highlights": [
+    "VERIFY OK site relaunch surfaces closed-gate links/json/entity",
+    "git diff --check prints no whitespace errors",
+    "private-demo-buyer-script.json parses without error",
+    "proof paths exist in the repo"
+  ],
+  "blocked_without_approval": [
+    "send_or_schedule_script",
+    "auto_outreach_or_dm",
+    "public_posting_or_x_space_creation",
+    "livestream_or_youtube_upload",
+    "record_audio_or_video",
+    "upload_private_media",
+    "create_payment_link_or_invoice",
+    "claim_revenue_or_affiliation",
+    "start_gpu_paid_api_model_download_or_training",
+    "mutate_cron_or_unattended_launch_automation"
+  ],
+  "risky_flags": {
+    "outreach": false,
+    "public_posting": false,
+    "x_space_creation": false,
+    "livestream_creation": false,
+    "youtube_upload": false,
+    "caption_upload": false,
+    "payment_links": false,
+    "invoice_creation": false,
+    "manual_invoice_execution": false,
+    "auto_payment_enabled": false,
+    "claim_revenue": false,
+    "claim_affiliation": false,
+    "records_audio": false,
+    "uploads_private_media": false,
+    "starts_gpu": false,
+    "starts_paid_api": false,
+    "downloads_models": false,
+    "starts_training": false,
+    "submits_hackathon": false,
+    "mutates_cron": false
+  }
+}

@@ -121,6 +121,36 @@ REQUIRED_LAUNCH_SCREEN_DOC_NEEDLES = [
     'no recording, no public posting, no outreach, no livestream, no payment link',
     'Blocked without approval',
 ]
+PRIVATE_DEMO_BUYER_RISKY_FLAGS = [
+    'outreach',
+    'public_posting',
+    'x_space_creation',
+    'livestream_creation',
+    'youtube_upload',
+    'caption_upload',
+    'payment_links',
+    'invoice_creation',
+    'manual_invoice_execution',
+    'auto_payment_enabled',
+    'claim_revenue',
+    'claim_affiliation',
+    'records_audio',
+    'uploads_private_media',
+    'starts_gpu',
+    'starts_paid_api',
+    'downloads_models',
+    'starts_training',
+    'submits_hackathon',
+    'mutates_cron',
+]
+REQUIRED_PRIVATE_DEMO_BUYER_DOC_NEEDLES = [
+    'private_demo_buyer_script_draft_only_closed_until_human_yes',
+    'Do you approve running this exact private Afterparty Forge 2045 buyer demo manually',
+    'PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_site.py',
+    'VERIFY OK site relaunch surfaces closed-gate links/json/entity',
+    'Do not say “we made revenue” unless a real payment is verified',
+    'Blocked without approval',
+]
 
 
 class LinkCollector(HTMLParser):
@@ -309,6 +339,49 @@ def verify_launch_screen_checklist() -> None:
             fail(f'{html_rel} missing launch screen checklist card')
 
 
+def verify_private_demo_buyer_script() -> None:
+    doc_path = ROOT / 'docs/revenue/PRIVATE_DEMO_BUYER_SAFE_SCRIPT.md'
+    manifest_path = ROOT / 'site/data/private-demo-buyer-script.json'
+    if not doc_path.exists():
+        fail(f'missing {doc_path.relative_to(ROOT)}')
+    if not manifest_path.exists():
+        fail(f'missing {manifest_path.relative_to(ROOT)}')
+    doc_text = doc_path.read_text(encoding='utf-8')
+    for needle in REQUIRED_PRIVATE_DEMO_BUYER_DOC_NEEDLES:
+        if needle not in doc_text:
+            fail(f'{doc_path.relative_to(ROOT)} missing private-demo buyer safety needle: {needle}')
+    manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+    if manifest.get('status') != 'private_demo_buyer_script_draft_only_closed_until_human_yes':
+        fail('private demo buyer script status is not closed-until-human-yes')
+    if manifest.get('manual_demo_required') is not True:
+        fail('private demo buyer script must require manual demo')
+    if manifest.get('auto_outreach_enabled') is not False:
+        fail('private demo buyer script auto outreach must be disabled')
+    if manifest.get('auto_payment_enabled') is not False:
+        fail('private demo buyer script auto payment must be disabled')
+    if manifest.get('requires_human_approval') is not True:
+        fail('private demo buyer script must require human approval')
+    if 'Do you approve' not in (manifest.get('human_approval_question') or ''):
+        fail('private demo buyer script needs an explicit human approval question')
+    flags = manifest.get('risky_flags') or {}
+    for flag in PRIVATE_DEMO_BUYER_RISKY_FLAGS:
+        if flags.get(flag) is not False:
+            fail(f'private demo buyer script risky flag appears open or missing: {flag}')
+    if len(manifest.get('demo_beats') or []) < 5:
+        fail('private demo buyer script needs enough demo beats')
+    if len(manifest.get('blocked_without_approval') or []) < 8:
+        fail('private demo buyer script needs a substantial blocked-without-approval list')
+    if len(manifest.get('terminal_proof_commands') or []) < 4:
+        fail('private demo buyer script needs terminal proof commands')
+    for proof in manifest.get('proof_paths') or []:
+        if not (ROOT / proof).exists():
+            fail(f'private demo buyer script proof path missing: {proof}')
+    for html_rel in ['site/index.html', 'docs/index.html']:
+        html_text = (ROOT / html_rel).read_text(encoding='utf-8')
+        if 'private-demo-buyer-script' not in html_text:
+            fail(f'{html_rel} missing private demo buyer script card')
+
+
 def run_entity_verifier() -> None:
     result = subprocess.run(
         [sys.executable, 'scripts/verify_entity_pipeline.py'],
@@ -336,6 +409,7 @@ def main() -> None:
     verify_x_thread_drafts()
     verify_youtube_caption_pack()
     verify_launch_screen_checklist()
+    verify_private_demo_buyer_script()
     run_entity_verifier()
     print('VERIFY OK site relaunch surfaces closed-gate links/json/entity')
 
