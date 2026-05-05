@@ -19,7 +19,18 @@ assert not re.search(r'https?://[^\s]*(stripe|paypal|gumroad|checkout|buy)', jso
 lead_schema=rm.get('local_lead_schema',[])
 assert any(f.get('field')=='approval_status' and f.get('default')=='draft_only' for f in lead_schema)
 tm=json.loads((root/'tools/entity-tool-suite.json').read_text())
+assert tm.get('contract_version') == '2026-05-05.prep_only.v1'
 assert len(tm.get('tools',[])) >= 6
+assert 'payment links or checkout activation' in tm.get('forbidden_unattended_actions', [])
+for tool in tm.get('tools', []):
+    assert tool.get('closed_until_human_yes') is True
+    assert tool.get('money_actions_enabled') is False
+    assert tool.get('external_delivery_enabled') is False
+    assert tool.get('training_or_gpu_enabled') is False
+    assert len(tool.get('input_contract', [])) >= 3
+    assert len(tool.get('output_contract', [])) >= 3
+    assert len(tool.get('verification', [])) >= 2
+    assert 'Awake operator' in tool.get('human_handoff', '')
 for rel in ['site/index.html','docs/index.html']:
     page=(root/rel).read_text()
     assert 'entity-tool-suite' in page

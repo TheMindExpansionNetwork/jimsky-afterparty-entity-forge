@@ -4,6 +4,8 @@ Status: `entity_tools_seeded`, `closed_until_human_yes_for_money_actions`
 
 The entity now has a concrete tool suite: each tool has a purpose, output artifact, verifier posture, and safety gate.
 
+This increment adds `contract_version: 2026-05-05.prep_only.v1` in `tools/entity-tool-suite.json`. Each tool now carries an explicit input contract, output contract, verifier expectation, and awake-operator handoff. The contract is prep-only: it can draft offers, proof ledgers, demo scripts, local lead schemas, and static-site manifest polish, but it cannot execute payment, outreach, spend, training/GPU, private upload, or public-posting actions while unattended.
+
 ## Tools
 
 ### 1. Offer Builder

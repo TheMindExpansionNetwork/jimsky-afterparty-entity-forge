@@ -1,43 +1,177 @@
 {
   "entity": "Afterparty Forge 2045",
-  "status": "seed_tool_suite_ready",
+  "status": "tool_contract_v1_ready_closed_gates",
   "tools": [
     {
       "id": "offer-builder",
       "name": "Offer Builder",
       "requires_human_approval": true,
-      "closed_until_human_yes": true
+      "closed_until_human_yes": true,
+      "input_contract": [
+        "entity name",
+        "target buyer type",
+        "existing proof artifact paths",
+        "desired deliverable scope"
+      ],
+      "output_contract": [
+        "offer headline",
+        "deliverables list",
+        "price ladder draft",
+        "approval checklist"
+      ],
+      "verification": [
+        "FIRST_DOLLAR_REVENUE_PATH.json closed gates false",
+        "no checkout/payment URLs"
+      ],
+      "human_handoff": "Awake operator approves buyer, price, recipient, payment mechanism, and send/post channel.",
+      "money_actions_enabled": false,
+      "external_delivery_enabled": false,
+      "training_or_gpu_enabled": false
     },
     {
       "id": "launch-packager",
       "name": "Launch Packager",
       "requires_human_approval": false,
-      "closed_until_human_yes": true
+      "closed_until_human_yes": true,
+      "input_contract": [
+        "repo URLs",
+        "Pages URL",
+        "asset paths",
+        "known blockers"
+      ],
+      "output_contract": [
+        "launch checklist",
+        "media inventory",
+        "public-safe copy drafts",
+        "blocked action list"
+      ],
+      "verification": [
+        "referenced local files exist",
+        "copy avoids affiliation/revenue claims"
+      ],
+      "human_handoff": "Awake operator chooses public channel and confirms publication scope.",
+      "money_actions_enabled": false,
+      "external_delivery_enabled": false,
+      "training_or_gpu_enabled": false
     },
     {
       "id": "proof-ledger",
       "name": "Proof Ledger",
       "requires_human_approval": false,
-      "closed_until_human_yes": true
+      "closed_until_human_yes": true,
+      "input_contract": [
+        "claim text",
+        "source file path or URL",
+        "verifier command"
+      ],
+      "output_contract": [
+        "claim/proof/status row",
+        "truth label green/yellow/red",
+        "next verification step"
+      ],
+      "verification": [
+        "green labels require existing proof path",
+        "unverified claims stay yellow/red"
+      ],
+      "human_handoff": "Awake operator reviews claims before using them in buyer/public copy.",
+      "money_actions_enabled": false,
+      "external_delivery_enabled": false,
+      "training_or_gpu_enabled": false
     },
     {
       "id": "demo-router",
       "name": "Demo Router",
       "requires_human_approval": true,
-      "closed_until_human_yes": true
+      "closed_until_human_yes": true,
+      "input_contract": [
+        "audience",
+        "available proof assets",
+        "risk tolerance",
+        "timebox"
+      ],
+      "output_contract": [
+        "private demo route",
+        "public page route",
+        "paid-offer route",
+        "dataset-release route"
+      ],
+      "verification": [
+        "route keeps closed gates closed",
+        "route references only existing artifacts"
+      ],
+      "human_handoff": "Awake operator picks exactly one route and approves any external action.",
+      "money_actions_enabled": false,
+      "external_delivery_enabled": false,
+      "training_or_gpu_enabled": false
     },
     {
       "id": "revenue-scout",
       "name": "Revenue Scout",
       "requires_human_approval": true,
-      "closed_until_human_yes": true
+      "closed_until_human_yes": true,
+      "input_contract": [
+        "buyer segment hypothesis",
+        "proof assets",
+        "offer constraints",
+        "local lead fields"
+      ],
+      "output_contract": [
+        "buyer types",
+        "listing copy draft",
+        "service ladder",
+        "local lead schema"
+      ],
+      "verification": [
+        "approval_status defaults to draft_only",
+        "no outreach/payment URLs introduced"
+      ],
+      "human_handoff": "Awake operator approves any contact list, message, price, and payment workflow.",
+      "money_actions_enabled": false,
+      "external_delivery_enabled": false,
+      "training_or_gpu_enabled": false
     },
     {
       "id": "unicode-interface-director",
       "name": "Unicode Interface Director",
       "requires_human_approval": false,
-      "closed_until_human_yes": true
+      "closed_until_human_yes": true,
+      "input_contract": [
+        "entity identity",
+        "proof state",
+        "visual style constraints",
+        "asset target"
+      ],
+      "output_contract": [
+        "Unicode HUD copy",
+        "static card copy",
+        "video/storyboard notes",
+        "truthful status labels"
+      ],
+      "verification": [
+        "no fake screenshots/status",
+        "assets labeled concept/private when not published"
+      ],
+      "human_handoff": "Awake operator approves publishing or rendering beyond local/static proof.",
+      "money_actions_enabled": false,
+      "external_delivery_enabled": false,
+      "training_or_gpu_enabled": false
     }
   ],
-  "safety": "No spend, outreach, payment collection, fake revenue, fake affiliation, secret exposure, training, GPU jobs, or wallet actions while unattended."
+  "safety": "No spend, outreach, payment collection, fake revenue, fake affiliation, secret exposure, training, GPU jobs, or wallet actions while unattended.",
+  "contract_version": "2026-05-05.prep_only.v1",
+  "prep_only_allowed_actions": [
+    "draft buyer-facing offer copy for awake review",
+    "map proof claims to local files and verifier commands",
+    "prepare private demo scripts and launch checklists",
+    "write local lead schemas without scraping or outreach",
+    "polish static site/tool manifests under existing GitHub/Pages workflow"
+  ],
+  "forbidden_unattended_actions": [
+    "payment links or checkout activation",
+    "outreach, DMs, emails, form submissions, or spam",
+    "spend, paid subscriptions, wallets, or revenue claims",
+    "public posting outside existing GitHub/Pages/HF workflows",
+    "GPU jobs, training runs, private uploads, or model downloads",
+    "secret exposure or credential capture"
+  ]
 }
