@@ -223,6 +223,7 @@ assert 'evidence-snapshot-reuse-decision-matrix-builder' in handoff_integrity.ge
 assert 'buyer-proof-packet-draft-builder' in handoff_integrity.get('required_tool_contract_ids',[])
 assert 'dataset-handoff-draft-builder' in handoff_integrity.get('required_tool_contract_ids',[])
 assert 'public-copy-draft-builder' in handoff_integrity.get('required_tool_contract_ids',[])
+assert 'public-copy-qa-checklist-builder' in handoff_integrity.get('required_tool_contract_ids',[])
 assert len(handoff_integrity.get('must_confirm_before_external_use',[])) >= 5
 assert any('money_actions_enabled=false' in item for item in handoff_integrity.get('must_confirm_before_external_use',[]))
 for forbidden in ['sending or scheduling follow-up messages','creating checkout or payment links','creating or sending invoices','starting a manual invoice workflow','claiming revenue before payment is verified','claiming affiliation or sponsorship','Hugging Face upload or public dataset release','printing HF tokens or credential-store contents','starting GPU/training/model-download jobs','public posting','mutating cron jobs']:
@@ -335,6 +336,24 @@ assert any('exactly one archive_entry_id' in item for item in public_copy.get('m
 for forbidden in ['posting or scheduling public copy','sending outreach or DMs','paid promotion or spend','creating checkout or payment links','creating or sending invoices','claiming revenue before payment is verified','claiming affiliation or sponsorship','Hugging Face upload or public dataset release','printing HF tokens or credential-store contents','starting GPU/training/model-download jobs','mutating cron jobs','using public-copy drafts as published or buyer copy without awake approval']:
     assert forbidden in public_copy.get('forbidden_until_approval',[]), forbidden
 assert 'verify_entity_pipeline.py' in public_copy.get('verification_note','')
+public_copy_qa=rm.get('wake_operator_public_copy_qa_checklist',{})
+assert public_copy_qa.get('status') == 'draft_only_local_qa_not_posted'
+assert 'public-copy draft' in public_copy_qa.get('purpose','').lower() or 'public copy' in public_copy_qa.get('purpose','').lower()
+assert public_copy_qa.get('allowed_trigger','').startswith('wake_operator_public_copy_draft.status == draft_only_local_copy_not_posted')
+for field in ['copy_qa_id','copy_draft_id','archive_entry_id','approved_page_or_channel_context','proof_paths_rechecked','verifier_command','verifier_result','safe_claims_reviewed','forbidden_claims_removed','approval_expires_utc']:
+    assert field in public_copy_qa.get('qa_fields',[]), field
+for rel in public_copy_qa.get('required_proof_paths',[]):
+    assert not rel.startswith('/') and '..' not in Path(rel).parts
+    assert (root/rel).exists(), f"public copy QA proof path missing: {rel}"
+assert len(public_copy_qa.get('public_copy_qa_checks',[])) >= 5
+assert any('green claim' in item.lower() for item in public_copy_qa.get('public_copy_qa_checks',[]))
+assert any('closed-gate line' in item.lower() for item in public_copy_qa.get('public_copy_qa_checks',[]))
+assert len(public_copy_qa.get('forbidden_claims_to_remove',[])) >= 5
+for field in ['approved_copy_draft_path','approved_page_or_channel_context','approved_human_operator','approved_post_or_publish_scope','verifier_result_path_or_summary','approval_expires_utc']:
+    assert field in public_copy_qa.get('approval_required_before_use',[]), field
+for forbidden in ['posting or scheduling public copy','sending outreach or DMs','paid promotion or spend','creating checkout or payment links','creating or sending invoices','starting a manual invoice workflow','claiming revenue before payment is verified','claiming affiliation or sponsorship','Hugging Face upload or public dataset release','printing HF tokens or credential-store contents','starting GPU/training/model-download jobs','mutating cron jobs','using public-copy QA as publication approval without awake approval']:
+    assert forbidden in public_copy_qa.get('forbidden_until_approval',[]), forbidden
+assert 'verify_entity_pipeline.py' in public_copy_qa.get('verification_note','')
 lead_schema=rm.get('local_lead_schema',[])
 assert any(f.get('field')=='approval_status' and f.get('default')=='draft_only' for f in lead_schema)
 dataset_release=rm.get('dataset_release_readiness',{})
@@ -438,6 +457,7 @@ assert 'evidence-snapshot-reuse-decision-matrix-builder' in tool_ids
 assert 'buyer-proof-packet-draft-builder' in tool_ids
 assert 'dataset-handoff-draft-builder' in tool_ids
 assert 'public-copy-draft-builder' in tool_ids
+assert 'public-copy-qa-checklist-builder' in tool_ids
 post_demo_tool=next(tool for tool in tm.get('tools',[]) if tool.get('id')=='post-demo-outcome-router')
 assert post_demo_tool.get('requires_human_approval') is True
 assert any('post_demo_outcome_capture' in item for item in post_demo_tool.get('verification',[]))
@@ -515,8 +535,14 @@ assert any('wake_operator_public_copy_draft' in item for item in public_copy_too
 assert public_copy_tool.get('money_actions_enabled') is False
 assert public_copy_tool.get('external_delivery_enabled') is False
 assert public_copy_tool.get('training_or_gpu_enabled') is False
+public_copy_qa_tool=next(tool for tool in tm.get('tools',[]) if tool.get('id')=='public-copy-qa-checklist-builder')
+assert public_copy_qa_tool.get('requires_human_approval') is True
+assert any('wake_operator_public_copy_qa_checklist' in item for item in public_copy_qa_tool.get('verification',[]))
+assert public_copy_qa_tool.get('money_actions_enabled') is False
+assert public_copy_qa_tool.get('external_delivery_enabled') is False
+assert public_copy_qa_tool.get('training_or_gpu_enabled') is False
 tool_doc=(root/'docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md').read_text()
-for phrase in ['### 14. Manual Invoice Planning Checklist Builder','approve_manual_invoice_planning','no invoice creation/sending','every external money action stays closed','### 15. Handoff Integrity Auditor','wake_operator_handoff_integrity_checklist','no follow-up sending','### 16. Evidence Snapshot Builder','wake_operator_evidence_snapshot_checklist','no sending/scheduling','### 17. Evidence Snapshot Notes Template Builder','EVIDENCE_SNAPSHOT_OPERATOR_NOTES_TEMPLATE.md','notes are not sent','### 18. Evidence Snapshot Archive Index Builder','wake_operator_evidence_snapshot_archive_index','archive entries are not sent','### 19. Evidence Snapshot Reuse Decision Matrix Builder','wake_operator_evidence_snapshot_reuse_decision_matrix','reuse decisions are not sent','### 20. Buyer Proof Packet Draft Builder','wake_operator_buyer_proof_packet_draft','buyer proof packet drafts are not sent','### 21. Dataset Handoff Draft Builder','wake_operator_dataset_handoff_draft','dataset handoff drafts do not upload to Hugging Face','### 22. Public Copy Draft Builder','wake_operator_public_copy_draft','public copy drafts are not posted']:
+for phrase in ['### 14. Manual Invoice Planning Checklist Builder','approve_manual_invoice_planning','no invoice creation/sending','every external money action stays closed','### 15. Handoff Integrity Auditor','wake_operator_handoff_integrity_checklist','no follow-up sending','### 16. Evidence Snapshot Builder','wake_operator_evidence_snapshot_checklist','no sending/scheduling','### 17. Evidence Snapshot Notes Template Builder','EVIDENCE_SNAPSHOT_OPERATOR_NOTES_TEMPLATE.md','notes are not sent','### 18. Evidence Snapshot Archive Index Builder','wake_operator_evidence_snapshot_archive_index','archive entries are not sent','### 19. Evidence Snapshot Reuse Decision Matrix Builder','wake_operator_evidence_snapshot_reuse_decision_matrix','reuse decisions are not sent','### 20. Buyer Proof Packet Draft Builder','wake_operator_buyer_proof_packet_draft','buyer proof packet drafts are not sent','### 21. Dataset Handoff Draft Builder','wake_operator_dataset_handoff_draft','dataset handoff drafts do not upload to Hugging Face','### 22. Public Copy Draft Builder','wake_operator_public_copy_draft','public copy drafts are not posted','### 23. Public Copy QA Checklist Builder','wake_operator_public_copy_qa_checklist','public copy QA checklists are not publication approvals']:
     assert phrase in tool_doc, phrase
 assert 'payment links or checkout activation' in tm.get('forbidden_unattended_actions', [])
 for tool in tm.get('tools', []):
@@ -534,10 +560,10 @@ for rel in ['site/index.html','docs/index.html']:
     assert 'Money actions remain closed until human approval' in page
     assert 'revenue-handoff-lanes' in page
     assert 'Prep-Only Revenue Handoff Lanes' in page
-    assert 'Private follow-up drafts, manual invoice planning, handoff integrity checks, evidence snapshots, local evidence snapshot archive indexes, evidence snapshot reuse decision matrices, buyer proof packet drafts, dataset handoff drafts, and public copy drafts' in page
+    assert 'Private follow-up drafts, manual invoice planning, handoff integrity checks, evidence snapshots, local evidence snapshot archive indexes, evidence snapshot reuse decision matrices, buyer proof packet drafts, dataset handoff drafts, public copy drafts, and public copy QA checklists' in page
     assert 'no sending, invoice creation, checkout/payment links' in page
     assert 'HF upload, token printing, GPU/training, model downloads' in page
-    for tool_name in ['Dataset Release Auditor','Buyer Proof FAQ Builder','Post-Demo Outcome Router','Scope Quote Sheet Builder','Private Demo Delivery Receipt Kit','Wake Operator Next Action Router','Private Follow-up Draft Builder','Manual Invoice Planning Checklist Builder','Handoff Integrity Auditor','Evidence Snapshot Builder','Evidence Snapshot Notes Template Builder','Evidence Snapshot Archive Index Builder','Evidence Snapshot Reuse Decision Matrix Builder','Buyer Proof Packet Draft Builder','Dataset Handoff Draft Builder','Public Copy Draft Builder']:
+    for tool_name in ['Dataset Release Auditor','Buyer Proof FAQ Builder','Post-Demo Outcome Router','Scope Quote Sheet Builder','Private Demo Delivery Receipt Kit','Wake Operator Next Action Router','Private Follow-up Draft Builder','Manual Invoice Planning Checklist Builder','Handoff Integrity Auditor','Evidence Snapshot Builder','Evidence Snapshot Notes Template Builder','Evidence Snapshot Archive Index Builder','Evidence Snapshot Reuse Decision Matrix Builder','Buyer Proof Packet Draft Builder','Dataset Handoff Draft Builder','Public Copy Draft Builder','Public Copy QA Checklist Builder']:
         assert tool_name in page, f"site/docs tool-suite mirror missing {tool_name} in {rel}"
     assert 'handoff integrity checks' in page, f"site/docs handoff integrity copy missing in {rel}"
     assert 'evidence snapshots' in page, f"site/docs evidence snapshot copy missing in {rel}"
@@ -546,6 +572,7 @@ for rel in ['site/index.html','docs/index.html']:
     assert 'buyer proof packet drafts' in page, f"site/docs buyer proof packet copy missing in {rel}"
     assert 'dataset handoff drafts' in page, f"site/docs dataset handoff copy missing in {rel}"
     assert 'public copy drafts' in page, f"site/docs public copy draft copy missing in {rel}"
+    assert 'public copy QA checklists' in page, f"site/docs public copy QA checklist copy missing in {rel}"
 rows=[]
 for line in (root/'datasets/logo-seed/metadata.jsonl').read_text().splitlines():
     if line.strip(): rows.append(json.loads(line))

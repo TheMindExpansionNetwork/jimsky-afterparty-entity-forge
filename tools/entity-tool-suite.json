@@ -586,6 +586,33 @@
       "money_actions_enabled": false,
       "external_delivery_enabled": false,
       "training_or_gpu_enabled": false
+    },
+    {
+      "id": "public-copy-qa-checklist-builder",
+      "name": "Public Copy QA Checklist Builder",
+      "requires_human_approval": true,
+      "closed_until_human_yes": true,
+      "input_contract": [
+        "approved public-copy draft id",
+        "approved page or channel context",
+        "repo-local proof paths",
+        "latest verifier result"
+      ],
+      "output_contract": [
+        "draft-only public-copy QA fields",
+        "green/yellow proof-claim review",
+        "forbidden claim removal checklist",
+        "closed-gate approval reminder"
+      ],
+      "verification": [
+        "wake_operator_public_copy_qa_checklist stays draft_only_local_qa_not_posted",
+        "public copy QA proof paths and public-copy draft dependency exist before use",
+        "no posting/outreach/payment/invoice/HF upload/GPU/training/revenue/affiliation claims introduced"
+      ],
+      "human_handoff": "Awake operator approves exact copy path, page/channel context, post/publish scope, verifier result, and expiration before any copy is posted or published.",
+      "money_actions_enabled": false,
+      "external_delivery_enabled": false,
+      "training_or_gpu_enabled": false
     }
   ],
   "safety": "No spend, outreach, payment collection, fake revenue, fake affiliation, secret exposure, training, GPU jobs, or wallet actions while unattended.",

@@ -131,6 +131,12 @@ This increment adds `contract_version: 2026-05-05.prep_only.v1` in `tools/entity
 - Outputs: draft-only public copy fields, proof-path rechecks, safe copy blocks, forbidden copy reminders, and approval expiration fields.
 - Closed gate: public copy drafts are not posted, scheduled, sent, boosted, converted into checkout copy, used for HF upload claims, used for revenue/affiliation proof, or used for outreach without separate awake approval.
 
+### 23. Public Copy QA Checklist Builder
+- Purpose: run a final local QA checklist on an approved public-copy draft before any awake operator posts or publishes it.
+- Artifact: `wake_operator_public_copy_qa_checklist` in `docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json`.
+- Outputs: draft-only QA fields, green/yellow proof-claim review, forbidden-claim removal checklist, and closed-gate approval reminders.
+- Closed gate: public copy QA checklists are not publication approvals; they do not post, schedule, send outreach, boost, create checkout/payment links, create/send invoices, upload to Hugging Face, print tokens, start GPU/training/model downloads, mutate cron, or claim revenue/affiliation without separate awake approval.
+
 ## First awake command
 
 Review the public explainer page, then pick one route:
@@ -205,3 +211,7 @@ The checkout matrix is prep-only: it helps an awake operator choose `private_dem
 ## Public copy draft lane
 
 `docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes `wake_operator_public_copy_draft`, paired with the `public-copy-draft-builder` contract. It is a **draft-only, local/private public-copy planning lane** for an already approved evidence snapshot reuse decision. It can prepare proof-backed copy blocks for awake review, but it does not post, schedule, send outreach, boost, create checkout/payment links, claim revenue, claim affiliation, upload to Hugging Face, start GPU/training/model downloads, or mutate cron without a separate awake approval.
+
+## Public copy QA checklist
+
+`docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes `wake_operator_public_copy_qa_checklist`, paired with the `public-copy-qa-checklist-builder` contract. It is a **draft-only, local/private QA lane** for reviewing an approved public-copy draft before an awake operator decides whether to post or publish. It checks proof paths, current verifier output, green/yellow claim status, forbidden-claim removal, and closed-gate copy. It does not post, schedule, send outreach, boost, create checkout/payment links, create/send invoices, upload to Hugging Face, print tokens, start GPU/training/model downloads, mutate cron, or claim revenue/affiliation without a separate awake approval.
