@@ -262,6 +262,33 @@
       "money_actions_enabled": false,
       "external_delivery_enabled": false,
       "training_or_gpu_enabled": false
+    },
+    {
+      "id": "private-demo-delivery-receipt-kit",
+      "name": "Private Demo Delivery Receipt Kit",
+      "requires_human_approval": true,
+      "closed_until_human_yes": true,
+      "input_contract": [
+        "approved private demo receipt id",
+        "approved demo recipient and channel",
+        "proof paths shown during demo",
+        "operator-selected outcome label"
+      ],
+      "output_contract": [
+        "local/manual delivery receipt fields",
+        "proof path checklist",
+        "operator attestations",
+        "next-decision router handoff"
+      ],
+      "verification": [
+        "private_demo_delivery_receipt_kit stays draft_only_not_sent",
+        "delivery receipt proof paths exist before use",
+        "no follow-up/payment/outreach/HF upload/GPU/training claims introduced"
+      ],
+      "human_handoff": "Awake operator approves recipient/channel before delivery and separately approves any follow-up, invoice workflow, upload check, public post, or quote after the receipt is reviewed.",
+      "money_actions_enabled": false,
+      "external_delivery_enabled": false,
+      "training_or_gpu_enabled": false
     }
   ],
   "safety": "No spend, outreach, payment collection, fake revenue, fake affiliation, secret exposure, training, GPU jobs, or wallet actions while unattended.",

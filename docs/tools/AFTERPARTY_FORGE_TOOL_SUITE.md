@@ -61,6 +61,11 @@ This increment adds `contract_version: 2026-05-05.prep_only.v1` in `tools/entity
 - Outputs: buyer problem summary, selected draft tier, deliverables mapped to proof paths, explicit exclusions, approval expiration.
 - Closed gate: no quote sending, checkout/payment links, manual invoice workflow, follow-up, revenue claim, HF upload, GPU/training, or cron mutation without fresh awake approval.
 
+### 11. Private Demo Delivery Receipt Kit
+- Purpose: capture a local/manual delivery receipt after an awake-approved private demo before any follow-up or invoice decision.
+- Outputs: receipt fields, proof path checklist, operator attestations, and a handoff into the post-demo outcome router.
+- Closed gate: no follow-up sending, checkout/payment links, manual invoice workflow, revenue/affiliation claim, HF upload, GPU/training/model download, public posting, or cron mutation without fresh awake approval.
+
 ## First awake command
 
 Review the public explainer page, then pick one route:
@@ -99,3 +104,7 @@ The checkout matrix is prep-only: it helps an awake operator choose `private_dem
 ## Wake-operator scope quote sheet
 
 `docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes `wake_operator_scope_quote_sheet`, paired with the `scope-quote-sheet-builder` tool contract and a timestamped usage skill. It is a **draft-only scope/quote worksheet** for after an approved private demo or post-demo outcome: it maps requested deliverables to existing proof paths and a draft tier, while keeping quote sending, checkout/payment links, manual invoice workflow, outreach/follow-up, revenue/affiliation claims, HF upload/public dataset release/private media movement, GPU/training/model downloads, and cron mutation closed until separate awake approval.
+
+## Private demo delivery receipt kit
+
+`docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes `private_demo_delivery_receipt_kit`, paired with the `private-demo-delivery-receipt-kit` tool contract and a timestamped usage skill. It is a **local/manual receipt template only** for after an awake-approved private demo: it captures what proof paths were shown, the selected outcome label, and operator attestations before routing into the post-demo outcome capture. It keeps follow-up sending, checkout/payment links, manual invoice workflow, revenue/affiliation claims, HF upload/public dataset release/private media movement, GPU/training/model downloads, and cron mutation closed until separate awake approval.

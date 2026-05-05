@@ -25,7 +25,7 @@
     "datasets/logo-seed/metadata.jsonl"
   ],
   "tool_suite_manifest": "tools/entity-tool-suite.json",
-  "prep_only_increment": "2026-05-05-scope-quote-sheet-v1",
+  "prep_only_increment": "2026-05-05-private-demo-delivery-receipt-v1",
   "buyer_facing_offer_draft": {
     "headline": "Turn your AI agent idea into a safe, forkable entity launch kit.",
     "audience": [
@@ -527,6 +527,63 @@
         "mutating cron jobs"
       ],
       "verification_note": "Run PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py and git diff --check before using this scope/quote worksheet in any buyer-facing workflow."
+    },
+    "private_demo_delivery_receipt_kit": {
+      "status": "draft_only_not_sent",
+      "purpose": "Give the awake operator a local/manual delivery receipt template after an approved private demo, before any follow-up, invoice, checkout/payment link, upload, GPU/training, or public claim is allowed.",
+      "receipt_scope": "local_manual_record_only_no_external_delivery",
+      "receipt_fields": [
+        "approved_demo_receipt_id",
+        "demo_date_utc",
+        "approved_demo_recipient",
+        "approved_demo_channel",
+        "operator_name_or_handle",
+        "proof_paths_shown",
+        "questions_answered",
+        "buyer_requested_next_step",
+        "operator_selected_outcome_label",
+        "followup_approval_expires_utc"
+      ],
+      "required_proof_paths": [
+        "docs/proof/AFTERPARTY_PROOF_LEDGER.json",
+        "tools/entity-tool-suite.json",
+        "docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json",
+        "docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md",
+        "site/index.html"
+      ],
+      "allowed_outcome_labels": [
+        "private_demo_complete_no_followup_yet",
+        "interested_manual_invoice_after_yes",
+        "needs_more_proof_before_followup",
+        "dataset_release_question_requires_approval",
+        "no_fit_do_not_contact_unattended"
+      ],
+      "operator_attestations_required": [
+        "The demo recipient/channel were approved while awake before delivery.",
+        "Only repo-local proof paths were shown or claimed.",
+        "No checkout/payment URL, invoice, follow-up message, upload, GPU/training job, model download, public post, or revenue/affiliation claim was created during the receipt step.",
+        "The verifier command passed before relying on this receipt for any next decision."
+      ],
+      "next_decision_router": "post_demo_outcome_capture",
+      "approval_required_before_any_followup": [
+        "approved_followup_recipient",
+        "approved_followup_channel",
+        "approved_message_path",
+        "approved_price_tier_usd_if_any",
+        "approved_manual_invoice_workflow_path_if_any",
+        "approval_expires_utc"
+      ],
+      "forbidden_until_approval": [
+        "sending follow-up messages",
+        "creating checkout or payment links",
+        "starting a manual invoice workflow",
+        "claiming revenue before payment is verified",
+        "claiming affiliation or sponsorship",
+        "uploading private data or publishing datasets",
+        "starting GPU/training/model-download jobs",
+        "mutating cron jobs"
+      ],
+      "verification_note": "Run PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py and git diff --check before using this delivery receipt in any buyer-facing workflow."
     }
   },
   "local_lead_schema": [

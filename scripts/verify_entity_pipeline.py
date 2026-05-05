@@ -143,6 +143,24 @@ for field in ['approved_buyer_or_demo_receipt','approved_scope_summary','approve
 for forbidden in ['sending a quote or follow-up','creating checkout or payment links','claiming revenue before payment is verified','claiming affiliation or sponsorship','uploading private data or publishing datasets','starting GPU/training/model-download jobs','mutating cron jobs']:
     assert forbidden in scope_quote.get('forbidden_until_approval',[]), forbidden
 assert 'verify_entity_pipeline.py' in scope_quote.get('verification_note','')
+delivery_receipt=offer.get('private_demo_delivery_receipt_kit',{})
+assert delivery_receipt.get('status') == 'draft_only_not_sent'
+assert delivery_receipt.get('receipt_scope') == 'local_manual_record_only_no_external_delivery'
+assert 'local/manual delivery receipt' in delivery_receipt.get('purpose','').lower()
+for field in ['approved_demo_receipt_id','demo_date_utc','approved_demo_recipient','approved_demo_channel','proof_paths_shown','operator_selected_outcome_label','followup_approval_expires_utc']:
+    assert field in delivery_receipt.get('receipt_fields',[]), field
+for rel in delivery_receipt.get('required_proof_paths',[]):
+    assert not rel.startswith('/') and '..' not in Path(rel).parts
+    assert (root/rel).exists(), f"delivery receipt proof path missing: {rel}"
+expected_receipt_outcomes={'private_demo_complete_no_followup_yet','interested_manual_invoice_after_yes','needs_more_proof_before_followup','dataset_release_question_requires_approval','no_fit_do_not_contact_unattended'}
+assert expected_receipt_outcomes <= set(delivery_receipt.get('allowed_outcome_labels',[]))
+assert len(delivery_receipt.get('operator_attestations_required',[])) >= 4
+assert delivery_receipt.get('next_decision_router') == 'post_demo_outcome_capture'
+for field in ['approved_followup_recipient','approved_followup_channel','approved_message_path','approval_expires_utc']:
+    assert field in delivery_receipt.get('approval_required_before_any_followup',[]), field
+for forbidden in ['sending follow-up messages','creating checkout or payment links','starting a manual invoice workflow','claiming revenue before payment is verified','claiming affiliation or sponsorship','uploading private data or publishing datasets','starting GPU/training/model-download jobs','mutating cron jobs']:
+    assert forbidden in delivery_receipt.get('forbidden_until_approval',[]), forbidden
+assert 'verify_entity_pipeline.py' in delivery_receipt.get('verification_note','')
 lead_schema=rm.get('local_lead_schema',[])
 assert any(f.get('field')=='approval_status' and f.get('default')=='draft_only' for f in lead_schema)
 dataset_release=rm.get('dataset_release_readiness',{})
@@ -234,6 +252,7 @@ assert 'dataset-release-auditor' in tool_ids
 assert 'buyer-proof-faq-builder' in tool_ids
 assert 'post-demo-outcome-router' in tool_ids
 assert 'scope-quote-sheet-builder' in tool_ids
+assert 'private-demo-delivery-receipt-kit' in tool_ids
 post_demo_tool=next(tool for tool in tm.get('tools',[]) if tool.get('id')=='post-demo-outcome-router')
 assert post_demo_tool.get('requires_human_approval') is True
 assert any('post_demo_outcome_capture' in item for item in post_demo_tool.get('verification',[]))
@@ -241,6 +260,10 @@ scope_quote_tool=next(tool for tool in tm.get('tools',[]) if tool.get('id')=='sc
 assert scope_quote_tool.get('requires_human_approval') is True
 assert any('wake_operator_scope_quote_sheet' in item for item in scope_quote_tool.get('verification',[]))
 assert scope_quote_tool.get('money_actions_enabled') is False
+delivery_receipt_tool=next(tool for tool in tm.get('tools',[]) if tool.get('id')=='private-demo-delivery-receipt-kit')
+assert delivery_receipt_tool.get('requires_human_approval') is True
+assert any('private_demo_delivery_receipt_kit' in item for item in delivery_receipt_tool.get('verification',[]))
+assert delivery_receipt_tool.get('external_delivery_enabled') is False
 assert 'payment links or checkout activation' in tm.get('forbidden_unattended_actions', [])
 for tool in tm.get('tools', []):
     assert tool.get('closed_until_human_yes') is True
