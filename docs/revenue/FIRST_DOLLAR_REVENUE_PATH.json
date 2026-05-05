@@ -25,7 +25,7 @@
     "datasets/logo-seed/metadata.jsonl"
   ],
   "tool_suite_manifest": "tools/entity-tool-suite.json",
-  "prep_only_increment": "2026-05-05-post-demo-outcome-router-v1",
+  "prep_only_increment": "2026-05-05-scope-quote-sheet-v1",
   "buyer_facing_offer_draft": {
     "headline": "Turn your AI agent idea into a safe, forkable entity launch kit.",
     "audience": [
@@ -455,6 +455,78 @@
         "mutating cron jobs"
       ],
       "verification_note": "Run PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py and git diff --check before using this receipt/router in any buyer-facing workflow."
+    },
+    "wake_operator_scope_quote_sheet": {
+      "status": "draft_only_not_sent",
+      "purpose": "Convert an interested post-demo outcome into a bounded scope/quote worksheet for awake operator review before any invoice, checkout URL, follow-up, upload, GPU/training, or public claim exists.",
+      "allowed_use_cases": [
+        "summarize the buyer problem after an approved private demo",
+        "map requested deliverables to repo-local proof paths",
+        "choose a draft price tier from the existing price_ladder without collecting payment",
+        "list missing approvals before any manual invoice or message is prepared"
+      ],
+      "quote_fields": [
+        "approved_demo_receipt_id",
+        "buyer_problem_summary",
+        "selected_offer_tier_usd",
+        "included_deliverables",
+        "proof_paths_to_show",
+        "explicit_exclusions",
+        "approval_expires_utc"
+      ],
+      "tier_guidance": [
+        {
+          "tier_usd": 55,
+          "scope": "proof-ledger review and one private demo packet only",
+          "required_proof_paths": [
+            "docs/proof/AFTERPARTY_PROOF_LEDGER.json",
+            "docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json"
+          ]
+        },
+        {
+          "tier_usd": 155,
+          "scope": "payload manifest, verifier handoff, and tool-suite summary for one entity concept",
+          "required_proof_paths": [
+            "payloads/afterparty-forge/manifest.json",
+            "tools/entity-tool-suite.json",
+            "scripts/verify_entity_pipeline.py"
+          ]
+        },
+        {
+          "tier_usd": 555,
+          "scope": "private launch kit: proof ledger, offer draft, demo script, static-site manifest notes, and safety gates",
+          "required_proof_paths": [
+            "docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md",
+            "docs/launch/RELAUNCH_PACKAGE_DRAFT.md",
+            "site/index.html"
+          ]
+        }
+      ],
+      "explicit_exclusions_required": [
+        "no checkout/payment URL creation",
+        "no unattended outreach or follow-up sending",
+        "no revenue or affiliation claim until independently verified",
+        "no Hugging Face upload/public dataset release/private media movement",
+        "no GPU/training/model downloads or paid provider spend"
+      ],
+      "approval_required_before_use": [
+        "approved_buyer_or_demo_receipt",
+        "approved_scope_summary",
+        "approved_price_tier_usd",
+        "approved_manual_invoice_workflow_path",
+        "approved_followup_message_path",
+        "approval_expires_utc"
+      ],
+      "forbidden_until_approval": [
+        "sending a quote or follow-up",
+        "creating checkout or payment links",
+        "claiming revenue before payment is verified",
+        "claiming affiliation or sponsorship",
+        "uploading private data or publishing datasets",
+        "starting GPU/training/model-download jobs",
+        "mutating cron jobs"
+      ],
+      "verification_note": "Run PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py and git diff --check before using this scope/quote worksheet in any buyer-facing workflow."
     }
   },
   "local_lead_schema": [

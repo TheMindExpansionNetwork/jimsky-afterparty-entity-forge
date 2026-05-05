@@ -235,6 +235,33 @@
       "money_actions_enabled": false,
       "external_delivery_enabled": false,
       "training_or_gpu_enabled": false
+    },
+    {
+      "id": "scope-quote-sheet-builder",
+      "name": "Scope Quote Sheet Builder",
+      "requires_human_approval": true,
+      "closed_until_human_yes": true,
+      "input_contract": [
+        "approved post-demo receipt or buyer problem summary",
+        "selected draft price tier",
+        "repo-local proof paths",
+        "explicit exclusions and approval expiration"
+      ],
+      "output_contract": [
+        "draft-only scope summary",
+        "deliverables mapped to proof paths",
+        "manual invoice readiness checklist",
+        "closed-gate blocker list"
+      ],
+      "verification": [
+        "wake_operator_scope_quote_sheet stays draft_only_not_sent",
+        "scope quote proof paths exist before use",
+        "no checkout/payment/outreach/HF upload/GPU/training claims introduced"
+      ],
+      "human_handoff": "Awake operator approves buyer/receipt, exact scope, price tier, manual invoice workflow, follow-up message, and expiration before any quote is sent.",
+      "money_actions_enabled": false,
+      "external_delivery_enabled": false,
+      "training_or_gpu_enabled": false
     }
   ],
   "safety": "No spend, outreach, payment collection, fake revenue, fake affiliation, secret exposure, training, GPU jobs, or wallet actions while unattended.",

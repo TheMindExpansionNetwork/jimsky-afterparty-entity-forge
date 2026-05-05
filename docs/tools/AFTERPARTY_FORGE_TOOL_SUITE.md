@@ -56,6 +56,11 @@ This increment adds `contract_version: 2026-05-05.prep_only.v1` in `tools/entity
 - Outputs: receipt fields, outcome label, safe next-step route, closed-gate blocker list.
 - Closed gate: no follow-up messages, checkout/payment links, revenue claims, HF upload, public dataset release, GPU/training, model downloads, or cron mutation without a fresh awake approval.
 
+### 10. Scope Quote Sheet Builder
+- Purpose: turn an interested post-demo outcome into a draft scope/quote worksheet for awake review.
+- Outputs: buyer problem summary, selected draft tier, deliverables mapped to proof paths, explicit exclusions, approval expiration.
+- Closed gate: no quote sending, checkout/payment links, manual invoice workflow, follow-up, revenue claim, HF upload, GPU/training, or cron mutation without fresh awake approval.
+
 ## First awake command
 
 Review the public explainer page, then pick one route:
@@ -91,3 +96,6 @@ The checkout matrix is prep-only: it helps an awake operator choose `private_dem
 ## Post-demo outcome router
 
 `docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes `post_demo_outcome_capture`, paired with the `post-demo-outcome-router` tool contract and a timestamped usage skill. It is a **local receipt only** for after an awake-approved private demo: it records proof paths shown and routes the operator to `interested_manual_invoice_after_yes`, `needs_more_proof_before_followup`, `dataset_release_question_requires_approval`, or `no_fit_do_not_contact_unattended`. Follow-up messages, checkout/payment links, revenue claims, affiliation claims, private upload/HF publication, GPU/training/model downloads, and cron mutation remain closed until separate human approval.
+## Wake-operator scope quote sheet
+
+`docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes `wake_operator_scope_quote_sheet`, paired with the `scope-quote-sheet-builder` tool contract and a timestamped usage skill. It is a **draft-only scope/quote worksheet** for after an approved private demo or post-demo outcome: it maps requested deliverables to existing proof paths and a draft tier, while keeping quote sending, checkout/payment links, manual invoice workflow, outreach/follow-up, revenue/affiliation claims, HF upload/public dataset release/private media movement, GPU/training/model downloads, and cron mutation closed until separate awake approval.
