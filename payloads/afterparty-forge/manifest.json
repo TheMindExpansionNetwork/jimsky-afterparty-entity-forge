@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "name": "afterparty-forge-2045",
+  "display_name": "Afterparty Forge 2045",
+  "repo": "TheMindExpansionNetwork/jimsky-afterparty-entity-forge",
+  "purpose": "Forkable Jimsky digital entity + logo synthetic dataset pipeline",
+  "closed_gates": [
+    "public_posting",
+    "outreach",
+    "paid_spend",
+    "training",
+    "gpu_jobs",
+    "private_media_uploads",
+    "wallet_actions",
+    "cron_mutation"
+  ],
+  "required_files": [
+    "PAYLOAD.md",
+    "manifest.json",
+    ".env.example",
+    "docs/OPERATING_MANUAL.md",
+    "docs/SAFETY_BOUNDARIES.md",
+    "skills/bootstrap-afterparty-entity/SKILL.md"
+  ],
+  "dataset_repo": "TheMindExpansionNetwork/jimsky-afterparty-logo-seed",
+  "generated_at": "2026-05-05T05:24:58Z"
+}

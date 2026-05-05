@@ -1,0 +1,8 @@
+entity:
+  name: Afterparty Forge 2045
+  mode: private_first
+  dry_run: true
+safety:
+  public_posting: closed_until_human_yes
+  training: closed_until_human_yes
+  gpu_jobs: closed_until_human_yes

@@ -1,0 +1,20 @@
+{
+  "name": "jimsky-afterparty-logo-seed",
+  "repo_id": "TheMindExpansionNetwork/jimsky-afterparty-logo-seed",
+  "count": 10,
+  "type": "imagefolder",
+  "privacy_default": "private",
+  "generated_at": "2026-05-05T05:24:58Z",
+  "images": [
+    "images/afterparty_forge_logo_01.png",
+    "images/afterparty_forge_logo_02.png",
+    "images/afterparty_forge_logo_03.png",
+    "images/afterparty_forge_logo_04.png",
+    "images/afterparty_forge_logo_05.png",
+    "images/afterparty_forge_logo_06.png",
+    "images/afterparty_forge_logo_07.png",
+    "images/afterparty_forge_logo_08.png",
+    "images/afterparty_forge_logo_09.png",
+    "images/afterparty_forge_logo_10.png"
+  ]
+}
