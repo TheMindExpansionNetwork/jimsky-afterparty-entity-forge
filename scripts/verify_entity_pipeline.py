@@ -353,6 +353,8 @@ for rel in ['site/index.html','docs/index.html']:
     assert 'Private follow-up drafts and manual invoice planning' in page
     assert 'no sending, invoice creation, checkout/payment links' in page
     assert 'HF upload, token printing, GPU/training, model downloads' in page
+    for tool_name in ['Dataset Release Auditor','Buyer Proof FAQ Builder','Post-Demo Outcome Router','Scope Quote Sheet Builder','Private Demo Delivery Receipt Kit','Wake Operator Next Action Router','Private Follow-up Draft Builder','Manual Invoice Planning Checklist Builder']:
+        assert tool_name in page, f"site/docs tool-suite mirror missing {tool_name} in {rel}"
 rows=[]
 for line in (root/'datasets/logo-seed/metadata.jsonl').read_text().splitlines():
     if line.strip(): rows.append(json.loads(line))
