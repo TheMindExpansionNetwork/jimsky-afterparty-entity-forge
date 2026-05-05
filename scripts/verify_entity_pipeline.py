@@ -3,7 +3,7 @@ from pathlib import Path
 from PIL import Image
 import json, re, sys
 root=Path(__file__).resolve().parents[1]
-required=['README.md','automation/SAFETY_BOUNDARIES.md','docs/entity/IDENTITY.md','docs/pipeline/ENTITY_PIPELINE.md','payloads/afterparty-forge/manifest.json','datasets/logo-seed/metadata.jsonl','site/index.html','docs/index.html','docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md','docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json','docs/proof/AFTERPARTY_PROOF_LEDGER.json','tools/entity-tool-suite.json','docs/launch/RELAUNCH_PACKAGE_DRAFT.md','scripts/verify_site.py']
+required=['README.md','automation/SAFETY_BOUNDARIES.md','docs/entity/IDENTITY.md','docs/pipeline/ENTITY_PIPELINE.md','payloads/afterparty-forge/manifest.json','datasets/logo-seed/metadata.jsonl','site/index.html','docs/index.html','docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md','docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json','docs/proof/AFTERPARTY_PROOF_LEDGER.json','tools/entity-tool-suite.json','docs/launch/RELAUNCH_PACKAGE_DRAFT.md','docs/social/X_THREAD_DRAFTS.md','site/data/x-thread-drafts.json','scripts/verify_site.py']
 missing=[p for p in required if not (root/p).exists()]
 if missing: raise SystemExit('missing '+str(missing))
 json.loads((root/'payloads/afterparty-forge/manifest.json').read_text())
@@ -92,6 +92,24 @@ for c in claims:
         assert (root/rel).exists(), f"proof path missing for {c.get('id')}: {rel}"
     if c.get('truth_label') == 'green':
         assert c.get('proof_paths'), c.get('id')
+xpack=json.loads((root/'site/data/x-thread-drafts.json').read_text())
+assert xpack.get('status') == 'x_thread_drafts_manual_post_only_closed_until_human_yes'
+assert xpack.get('manual_post_required') is True
+assert xpack.get('auto_post_enabled') is False
+assert xpack.get('requires_human_approval') is True
+for key in ['public_posting','outreach','paid_promotion','claim_revenue','claim_affiliation','starts_gpu','starts_paid_api','publishes_stream','records_audio','uploads_private_media','downloads_models','starts_training','submits_hackathon','mutates_cron']:
+    assert xpack.get('risky_flags',{}).get(key) is False, key
+assert len(xpack.get('threads',[])) >= 3
+for thread in xpack.get('threads',[]):
+    assert thread.get('status') == 'draft_only_not_posted'
+    assert thread.get('post_count') == 5
+    assert (root/thread.get('claims_source','')).exists(), thread
+for rel in xpack.get('proof_paths',[]):
+    assert not rel.startswith('/') and '..' not in Path(rel).parts
+    assert (root/rel).exists(), f"x thread proof path missing: {rel}"
+xdoc=(root/'docs/social/X_THREAD_DRAFTS.md').read_text()
+for phrase in ['manual-post only','auto_post_enabled: false','claim_revenue: false','mutates_cron: false','Posting, scheduling, liking, replying, DMing, quoting, or boosting']:
+    assert phrase in xdoc, phrase
 tm=json.loads((root/'tools/entity-tool-suite.json').read_text())
 assert tm.get('contract_version') == '2026-05-05.prep_only.v1'
 assert len(tm.get('tools',[])) >= 6
