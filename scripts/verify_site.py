@@ -66,6 +66,32 @@ X_THREAD_RISKY_FLAGS = [
     'submits_hackathon',
     'mutates_cron',
 ]
+YOUTUBE_CAPTION_RISKY_FLAGS = [
+    'youtube_upload',
+    'caption_upload',
+    'public_posting',
+    'paid_promotion',
+    'outreach',
+    'claim_revenue',
+    'claim_affiliation',
+    'starts_gpu',
+    'starts_paid_api',
+    'publishes_stream',
+    'records_audio',
+    'uploads_private_media',
+    'downloads_models',
+    'starts_training',
+    'submits_hackathon',
+    'mutates_cron',
+]
+REQUIRED_YOUTUBE_CAPTION_DOC_NEEDLES = [
+    'caption_transcript_pack_ready_manual_upload_only',
+    'Do you approve using these exact captions/transcript',
+    'Manual upload only',
+    'no upload action is enabled',
+    'Blocked without approval',
+    'PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_site.py',
+]
 
 
 class LinkCollector(HTMLParser):
@@ -167,6 +193,52 @@ def verify_x_thread_drafts() -> None:
             fail(f'x thread manifest proof path missing: {proof}')
 
 
+def verify_youtube_caption_pack() -> None:
+    doc_path = ROOT / 'docs/youtube/CAPTIONS_TRANSCRIPTS_PACK.md'
+    manifest_path = ROOT / 'site/data/youtube-captions-pack.json'
+    if not doc_path.exists():
+        fail(f'missing {doc_path.relative_to(ROOT)}')
+    if not manifest_path.exists():
+        fail(f'missing {manifest_path.relative_to(ROOT)}')
+    doc_text = doc_path.read_text(encoding='utf-8')
+    for needle in REQUIRED_YOUTUBE_CAPTION_DOC_NEEDLES:
+        if needle not in doc_text:
+            fail(f'{doc_path.relative_to(ROOT)} missing captions-pack safety needle: {needle}')
+    manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+    if manifest.get('status') != 'caption_transcript_pack_ready_manual_upload_only':
+        fail('youtube captions manifest status is not manual-upload-only')
+    if manifest.get('manual_upload_required') is not True:
+        fail('youtube captions manifest must require manual upload')
+    if manifest.get('auto_upload_enabled') is not False:
+        fail('youtube captions manifest auto upload must be disabled')
+    if manifest.get('requires_human_approval') is not True:
+        fail('youtube captions manifest must require human approval')
+    if 'Do you approve' not in (manifest.get('human_approval_question') or ''):
+        fail('youtube captions manifest needs an explicit human approval question')
+    flags = manifest.get('risky_flags') or {}
+    for flag in YOUTUBE_CAPTION_RISKY_FLAGS:
+        if flags.get(flag) is not False:
+            fail(f'youtube captions manifest risky flag appears open or missing: {flag}')
+    if len(manifest.get('blocked_without_approval') or []) < 8:
+        fail('youtube captions manifest needs a substantial blocked-without-approval list')
+    caption_files = manifest.get('caption_files') or []
+    if len(caption_files) < 2:
+        fail('youtube captions manifest must include VTT and SRT caption files')
+    for item in caption_files:
+        rel = item.get('path')
+        if not rel or not (ROOT / rel).exists():
+            fail(f'youtube captions caption path missing: {rel}')
+        if int(item.get('cue_count') or 0) < 6:
+            fail(f'youtube captions cue count too low: {rel}')
+    if len(manifest.get('chapters') or []) < 5:
+        fail('youtube captions manifest must include chapter markers')
+    if len(manifest.get('shorts_hooks') or []) < 3:
+        fail('youtube captions manifest must include at least three Shorts hooks')
+    for proof in manifest.get('proof_paths') or []:
+        if not (ROOT / proof).exists():
+            fail(f'youtube captions manifest proof path missing: {proof}')
+
+
 def run_entity_verifier() -> None:
     result = subprocess.run(
         [sys.executable, 'scripts/verify_entity_pipeline.py'],
@@ -192,6 +264,7 @@ def main() -> None:
     verify_json_files()
     verify_relaunch_doc()
     verify_x_thread_drafts()
+    verify_youtube_caption_pack()
     run_entity_verifier()
     print('VERIFY OK site relaunch surfaces closed-gate links/json/entity')
 

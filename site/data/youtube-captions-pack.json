@@ -1,0 +1,83 @@
+{
+  "status": "caption_transcript_pack_ready_manual_upload_only",
+  "manual_upload_required": true,
+  "auto_upload_enabled": false,
+  "requires_human_approval": true,
+  "target_video": {
+    "working_title": "Afterparty Forge 2045: Human-Gated Relaunch Proof",
+    "planned_path": "dist/video/afterparty-forge-2045-release-720p.mp4",
+    "current_video_required_for_this_pack": false
+  },
+  "human_approval_question": "Do you approve using these exact captions/transcript with the final reviewed video file, and do you approve a human-only manual upload after checking the title, description, proof links, and safety copy?",
+  "caption_files": [
+    {
+      "path": "docs/youtube/captions/afterparty-forge-2045-release_en.vtt",
+      "format": "vtt",
+      "language": "en",
+      "cue_count": 8
+    },
+    {
+      "path": "docs/youtube/captions/afterparty-forge-2045-release_en.srt",
+      "format": "srt",
+      "language": "en",
+      "cue_count": 8
+    }
+  ],
+  "transcript_doc": "docs/youtube/CAPTIONS_TRANSCRIPTS_PACK.md",
+  "proof_paths": [
+    "docs/youtube/CAPTIONS_TRANSCRIPTS_PACK.md",
+    "docs/youtube/captions/afterparty-forge-2045-release_en.vtt",
+    "docs/youtube/captions/afterparty-forge-2045-release_en.srt",
+    "site/index.html",
+    "docs/index.html",
+    "docs/launch/RELAUNCH_PACKAGE_DRAFT.md",
+    "docs/social/X_THREAD_DRAFTS.md",
+    "docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md"
+  ],
+  "chapters": [
+    {"time": "00:00", "title": "Failed launch remix"},
+    {"time": "00:08", "title": "Repo proof inventory"},
+    {"time": "00:18", "title": "Manual-only release surface"},
+    {"time": "00:30", "title": "Closed gates and non-claims"},
+    {"time": "00:44", "title": "Operator review path"},
+    {"time": "00:54", "title": "Human approval checkpoint"}
+  ],
+  "shorts_hooks": [
+    "Failed launch? Don't fake traction. Package proof, keep gates closed, and let a human approve the next move.",
+    "Afterparty Forge 2045 turns chaos into a reviewable release kit — captions included, upload disabled.",
+    "The safest launch artifact is the one that proves what exists and refuses to pretend the rest happened."
+  ],
+  "blocked_without_approval": [
+    "youtube_upload",
+    "caption_upload",
+    "public_posting",
+    "x_posting_or_spaces",
+    "paid_promotion",
+    "outreach",
+    "checkout_or_payment_links",
+    "revenue_claims",
+    "affiliation_claims",
+    "gpu_or_training",
+    "private_media_upload",
+    "recording_or_livestream",
+    "cron_mutation"
+  ],
+  "risky_flags": {
+    "youtube_upload": false,
+    "caption_upload": false,
+    "public_posting": false,
+    "paid_promotion": false,
+    "outreach": false,
+    "claim_revenue": false,
+    "claim_affiliation": false,
+    "starts_gpu": false,
+    "starts_paid_api": false,
+    "publishes_stream": false,
+    "records_audio": false,
+    "uploads_private_media": false,
+    "downloads_models": false,
+    "starts_training": false,
+    "submits_hackathon": false,
+    "mutates_cron": false
+  }
+}
