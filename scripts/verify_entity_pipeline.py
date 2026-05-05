@@ -3,7 +3,7 @@ from pathlib import Path
 from PIL import Image
 import json, re, sys
 root=Path(__file__).resolve().parents[1]
-required=['README.md','automation/SAFETY_BOUNDARIES.md','docs/entity/IDENTITY.md','docs/pipeline/ENTITY_PIPELINE.md','payloads/afterparty-forge/manifest.json','datasets/logo-seed/metadata.jsonl','site/index.html','docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md','docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json','tools/entity-tool-suite.json']
+required=['README.md','automation/SAFETY_BOUNDARIES.md','docs/entity/IDENTITY.md','docs/pipeline/ENTITY_PIPELINE.md','payloads/afterparty-forge/manifest.json','datasets/logo-seed/metadata.jsonl','site/index.html','docs/index.html','docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md','docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json','tools/entity-tool-suite.json']
 missing=[p for p in required if not (root/p).exists()]
 if missing: raise SystemExit('missing '+str(missing))
 json.loads((root/'payloads/afterparty-forge/manifest.json').read_text())
@@ -13,9 +13,10 @@ assert rm.get('closed_gates',{}).get('payment_links') is False
 assert rm.get('closed_gates',{}).get('outreach') is False
 tm=json.loads((root/'tools/entity-tool-suite.json').read_text())
 assert len(tm.get('tools',[])) >= 6
-site=(root/'site/index.html').read_text()
-assert 'entity-tool-suite' in site
-assert 'Money actions remain closed until human approval' in site
+for rel in ['site/index.html','docs/index.html']:
+    page=(root/rel).read_text()
+    assert 'entity-tool-suite' in page
+    assert 'Money actions remain closed until human approval' in page
 rows=[]
 for line in (root/'datasets/logo-seed/metadata.jsonl').read_text().splitlines():
     if line.strip(): rows.append(json.loads(line))
