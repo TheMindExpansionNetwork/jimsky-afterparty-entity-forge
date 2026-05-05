@@ -191,6 +191,22 @@ for rel in followup_template.get('required_proof_paths',[]):
 for forbidden in ['sending or scheduling the follow-up','creating checkout or payment links','starting a manual invoice workflow','claiming revenue before payment is verified','claiming affiliation or sponsorship','uploading private data or publishing datasets','printing HF tokens or credential-store contents','starting GPU/training/model-download jobs','mutating cron jobs']:
     assert forbidden in followup_template.get('forbidden_until_approval',[]), forbidden
 assert 'verify_entity_pipeline.py' in followup_template.get('verification_note','')
+manual_invoice=offer.get('wake_operator_manual_invoice_planning_checklist',{})
+assert manual_invoice.get('status') == 'draft_only_not_sent'
+assert 'local/manual invoice planning checklist' in manual_invoice.get('purpose','').lower()
+assert manual_invoice.get('allowed_trigger','').startswith('wake_operator_next_action_router.route_id == approve_manual_invoice_planning')
+for field in ['approved_demo_receipt_id','approved_route_id','approved_buyer_or_org','approved_scope_quote_sheet_id','selected_price_tier_usd','approved_manual_invoice_workflow_path','proof_paths_to_attach','explicit_exclusions','approval_expires_utc']:
+    assert field in manual_invoice.get('planning_fields',[]), field
+assert len(manual_invoice.get('required_preconditions',[])) >= 4
+assert any('real buyer explicitly asked to buy' in item.lower() for item in manual_invoice.get('required_preconditions',[]))
+for rel in manual_invoice.get('required_proof_paths',[]):
+    assert not rel.startswith('/') and '..' not in Path(rel).parts
+    assert (root/rel).exists(), f"manual invoice checklist proof path missing: {rel}"
+assert len(manual_invoice.get('manual_invoice_copy_constraints',[])) >= 4
+assert any('do not create or send invoices unattended' in item.lower() for item in manual_invoice.get('manual_invoice_copy_constraints',[]))
+for forbidden in ['creating checkout or payment links','creating or sending an invoice','starting a manual invoice workflow','sending follow-up messages','claiming revenue before payment is verified','claiming affiliation or sponsorship','uploading private data or publishing datasets','printing HF tokens or credential-store contents','starting GPU/training/model-download jobs','public posting','mutating cron jobs']:
+    assert forbidden in manual_invoice.get('forbidden_until_approval',[]), forbidden
+assert 'verify_entity_pipeline.py' in manual_invoice.get('verification_note','')
 lead_schema=rm.get('local_lead_schema',[])
 assert any(f.get('field')=='approval_status' and f.get('default')=='draft_only' for f in lead_schema)
 dataset_release=rm.get('dataset_release_readiness',{})
@@ -285,6 +301,7 @@ assert 'scope-quote-sheet-builder' in tool_ids
 assert 'private-demo-delivery-receipt-kit' in tool_ids
 assert 'wake-operator-next-action-router' in tool_ids
 assert 'private-followup-draft-builder' in tool_ids
+assert 'manual-invoice-planning-checklist-builder' in tool_ids
 post_demo_tool=next(tool for tool in tm.get('tools',[]) if tool.get('id')=='post-demo-outcome-router')
 assert post_demo_tool.get('requires_human_approval') is True
 assert any('post_demo_outcome_capture' in item for item in post_demo_tool.get('verification',[]))
@@ -308,6 +325,12 @@ assert any('private_followup_draft_template' in item for item in followup_tool.g
 assert followup_tool.get('money_actions_enabled') is False
 assert followup_tool.get('external_delivery_enabled') is False
 assert followup_tool.get('training_or_gpu_enabled') is False
+manual_invoice_tool=next(tool for tool in tm.get('tools',[]) if tool.get('id')=='manual-invoice-planning-checklist-builder')
+assert manual_invoice_tool.get('requires_human_approval') is True
+assert any('wake_operator_manual_invoice_planning_checklist' in item for item in manual_invoice_tool.get('verification',[]))
+assert manual_invoice_tool.get('money_actions_enabled') is False
+assert manual_invoice_tool.get('external_delivery_enabled') is False
+assert manual_invoice_tool.get('training_or_gpu_enabled') is False
 assert 'payment links or checkout activation' in tm.get('forbidden_unattended_actions', [])
 for tool in tm.get('tools', []):
     assert tool.get('closed_until_human_yes') is True

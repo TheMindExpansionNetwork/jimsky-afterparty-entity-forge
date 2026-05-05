@@ -25,7 +25,7 @@
     "datasets/logo-seed/metadata.jsonl"
   ],
   "tool_suite_manifest": "tools/entity-tool-suite.json",
-  "prep_only_increment": "2026-05-05-private-followup-draft-template-v1",
+  "prep_only_increment": "2026-05-05-manual-invoice-planning-checklist-v1",
   "buyer_facing_offer_draft": {
     "headline": "Turn your AI agent idea into a safe, forkable entity launch kit.",
     "audience": [
@@ -712,6 +712,54 @@
         "mutating cron jobs"
       ],
       "verification_note": "Run PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py and git diff --check before any awake operator copies this follow-up draft into an external channel."
+    },
+    "wake_operator_manual_invoice_planning_checklist": {
+      "status": "draft_only_not_sent",
+      "purpose": "Convert an approved next-action route into a local/manual invoice planning checklist without creating, sending, scheduling, or collecting payment while unattended.",
+      "allowed_trigger": "wake_operator_next_action_router.route_id == approve_manual_invoice_planning with approved buyer/receipt, scope, tier, manual invoice workflow path, and expiration supplied by an awake operator",
+      "planning_fields": [
+        "approved_demo_receipt_id",
+        "approved_route_id",
+        "approved_buyer_or_org",
+        "approved_scope_quote_sheet_id",
+        "selected_price_tier_usd",
+        "approved_manual_invoice_workflow_path",
+        "proof_paths_to_attach",
+        "explicit_exclusions",
+        "approval_expires_utc"
+      ],
+      "required_preconditions": [
+        "A real buyer explicitly asked to buy after reviewing proof.",
+        "The awake operator selected approve_manual_invoice_planning in the next-action router.",
+        "The selected price tier maps to an existing scope/quote proof path.",
+        "The verifier command passes before any external invoice workflow is prepared."
+      ],
+      "required_proof_paths": [
+        "docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json",
+        "docs/proof/AFTERPARTY_PROOF_LEDGER.json",
+        "tools/entity-tool-suite.json",
+        "docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md"
+      ],
+      "manual_invoice_copy_constraints": [
+        "Use this checklist only as a local planning artifact; do not create or send invoices unattended.",
+        "State that payment collection, invoice sending, checkout links, revenue claims, uploads, public posting, and GPU/training remain closed until a separate human approval.",
+        "Do not imply OpenAI/event/sponsor affiliation or guaranteed revenue.",
+        "Attach only repo-local proof paths that exist and were approved by the awake operator."
+      ],
+      "forbidden_until_approval": [
+        "creating checkout or payment links",
+        "creating or sending an invoice",
+        "starting a manual invoice workflow",
+        "sending follow-up messages",
+        "claiming revenue before payment is verified",
+        "claiming affiliation or sponsorship",
+        "uploading private data or publishing datasets",
+        "printing HF tokens or credential-store contents",
+        "starting GPU/training/model-download jobs",
+        "public posting",
+        "mutating cron jobs"
+      ],
+      "verification_note": "Run PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py and git diff --check before any awake operator uses this checklist outside the repo."
     }
   },
   "local_lead_schema": [

@@ -128,3 +128,7 @@ The checkout matrix is prep-only: it helps an awake operator choose `private_dem
 ## Private follow-up draft template
 
 `docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes `private_followup_draft_template`, paired with the `private-followup-draft-builder` tool contract. It is a **draft-only, not-sent** template for an already awake-approved private demo context: it records the approved receipt, route, recipient/channel, message path, proof paths, and one bounded next-step question. It keeps follow-up sending/scheduling, checkout/payment links, manual invoice workflow, revenue/affiliation claims, HF upload/token printing, GPU/training/model downloads, public posting, and cron mutation closed until separate awake approval.
+
+## Manual invoice planning checklist
+
+`docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes `wake_operator_manual_invoice_planning_checklist`, paired with the `manual-invoice-planning-checklist-builder` tool contract. It is a **local planning artifact only** for the `approve_manual_invoice_planning` route: it records approved receipt/scope/tier fields, proof paths to attach, explicit exclusions, and invoice-copy constraints. It does not create or send invoices, checkout links, payment links, follow-ups, public posts, uploads, GPU/training jobs, or revenue/affiliation claims; every external money action stays closed until a separate awake human approval.

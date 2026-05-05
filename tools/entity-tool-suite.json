@@ -343,6 +343,33 @@
       "money_actions_enabled": false,
       "external_delivery_enabled": false,
       "training_or_gpu_enabled": false
+    },
+    {
+      "id": "manual-invoice-planning-checklist-builder",
+      "name": "Manual Invoice Planning Checklist Builder",
+      "requires_human_approval": true,
+      "closed_until_human_yes": true,
+      "input_contract": [
+        "approved private demo receipt or scope/quote sheet id",
+        "approved next-action route id",
+        "selected draft price tier",
+        "approved manual invoice workflow path and expiration"
+      ],
+      "output_contract": [
+        "local-only invoice planning fields",
+        "proof paths to attach",
+        "explicit exclusions",
+        "closed-gate reminder block"
+      ],
+      "verification": [
+        "wake_operator_manual_invoice_planning_checklist stays draft_only_not_sent",
+        "manual invoice proof paths exist before use",
+        "no invoice/checkout/follow-up/revenue/HF upload/GPU/training claims introduced"
+      ],
+      "human_handoff": "Awake operator approves buyer/receipt, selected tier, invoice workflow path, exact follow-up copy, payment mechanism, and expiration before any invoice or payment action is created.",
+      "money_actions_enabled": false,
+      "external_delivery_enabled": false,
+      "training_or_gpu_enabled": false
     }
   ],
   "safety": "No spend, outreach, payment collection, fake revenue, fake affiliation, secret exposure, training, GPU jobs, or wallet actions while unattended.",
