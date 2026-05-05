@@ -46,6 +46,20 @@ assert 'approved_demo_channel' in acceptance.get('operator_decision_fields',[])
 closed=acceptance.get('closed_gate_confirmation',{})
 for key in ['payment_links','outreach_automation','public_posting','gpu_or_training','private_upload','revenue_claim','affiliation_claim']:
     assert closed.get(key) is False, key
+checkout_matrix=offer.get('wake_operator_checkout_decision_matrix',{})
+assert checkout_matrix.get('status') == 'draft_only_not_sent'
+assert 'checkout link' in checkout_matrix.get('purpose','').lower()
+options=checkout_matrix.get('decision_options',[])
+assert len(options) >= 3
+option_ids={o.get('option_id') for o in options}
+assert {'private_demo_only','manual_invoice_after_yes','keep_building_proof'} <= option_ids
+for option in options:
+    assert option.get('recommended_when') and option.get('allowed_next_step')
+    assert option.get('still_closed'), option
+assert 'approved_payment_workflow_path' in checkout_matrix.get('approval_required_fields',[])
+for forbidden in ['checkout URL creation','cold outreach','claiming revenue','starting GPU/training jobs']:
+    assert forbidden in checkout_matrix.get('forbidden_until_approval',[])
+assert 'verify_entity_pipeline.py' in checkout_matrix.get('verification_note','')
 lead_schema=rm.get('local_lead_schema',[])
 assert any(f.get('field')=='approval_status' and f.get('default')=='draft_only' for f in lead_schema)
 pl=json.loads((root/'docs/proof/AFTERPARTY_PROOF_LEDGER.json').read_text())

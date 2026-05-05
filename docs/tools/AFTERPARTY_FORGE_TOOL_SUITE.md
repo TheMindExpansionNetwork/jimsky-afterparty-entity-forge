@@ -52,6 +52,6 @@ Review the public explainer page, then pick one route:
 
 ## Prep-only first-dollar offer draft
 
-The current first-dollar path is a **local offer draft**, not a live storefront. The draft now names the buyer audience, deliverables, exclusions, a local lead schema, a 7-minute private demo script, and objection-safe responses in `docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json`.
+The current first-dollar path is a **local offer draft**, not a live storefront. The draft now names the buyer audience, deliverables, exclusions, a local lead schema, a 7-minute private demo script, objection-safe responses, and a wake-operator checkout decision matrix in `docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json`.
 
-Closed gates remain unchanged: no payment links, outreach, spend, revenue claims, public posting, GPU/training, wallets, or affiliation claims without an awake human yes.
+The checkout matrix is prep-only: it helps an awake operator choose `private_demo_only`, `manual_invoice_after_yes`, or `keep_building_proof` after reviewing proof. Closed gates remain unchanged: no payment links, outreach, spend, revenue claims, public posting, GPU/training, wallets, private upload, or affiliation claims without an awake human yes.
