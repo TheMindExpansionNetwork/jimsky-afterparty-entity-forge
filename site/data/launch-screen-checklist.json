@@ -1,0 +1,70 @@
+{
+  "status": "launch_screen_checklist_manual_run_only_closed_until_human_yes",
+  "manual_run_required": true,
+  "auto_stream_enabled": false,
+  "requires_human_approval": true,
+  "human_approval_question": "Do you approve running this exact Afterparty Forge 2045 screen checklist manually on a private screen-share, with no recording, no public posting, no outreach, no livestream, no payment link, no private-media upload, and no GPU/training/model-download action?",
+  "proof_paths": [
+    "docs/launch/SCREEN_CHECKLIST.md",
+    "site/index.html",
+    "docs/index.html",
+    "docs/launch/RELAUNCH_PACKAGE_DRAFT.md",
+    "docs/social/X_THREAD_DRAFTS.md",
+    "docs/youtube/CAPTIONS_TRANSCRIPTS_PACK.md",
+    "docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md",
+    "scripts/verify_site.py",
+    "scripts/verify_entity_pipeline.py"
+  ],
+  "click_path": [
+    {"label": "Static proof site", "path": "site/index.html", "expected_highlight": "AFTERPARTY FORGE 2045"},
+    {"label": "Relaunch package gates", "path": "docs/launch/RELAUNCH_PACKAGE_DRAFT.md", "expected_highlight": "not approved for public posting"},
+    {"label": "Manual X draft pack", "path": "docs/social/X_THREAD_DRAFTS.md", "expected_highlight": "draft-only, manual-post only"},
+    {"label": "Manual YouTube captions pack", "path": "docs/youtube/CAPTIONS_TRANSCRIPTS_PACK.md", "expected_highlight": "caption_transcript_pack_ready_manual_upload_only"},
+    {"label": "Tool suite contracts", "path": "docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md", "expected_highlight": "Money actions remain closed"},
+    {"label": "Screen checklist", "path": "docs/launch/SCREEN_CHECKLIST.md", "expected_highlight": "launch_screen_checklist_manual_run_only_closed_until_human_yes"}
+  ],
+  "terminal_proof_commands": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_site.py",
+    "PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py",
+    "git diff --check",
+    "git status --short --branch"
+  ],
+  "expected_success_highlights": [
+    "VERIFY OK site relaunch surfaces closed-gate links/json/entity",
+    "VERIFY OK afterparty entity pipeline images=10",
+    "no git diff --check output",
+    "manual manifest status lines show requires_human_approval true"
+  ],
+  "blocked_without_approval": [
+    "public posting or scheduled posts",
+    "X/Twitter Spaces or livestream creation",
+    "OBS/RTMP publish or YouTube upload",
+    "recording audio/video of private media",
+    "direct outreach, DMs, email campaigns, forms, or lead scraping",
+    "checkout/payment links, invoices, wallets, crypto, domains, paid ads, subscriptions, or spend",
+    "GPU jobs, paid APIs, training, model downloads, dataset upload, or private-media upload",
+    "cron creation, deletion, or mutation",
+    "revenue, customer, sponsorship, OpenAI affiliation, attendance, or external-result claims"
+  ],
+  "risky_flags": {
+    "public_posting": false,
+    "x_space_creation": false,
+    "livestream_creation": false,
+    "youtube_upload": false,
+    "caption_upload": false,
+    "payment_links": false,
+    "outreach": false,
+    "paid_promotion": false,
+    "spend": false,
+    "claim_revenue": false,
+    "claim_affiliation": false,
+    "records_audio": false,
+    "uploads_private_media": false,
+    "starts_gpu": false,
+    "starts_paid_api": false,
+    "downloads_models": false,
+    "starts_training": false,
+    "submits_hackathon": false,
+    "mutates_cron": false
+  }
+}

@@ -92,6 +92,35 @@ REQUIRED_YOUTUBE_CAPTION_DOC_NEEDLES = [
     'Blocked without approval',
     'PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_site.py',
 ]
+LAUNCH_SCREEN_RISKY_FLAGS = [
+    'public_posting',
+    'x_space_creation',
+    'livestream_creation',
+    'youtube_upload',
+    'caption_upload',
+    'payment_links',
+    'outreach',
+    'paid_promotion',
+    'spend',
+    'claim_revenue',
+    'claim_affiliation',
+    'records_audio',
+    'uploads_private_media',
+    'starts_gpu',
+    'starts_paid_api',
+    'downloads_models',
+    'starts_training',
+    'submits_hackathon',
+    'mutates_cron',
+]
+REQUIRED_LAUNCH_SCREEN_DOC_NEEDLES = [
+    'launch_screen_checklist_manual_run_only_closed_until_human_yes',
+    'Do you approve running this exact Afterparty Forge 2045 screen checklist manually',
+    'PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_site.py',
+    'VERIFY OK site relaunch surfaces closed-gate links/json/entity',
+    'no recording, no public posting, no outreach, no livestream, no payment link',
+    'Blocked without approval',
+]
 
 
 class LinkCollector(HTMLParser):
@@ -239,6 +268,47 @@ def verify_youtube_caption_pack() -> None:
             fail(f'youtube captions manifest proof path missing: {proof}')
 
 
+def verify_launch_screen_checklist() -> None:
+    doc_path = ROOT / 'docs/launch/SCREEN_CHECKLIST.md'
+    manifest_path = ROOT / 'site/data/launch-screen-checklist.json'
+    if not doc_path.exists():
+        fail(f'missing {doc_path.relative_to(ROOT)}')
+    if not manifest_path.exists():
+        fail(f'missing {manifest_path.relative_to(ROOT)}')
+    doc_text = doc_path.read_text(encoding='utf-8')
+    for needle in REQUIRED_LAUNCH_SCREEN_DOC_NEEDLES:
+        if needle not in doc_text:
+            fail(f'{doc_path.relative_to(ROOT)} missing launch-screen safety needle: {needle}')
+    manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+    if manifest.get('status') != 'launch_screen_checklist_manual_run_only_closed_until_human_yes':
+        fail('launch screen checklist status is not closed-until-human-yes')
+    if manifest.get('manual_run_required') is not True:
+        fail('launch screen checklist must require manual run')
+    if manifest.get('auto_stream_enabled') is not False:
+        fail('launch screen checklist auto stream must be disabled')
+    if manifest.get('requires_human_approval') is not True:
+        fail('launch screen checklist must require human approval')
+    if 'Do you approve' not in (manifest.get('human_approval_question') or ''):
+        fail('launch screen checklist needs an explicit human approval question')
+    flags = manifest.get('risky_flags') or {}
+    for flag in LAUNCH_SCREEN_RISKY_FLAGS:
+        if flags.get(flag) is not False:
+            fail(f'launch screen checklist risky flag appears open or missing: {flag}')
+    if len(manifest.get('blocked_without_approval') or []) < 8:
+        fail('launch screen checklist needs a substantial blocked-without-approval list')
+    if len(manifest.get('click_path') or []) < 5:
+        fail('launch screen checklist needs a substantial proof-hub click path')
+    if len(manifest.get('terminal_proof_commands') or []) < 4:
+        fail('launch screen checklist needs terminal proof commands')
+    for proof in manifest.get('proof_paths') or []:
+        if not (ROOT / proof).exists():
+            fail(f'launch screen checklist proof path missing: {proof}')
+    for html_rel in ['site/index.html', 'docs/index.html']:
+        html_text = (ROOT / html_rel).read_text(encoding='utf-8')
+        if 'launch-screen-checklist' not in html_text:
+            fail(f'{html_rel} missing launch screen checklist card')
+
+
 def run_entity_verifier() -> None:
     result = subprocess.run(
         [sys.executable, 'scripts/verify_entity_pipeline.py'],
@@ -265,6 +335,7 @@ def main() -> None:
     verify_relaunch_doc()
     verify_x_thread_drafts()
     verify_youtube_caption_pack()
+    verify_launch_screen_checklist()
     run_entity_verifier()
     print('VERIFY OK site relaunch surfaces closed-gate links/json/entity')
 
