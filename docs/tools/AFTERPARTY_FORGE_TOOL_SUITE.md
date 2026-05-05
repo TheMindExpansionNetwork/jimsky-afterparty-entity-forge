@@ -78,6 +78,11 @@ This increment adds `contract_version: 2026-05-05.prep_only.v1` in `tools/entity
 - Outputs: draft-only message fields, proof-path list, single bounded next-step question, and closed-gate reminder block.
 - Closed gate: no sending/scheduling, checkout/payment links, manual invoice workflow, revenue/affiliation claim, HF upload/token printing, GPU/training/model downloads, public posting, or cron mutation without fresh awake approval.
 
+### 14. Manual Invoice Planning Checklist Builder
+- Purpose: prepare a local/manual invoice planning checklist only after an awake-approved buyer explicitly asks to buy and the next-action router selects `approve_manual_invoice_planning`.
+- Outputs: planning fields, proof paths to attach, explicit exclusions, copy constraints, and closed-gate reminder block.
+- Closed gate: no invoice creation/sending, checkout/payment links, follow-up sending, revenue/affiliation claim, HF upload/token printing, GPU/training/model downloads, public posting, or cron mutation without fresh awake approval.
+
 ## First awake command
 
 Review the public explainer page, then pick one route:

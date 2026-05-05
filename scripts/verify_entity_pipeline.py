@@ -331,6 +331,9 @@ assert any('wake_operator_manual_invoice_planning_checklist' in item for item in
 assert manual_invoice_tool.get('money_actions_enabled') is False
 assert manual_invoice_tool.get('external_delivery_enabled') is False
 assert manual_invoice_tool.get('training_or_gpu_enabled') is False
+tool_doc=(root/'docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md').read_text()
+for phrase in ['### 14. Manual Invoice Planning Checklist Builder','approve_manual_invoice_planning','no invoice creation/sending','every external money action stays closed']:
+    assert phrase in tool_doc, phrase
 assert 'payment links or checkout activation' in tm.get('forbidden_unattended_actions', [])
 for tool in tm.get('tools', []):
     assert tool.get('closed_until_human_yes') is True
