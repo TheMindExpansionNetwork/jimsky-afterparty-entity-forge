@@ -208,6 +208,33 @@
       "money_actions_enabled": false,
       "external_delivery_enabled": false,
       "training_or_gpu_enabled": false
+    },
+    {
+      "id": "post-demo-outcome-router",
+      "name": "Post-Demo Outcome Router",
+      "requires_human_approval": true,
+      "closed_until_human_yes": true,
+      "input_contract": [
+        "approved private demo recipient",
+        "proof paths shown during demo",
+        "buyer questions and requested next step",
+        "operator-selected outcome label"
+      ],
+      "output_contract": [
+        "local demo receipt fields",
+        "safe next-step route",
+        "closed-gate blocker list",
+        "follow-up approval expiration fields"
+      ],
+      "verification": [
+        "post_demo_outcome_capture stays draft_only_not_sent",
+        "router proof paths exist before use",
+        "no checkout/payment/outreach/HF upload/GPU/training claims introduced"
+      ],
+      "human_handoff": "Awake operator approves any follow-up recipient, channel, invoice workflow, upload check, exact copy, and expiration before action.",
+      "money_actions_enabled": false,
+      "external_delivery_enabled": false,
+      "training_or_gpu_enabled": false
     }
   ],
   "safety": "No spend, outreach, payment collection, fake revenue, fake affiliation, secret exposure, training, GPU jobs, or wallet actions while unattended.",

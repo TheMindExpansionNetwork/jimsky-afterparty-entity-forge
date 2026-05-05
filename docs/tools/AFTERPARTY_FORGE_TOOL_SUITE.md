@@ -50,6 +50,12 @@ This increment adds `contract_version: 2026-05-05.prep_only.v1` in `tools/entity
 - Outputs: safe FAQ answer drafts, proof path lists, forbidden-claim reminders, approval fields.
 - Closed gate: no sending, posting, checkout/payment, outreach, revenue/affiliation claims, HF upload claims, GPU/training, or model-download claims without awake approval.
 
+
+### 9. Post-Demo Outcome Router
+- Purpose: capture a local, non-sending private-demo receipt and route the next safe operator decision.
+- Outputs: receipt fields, outcome label, safe next-step route, closed-gate blocker list.
+- Closed gate: no follow-up messages, checkout/payment links, revenue claims, HF upload, public dataset release, GPU/training, model downloads, or cron mutation without a fresh awake approval.
+
 ## First awake command
 
 Review the public explainer page, then pick one route:
@@ -81,3 +87,7 @@ The checkout matrix is prep-only: it helps an awake operator choose `private_dem
 ## Buyer proof FAQ
 
 `docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes `buyer_proof_faq`, paired with the `buyer-proof-faq-builder` tool contract. The FAQ answers only with repo-local proof paths and safe caveats: no revenue earned, no live checkout, no cold outreach sent, no affiliation claim, no HF remote-streaming claim before an awake upload check, and no GPU/training/model-download claim. It is **draft-only and not sent** until an awake operator approves the recipient/page, channel, question subset, message path, and expiration.
+
+## Post-demo outcome router
+
+`docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes `post_demo_outcome_capture`, paired with the `post-demo-outcome-router` tool contract and a timestamped usage skill. It is a **local receipt only** for after an awake-approved private demo: it records proof paths shown and routes the operator to `interested_manual_invoice_after_yes`, `needs_more_proof_before_followup`, `dataset_release_question_requires_approval`, or `no_fit_do_not_contact_unattended`. Follow-up messages, checkout/payment links, revenue claims, affiliation claims, private upload/HF publication, GPU/training/model downloads, and cron mutation remain closed until separate human approval.

@@ -104,6 +104,24 @@ for forbidden in ['revenue was earned','payment or checkout is live','cold outre
 for field in ['approved_recipient_or_page','approved_channel','approved_question_subset','approved_message_path','approval_expires_utc']:
     assert field in buyer_faq.get('approval_required_before_use',[]), field
 assert 'verify_entity_pipeline.py' in buyer_faq.get('verification_note','')
+post_demo=offer.get('post_demo_outcome_capture',{})
+assert post_demo.get('status') == 'draft_only_not_sent'
+assert 'local receipt' in post_demo.get('purpose','').lower()
+expected_outcomes={'interested_manual_invoice_after_yes','needs_more_proof_before_followup','dataset_release_question_requires_approval','no_fit_do_not_contact_unattended'}
+assert expected_outcomes <= set(post_demo.get('allowed_outcome_labels',[]))
+for field in ['demo_date_utc','approved_demo_recipient','approved_demo_channel','proof_paths_shown','operator_selected_outcome_label','followup_approval_expires_utc']:
+    assert field in post_demo.get('local_receipt_fields',[]), field
+for rel in post_demo.get('proof_paths_allowed',[]):
+    assert not rel.startswith('/') and '..' not in Path(rel).parts
+    assert (root/rel).exists(), f"post-demo proof path missing: {rel}"
+rules=post_demo.get('router_rules',[])
+assert len(rules) >= 4
+assert {r.get('if_outcome') for r in rules} >= expected_outcomes
+for rule in rules:
+    assert rule.get('safe_next_step') and rule.get('still_closed'), rule
+for forbidden in ['sending follow-up messages','creating checkout or payment links','claiming revenue before payment is verified','claiming affiliation or sponsorship','uploading private data or publishing datasets','starting GPU/training/model-download jobs','mutating cron jobs']:
+    assert forbidden in post_demo.get('forbidden_until_approval',[]), forbidden
+assert 'verify_entity_pipeline.py' in post_demo.get('verification_note','')
 lead_schema=rm.get('local_lead_schema',[])
 assert any(f.get('field')=='approval_status' and f.get('default')=='draft_only' for f in lead_schema)
 dataset_release=rm.get('dataset_release_readiness',{})
@@ -193,6 +211,10 @@ assert len(tm.get('tools',[])) >= 8
 tool_ids={tool.get('id') for tool in tm.get('tools',[])}
 assert 'dataset-release-auditor' in tool_ids
 assert 'buyer-proof-faq-builder' in tool_ids
+assert 'post-demo-outcome-router' in tool_ids
+post_demo_tool=next(tool for tool in tm.get('tools',[]) if tool.get('id')=='post-demo-outcome-router')
+assert post_demo_tool.get('requires_human_approval') is True
+assert any('post_demo_outcome_capture' in item for item in post_demo_tool.get('verification',[]))
 assert 'payment links or checkout activation' in tm.get('forbidden_unattended_actions', [])
 for tool in tm.get('tools', []):
     assert tool.get('closed_until_human_yes') is True
