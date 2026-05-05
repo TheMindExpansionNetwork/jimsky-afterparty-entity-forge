@@ -45,7 +45,52 @@
       "public posting beyond existing approved Pages/GitHub workflows",
       "GPU training or paid provider runs"
     ],
-    "call_to_action_draft": "Reply with the entity name, audience, and one proof artifact; I will prepare a private demo kit for awake review."
+    "call_to_action_draft": "Reply with the entity name, audience, and one proof artifact; I will prepare a private demo kit for awake review.",
+    "private_demo_script": {
+      "status": "draft_only_not_sent",
+      "duration_minutes": 7,
+      "beats": [
+        {
+          "minute": "0-1",
+          "speaker_note": "Name the entity idea and repeat that this is a private, approval-gated proof walkthrough.",
+          "proof_path": "docs/entity/IDENTITY.md"
+        },
+        {
+          "minute": "1-3",
+          "speaker_note": "Show the payload, logo seed dataset, and static site as repo-local proof, not as a public launch claim.",
+          "proof_path": "docs/proof/AFTERPARTY_PROOF_LEDGER.json"
+        },
+        {
+          "minute": "3-5",
+          "speaker_note": "Walk through the offer-builder, proof-ledger, and demo-router tools using closed-gate language.",
+          "proof_path": "tools/entity-tool-suite.json"
+        },
+        {
+          "minute": "5-7",
+          "speaker_note": "Ask the awake operator to approve exactly one next action: private demo, first-dollar offer, public page polish, or dataset upload check.",
+          "proof_path": "docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md"
+        }
+      ],
+      "forbidden_lines": [
+        "Do not say revenue was earned.",
+        "Do not imply event, OpenAI, or sponsor affiliation.",
+        "Do not promise outreach, payment setup, GPU training, or upload execution without human approval."
+      ]
+    },
+    "buyer_objection_responses": [
+      {
+        "objection": "Is this already a live paid service?",
+        "safe_response": "No. It is a verifier-backed private launch kit draft; payment and outreach stay closed until an awake approval step."
+      },
+      {
+        "objection": "Can you train or upload my data tonight?",
+        "safe_response": "Not unattended. This package can prepare manifests and verification steps, while upload, GPU, and training require explicit human approval."
+      },
+      {
+        "objection": "What proof exists right now?",
+        "safe_response": "Use the proof ledger paths and verifier command to inspect repo-local payload, site, dataset, and offer artifacts before any public claim."
+      }
+    ]
   },
   "local_lead_schema": [
     {

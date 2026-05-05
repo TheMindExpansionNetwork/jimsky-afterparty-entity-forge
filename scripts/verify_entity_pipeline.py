@@ -16,6 +16,18 @@ assert offer.get('headline') and 'forkable entity launch kit' in offer['headline
 assert len(offer.get('deliverables',[])) >= 4
 assert any('payment links' in item for item in offer.get('not_included_without_approval',[]))
 assert not re.search(r'https?://[^\s]*(stripe|paypal|gumroad|checkout|buy)', json.dumps(offer, sort_keys=True), re.I)
+demo=offer.get('private_demo_script',{})
+assert demo.get('status') == 'draft_only_not_sent'
+assert demo.get('duration_minutes') == 7
+assert len(demo.get('beats',[])) >= 4
+for beat in demo.get('beats',[]):
+    assert (root/beat.get('proof_path','')).exists(), beat
+assert any('revenue' in line.lower() for line in demo.get('forbidden_lines',[]))
+objections=offer.get('buyer_objection_responses',[])
+assert len(objections) >= 3
+assert all(o.get('objection') and o.get('safe_response') for o in objections)
+assert any('payment' in o.get('safe_response','').lower() for o in objections)
+assert any('training' in o.get('safe_response','').lower() for o in objections)
 lead_schema=rm.get('local_lead_schema',[])
 assert any(f.get('field')=='approval_status' and f.get('default')=='draft_only' for f in lead_schema)
 pl=json.loads((root/'docs/proof/AFTERPARTY_PROOF_LEDGER.json').read_text())
