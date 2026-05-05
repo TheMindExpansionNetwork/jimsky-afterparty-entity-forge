@@ -16,6 +16,12 @@ assert offer.get('headline') and 'forkable entity launch kit' in offer['headline
 assert len(offer.get('deliverables',[])) >= 4
 assert any('payment links' in item for item in offer.get('not_included_without_approval',[]))
 assert not re.search(r'https?://[^\s]*(stripe|paypal|gumroad|checkout|buy)', json.dumps(offer, sort_keys=True), re.I)
+qual=offer.get('buyer_qualification_checklist',{})
+assert qual.get('status') == 'draft_only_not_sent'
+assert len(qual.get('must_confirm_before_contact',[])) >= 4
+assert len(qual.get('disqualifiers',[])) >= 3
+assert any('wallet' in item.lower() for item in qual.get('disqualifiers',[]))
+assert any('approved_channel' == item for item in qual.get('approval_fields',[]))
 demo=offer.get('private_demo_script',{})
 assert demo.get('status') == 'draft_only_not_sent'
 assert demo.get('duration_minutes') == 7

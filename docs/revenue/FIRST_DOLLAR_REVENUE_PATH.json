@@ -46,6 +46,28 @@
       "GPU training or paid provider runs"
     ],
     "call_to_action_draft": "Reply with the entity name, audience, and one proof artifact; I will prepare a private demo kit for awake review.",
+    "buyer_qualification_checklist": {
+      "status": "draft_only_not_sent",
+      "purpose": "Help the awake operator decide whether a private demo is worth approving before any outreach, payment link, or delivery action exists.",
+      "must_confirm_before_contact": [
+        "The buyer asked for or explicitly welcomed a private demo.",
+        "The buyer can provide at least one non-secret proof artifact or public project link.",
+        "The buyer understands this is a verifier-backed prep kit, not a live deployment or guaranteed revenue result.",
+        "The awake operator has chosen a price tier and approved the exact message/channel."
+      ],
+      "disqualifiers": [
+        "requests for wallets, seed phrases, payment custody, KYC, or guaranteed earnings",
+        "requests to upload private data, start GPU training, or run paid providers before approval",
+        "requests to imply OpenAI/event/sponsor affiliation or already-earned revenue"
+      ],
+      "approval_fields": [
+        "approved_buyer_id",
+        "approved_price_tier_usd",
+        "approved_channel",
+        "approved_message_path",
+        "expires_utc"
+      ]
+    },
     "private_demo_script": {
       "status": "draft_only_not_sent",
       "duration_minutes": 7,
