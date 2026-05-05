@@ -181,6 +181,33 @@
       "money_actions_enabled": false,
       "external_delivery_enabled": false,
       "training_or_gpu_enabled": false
+    },
+    {
+      "id": "buyer-proof-faq-builder",
+      "name": "Buyer Proof FAQ Builder",
+      "requires_human_approval": true,
+      "closed_until_human_yes": true,
+      "input_contract": [
+        "buyer proof question",
+        "approved proof artifact paths",
+        "truth label from proof ledger",
+        "approved recipient or page context"
+      ],
+      "output_contract": [
+        "safe FAQ answer draft",
+        "repo-local proof path list",
+        "forbidden claim reminders",
+        "awake-operator approval fields"
+      ],
+      "verification": [
+        "buyer_proof_faq stays draft_only_not_sent",
+        "all FAQ proof paths exist before use",
+        "no revenue/affiliation/HF upload/training claims introduced"
+      ],
+      "human_handoff": "Awake operator approves recipient/page, channel, question subset, and exact message before any FAQ answer is sent or published.",
+      "money_actions_enabled": false,
+      "external_delivery_enabled": false,
+      "training_or_gpu_enabled": false
     }
   ],
   "safety": "No spend, outreach, payment collection, fake revenue, fake affiliation, secret exposure, training, GPU jobs, or wallet actions while unattended.",

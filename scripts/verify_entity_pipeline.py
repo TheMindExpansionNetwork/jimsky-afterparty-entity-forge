@@ -88,6 +88,22 @@ for field in ['approved_demo_recipient','approved_demo_channel','approved_messag
 for forbidden in ['sending the demo packet','creating checkout or payment links','cold outreach or form submission','claiming revenue or affiliation','uploading private data or publishing datasets','starting GPU/training/model-download jobs','mutating cron jobs']:
     assert forbidden in demo_packet.get('forbidden_until_approval',[]), forbidden
 assert 'verify_entity_pipeline.py' in demo_packet.get('verification_note','')
+buyer_faq=offer.get('buyer_proof_faq',{})
+assert buyer_faq.get('status') == 'draft_only_not_sent'
+assert 'buyer proof questions' in buyer_faq.get('purpose','').lower()
+faq_questions=buyer_faq.get('questions',[])
+assert len(faq_questions) >= 4
+for item in faq_questions:
+    assert item.get('question') and item.get('safe_answer')
+    assert item.get('proof_paths'), item
+    for rel in item.get('proof_paths',[]):
+        assert not rel.startswith('/') and '..' not in Path(rel).parts
+        assert (root/rel).exists(), f"buyer FAQ proof path missing: {rel}"
+for forbidden in ['revenue was earned','payment or checkout is live','cold outreach has been sent','OpenAI/event/sponsor affiliation exists','Hugging Face remote streaming is verified before an awake upload check passes','GPU training/model downloads were started']:
+    assert forbidden in buyer_faq.get('forbidden_claims',[]), forbidden
+for field in ['approved_recipient_or_page','approved_channel','approved_question_subset','approved_message_path','approval_expires_utc']:
+    assert field in buyer_faq.get('approval_required_before_use',[]), field
+assert 'verify_entity_pipeline.py' in buyer_faq.get('verification_note','')
 lead_schema=rm.get('local_lead_schema',[])
 assert any(f.get('field')=='approval_status' and f.get('default')=='draft_only' for f in lead_schema)
 dataset_release=rm.get('dataset_release_readiness',{})
@@ -173,8 +189,10 @@ for phrase in ['manual-post only','auto_post_enabled: false','claim_revenue: fal
     assert phrase in xdoc, phrase
 tm=json.loads((root/'tools/entity-tool-suite.json').read_text())
 assert tm.get('contract_version') == '2026-05-05.prep_only.v1'
-assert len(tm.get('tools',[])) >= 7
-assert 'dataset-release-auditor' in {tool.get('id') for tool in tm.get('tools',[])}
+assert len(tm.get('tools',[])) >= 8
+tool_ids={tool.get('id') for tool in tm.get('tools',[])}
+assert 'dataset-release-auditor' in tool_ids
+assert 'buyer-proof-faq-builder' in tool_ids
 assert 'payment links or checkout activation' in tm.get('forbidden_unattended_actions', [])
 for tool in tm.get('tools', []):
     assert tool.get('closed_until_human_yes') is True

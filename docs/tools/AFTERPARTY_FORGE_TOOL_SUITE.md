@@ -45,6 +45,11 @@ This increment adds `contract_version: 2026-05-05.prep_only.v1` in `tools/entity
 - Outputs: local parse/open-image checklist, HF repo privacy/streaming check plan, release blockers.
 - Closed gate: no unattended HF upload, private media movement, GPU/training, model downloads, token printing, or remote-verified claims.
 
+### 8. Buyer Proof FAQ Builder
+- Purpose: answer proof questions with exact repo-local evidence before any buyer-facing use.
+- Outputs: safe FAQ answer drafts, proof path lists, forbidden-claim reminders, approval fields.
+- Closed gate: no sending, posting, checkout/payment, outreach, revenue/affiliation claims, HF upload claims, GPU/training, or model-download claims without awake approval.
+
 ## First awake command
 
 Review the public explainer page, then pick one route:
@@ -72,3 +77,7 @@ The checkout matrix is prep-only: it helps an awake operator choose `private_dem
 ## Wake-operator private demo packet
 
 `docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes `wake_operator_private_demo_packet`. It compresses the proof ledger, tool contracts, first-dollar draft, and existing static site into a three-minute private walkthrough script for an awake operator. The packet is **draft-only and not sent**: recipient, channel, message path, offer tier, and expiration must be approved before use. It explicitly keeps sending, checkout/payment links, cold outreach/forms, revenue or affiliation claims, private upload/dataset publishing, GPU/training/model downloads, and cron mutation closed until a separate human yes.
+
+## Buyer proof FAQ
+
+`docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes `buyer_proof_faq`, paired with the `buyer-proof-faq-builder` tool contract. The FAQ answers only with repo-local proof paths and safe caveats: no revenue earned, no live checkout, no cold outreach sent, no affiliation claim, no HF remote-streaming claim before an awake upload check, and no GPU/training/model-download claim. It is **draft-only and not sent** until an awake operator approves the recipient/page, channel, question subset, message path, and expiration.

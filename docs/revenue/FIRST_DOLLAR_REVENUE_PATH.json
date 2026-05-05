@@ -25,7 +25,7 @@
     "datasets/logo-seed/metadata.jsonl"
   ],
   "tool_suite_manifest": "tools/entity-tool-suite.json",
-  "prep_only_increment": "2026-05-05-wake-checkout-decision-matrix-v1",
+  "prep_only_increment": "2026-05-05-buyer-proof-faq-v1",
   "buyer_facing_offer_draft": {
     "headline": "Turn your AI agent idea into a safe, forkable entity launch kit.",
     "audience": [
@@ -317,6 +317,61 @@
         "mutating cron jobs"
       ],
       "verification_note": "Run PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py and git diff --check before any awake operator uses this packet."
+    },
+    "buyer_proof_faq": {
+      "status": "draft_only_not_sent",
+      "purpose": "Answer common buyer proof questions with exact repo-local evidence before any outreach, checkout, public post, upload, GPU/training, or revenue claim is approved.",
+      "questions": [
+        {
+          "question": "What can I verify without trusting a sales claim?",
+          "safe_answer": "Inspect the proof ledger, tool-suite manifest, and verifier output. Green claims must point to repo-local files; yellow claims remain unapproved until a human verifies them.",
+          "proof_paths": [
+            "docs/proof/AFTERPARTY_PROOF_LEDGER.json",
+            "tools/entity-tool-suite.json",
+            "scripts/verify_entity_pipeline.py"
+          ]
+        },
+        {
+          "question": "Is this already earning money or affiliated with an event/company?",
+          "safe_answer": "No. The offer is a prep-only private demo draft. It does not claim revenue, sponsorship, OpenAI/event affiliation, or a live checkout.",
+          "proof_paths": [
+            "docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json",
+            "automation/SAFETY_BOUNDARIES.md"
+          ]
+        },
+        {
+          "question": "Can the logo-seed dataset be uploaded or trained on now?",
+          "safe_answer": "Not unattended. The local dataset lane has metadata and a streaming-check handoff, but upload, public release, GPU, model downloads, and training remain closed until an awake approval.",
+          "proof_paths": [
+            "datasets/logo-seed/metadata.jsonl",
+            "docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json"
+          ]
+        },
+        {
+          "question": "What exact next action can an operator approve?",
+          "safe_answer": "Pick one bounded route from the decision matrix: private_demo_only, manual_invoice_after_yes, or keep_building_proof. Any external delivery/payment step needs a named recipient/channel/scope and expiration.",
+          "proof_paths": [
+            "docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json",
+            "docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md"
+          ]
+        }
+      ],
+      "forbidden_claims": [
+        "revenue was earned",
+        "payment or checkout is live",
+        "cold outreach has been sent",
+        "OpenAI/event/sponsor affiliation exists",
+        "Hugging Face remote streaming is verified before an awake upload check passes",
+        "GPU training/model downloads were started"
+      ],
+      "approval_required_before_use": [
+        "approved_recipient_or_page",
+        "approved_channel",
+        "approved_question_subset",
+        "approved_message_path",
+        "approval_expires_utc"
+      ],
+      "verification_note": "Run PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py and git diff --check before using this FAQ in any buyer-facing channel."
     }
   },
   "local_lead_schema": [
