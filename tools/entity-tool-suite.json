@@ -1,0 +1,43 @@
+{
+  "entity": "Afterparty Forge 2045",
+  "status": "seed_tool_suite_ready",
+  "tools": [
+    {
+      "id": "offer-builder",
+      "name": "Offer Builder",
+      "requires_human_approval": true,
+      "closed_until_human_yes": true
+    },
+    {
+      "id": "launch-packager",
+      "name": "Launch Packager",
+      "requires_human_approval": false,
+      "closed_until_human_yes": true
+    },
+    {
+      "id": "proof-ledger",
+      "name": "Proof Ledger",
+      "requires_human_approval": false,
+      "closed_until_human_yes": true
+    },
+    {
+      "id": "demo-router",
+      "name": "Demo Router",
+      "requires_human_approval": true,
+      "closed_until_human_yes": true
+    },
+    {
+      "id": "revenue-scout",
+      "name": "Revenue Scout",
+      "requires_human_approval": true,
+      "closed_until_human_yes": true
+    },
+    {
+      "id": "unicode-interface-director",
+      "name": "Unicode Interface Director",
+      "requires_human_approval": false,
+      "closed_until_human_yes": true
+    }
+  ],
+  "safety": "No spend, outreach, payment collection, fake revenue, fake affiliation, secret exposure, training, GPU jobs, or wallet actions while unattended."
+}

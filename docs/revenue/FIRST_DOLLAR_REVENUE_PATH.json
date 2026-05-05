@@ -1,0 +1,28 @@
+{
+  "status": "draft_money_path_ready_no_revenue_claimed",
+  "entity": "Afterparty Forge 2045",
+  "offer_name": "AI Entity Launch Kit: Afterparty Edition",
+  "price_ladder": [
+    55,
+    155,
+    555,
+    1555
+  ],
+  "approved_to_execute": false,
+  "closed_gates": {
+    "payment_links": false,
+    "outreach": false,
+    "public_posting": false,
+    "spend": false,
+    "claim_revenue": false,
+    "claim_openai_affiliation": false
+  },
+  "proof_assets": [
+    "https://themindexpansionnetwork.github.io/afterparty-forge-explainer-site/",
+    "https://github.com/TheMindExpansionNetwork/afterparty-forge-explainer-site",
+    "https://github.com/TheMindExpansionNetwork/jimsky-afterparty-entity-forge",
+    "assets/brand/logo-seed/contact_sheet.jpg",
+    "datasets/logo-seed/metadata.jsonl"
+  ],
+  "tool_suite_manifest": "tools/entity-tool-suite.json"
+}
