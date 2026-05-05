@@ -1,0 +1,5 @@
+AFTERPARTY FORGE 2045 PROOF HUB
+LOCAL: site/index.html
+DOC: docs/launch/RELAUNCH_PACKAGE_DRAFT.md
+VERIFY: PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_site.py
+CLOSED UNTIL HUMAN YES: no posting/outreach/payments/upload/GPU/training/cron.

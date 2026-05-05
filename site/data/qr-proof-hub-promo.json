@@ -1,0 +1,54 @@
+{
+  "status": "qr_proof_hub_promo_manual_scan_only_closed_until_human_yes",
+  "created_by": "scripts/build_qr_proof_hub_promo.py",
+  "manual_distribution_required": true,
+  "auto_post_enabled": false,
+  "requires_human_approval": true,
+  "human_approval_question": "Do you approve using this exact QR proof-hub promo card in the named manual channel, with no posting/upload/payment/outreach beyond that approved channel?",
+  "qr_payload_path": "assets/launch/qr-proof-hub/afterparty-forge-proof-hub-payload.txt",
+  "clean_qr_path": "assets/launch/qr-proof-hub/afterparty-forge-proof-hub-clean-qr.png",
+  "archive_card_path": "assets/launch/qr-proof-hub/afterparty-forge-proof-hub-card.png",
+  "site_card_path": "site/assets/img/launch/afterparty-forge-proof-hub-card.png",
+  "opencv_decode": {
+    "clean_qr_matches_payload": true,
+    "card_matches_payload": true
+  },
+  "proof_paths": [
+    "assets/launch/qr-proof-hub/afterparty-forge-proof-hub-payload.txt",
+    "assets/launch/qr-proof-hub/afterparty-forge-proof-hub-clean-qr.png",
+    "assets/launch/qr-proof-hub/afterparty-forge-proof-hub-card.png",
+    "site/assets/img/launch/afterparty-forge-proof-hub-card.png",
+    "docs/launch/QR_PROOF_HUB_PROMO_ASSET.md",
+    "docs/launch/RELAUNCH_PACKAGE_DRAFT.md",
+    "docs/proof/AFTERPARTY_PROOF_LEDGER.json",
+    "site/index.html"
+  ],
+  "blocked_without_approval": [
+    "posting the card publicly",
+    "scheduling or starting an X/Twitter Space",
+    "starting a livestream or screen recording",
+    "uploading the card or any private media to YouTube/social platforms",
+    "adding a checkout, payment link, invoice, or marketplace listing",
+    "claiming revenue, customers, affiliation, sponsorship, or live external results",
+    "sending DMs, email outreach, forms, or paid promotion",
+    "starting GPU, training, model-download, paid API, or cron-mutation work"
+  ],
+  "risky_flags": {
+    "public_posting": false,
+    "outreach": false,
+    "paid_promotion": false,
+    "payment_links": false,
+    "claim_revenue": false,
+    "claim_affiliation": false,
+    "youtube_upload": false,
+    "publishes_stream": false,
+    "records_audio": false,
+    "uploads_private_media": false,
+    "starts_gpu": false,
+    "starts_paid_api": false,
+    "downloads_models": false,
+    "starts_training": false,
+    "submits_hackathon": false,
+    "mutates_cron": false
+  }
+}

@@ -143,6 +143,32 @@ PRIVATE_DEMO_BUYER_RISKY_FLAGS = [
     'submits_hackathon',
     'mutates_cron',
 ]
+QR_PROOF_HUB_RISKY_FLAGS = [
+    'public_posting',
+    'outreach',
+    'paid_promotion',
+    'payment_links',
+    'claim_revenue',
+    'claim_affiliation',
+    'youtube_upload',
+    'publishes_stream',
+    'records_audio',
+    'uploads_private_media',
+    'starts_gpu',
+    'starts_paid_api',
+    'downloads_models',
+    'starts_training',
+    'submits_hackathon',
+    'mutates_cron',
+]
+REQUIRED_QR_PROOF_HUB_DOC_NEEDLES = [
+    'qr_proof_hub_promo_manual_scan_only_closed_until_human_yes',
+    'Do you approve using this exact QR proof-hub promo card',
+    'PYTHONDONTWRITEBYTECODE=1 python3 scripts/build_qr_proof_hub_promo.py',
+    'PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_site.py',
+    'CLOSED UNTIL HUMAN YES',
+    'Blocked without approval',
+]
 REQUIRED_PRIVATE_DEMO_BUYER_DOC_NEEDLES = [
     'private_demo_buyer_script_draft_only_closed_until_human_yes',
     'Do you approve running this exact private Afterparty Forge 2045 buyer demo manually',
@@ -382,6 +408,50 @@ def verify_private_demo_buyer_script() -> None:
             fail(f'{html_rel} missing private demo buyer script card')
 
 
+def verify_qr_proof_hub_promo() -> None:
+    doc_path = ROOT / 'docs/launch/QR_PROOF_HUB_PROMO_ASSET.md'
+    manifest_path = ROOT / 'site/data/qr-proof-hub-promo.json'
+    if not doc_path.exists():
+        fail(f'missing {doc_path.relative_to(ROOT)}')
+    if not manifest_path.exists():
+        fail(f'missing {manifest_path.relative_to(ROOT)}')
+    doc_text = doc_path.read_text(encoding='utf-8')
+    for needle in REQUIRED_QR_PROOF_HUB_DOC_NEEDLES:
+        if needle not in doc_text:
+            fail(f'{doc_path.relative_to(ROOT)} missing QR proof-hub safety needle: {needle}')
+    manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+    if manifest.get('status') != 'qr_proof_hub_promo_manual_scan_only_closed_until_human_yes':
+        fail('QR proof-hub manifest status is not closed-until-human-yes')
+    if manifest.get('manual_distribution_required') is not True:
+        fail('QR proof-hub manifest must require manual distribution')
+    if manifest.get('auto_post_enabled') is not False:
+        fail('QR proof-hub manifest auto posting must be disabled')
+    if manifest.get('requires_human_approval') is not True:
+        fail('QR proof-hub manifest must require human approval')
+    if 'Do you approve' not in (manifest.get('human_approval_question') or ''):
+        fail('QR proof-hub manifest needs an explicit human approval question')
+    decode = manifest.get('opencv_decode') or {}
+    if decode.get('clean_qr_matches_payload') is not True or decode.get('card_matches_payload') is not True:
+        fail('QR proof-hub manifest must record successful OpenCV decode for clean QR and card')
+    flags = manifest.get('risky_flags') or {}
+    for flag in QR_PROOF_HUB_RISKY_FLAGS:
+        if flags.get(flag) is not False:
+            fail(f'QR proof-hub risky flag appears open or missing: {flag}')
+    if len(manifest.get('blocked_without_approval') or []) < 8:
+        fail('QR proof-hub manifest needs a substantial blocked-without-approval list')
+    for proof in manifest.get('proof_paths') or []:
+        if not (ROOT / proof).exists():
+            fail(f'QR proof-hub proof path missing: {proof}')
+    payload_rel = manifest.get('qr_payload_path')
+    payload_text = (ROOT / payload_rel).read_text(encoding='utf-8') if payload_rel else ''
+    if 'CLOSED UNTIL HUMAN YES' not in payload_text:
+        fail('QR proof-hub payload must include closed-until-human-yes copy')
+    for html_rel in ['site/index.html', 'docs/index.html']:
+        html_text = (ROOT / html_rel).read_text(encoding='utf-8')
+        if 'qr-proof-hub-promo' not in html_text:
+            fail(f'{html_rel} missing QR proof-hub promo card')
+
+
 def run_entity_verifier() -> None:
     result = subprocess.run(
         [sys.executable, 'scripts/verify_entity_pipeline.py'],
@@ -410,6 +480,7 @@ def main() -> None:
     verify_youtube_caption_pack()
     verify_launch_screen_checklist()
     verify_private_demo_buyer_script()
+    verify_qr_proof_hub_promo()
     run_entity_verifier()
     print('VERIFY OK site relaunch surfaces closed-gate links/json/entity')
 
