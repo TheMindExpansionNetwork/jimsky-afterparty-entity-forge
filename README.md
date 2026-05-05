@@ -24,7 +24,8 @@ This repo turns the launch lesson into a repeatable system: build a better digit
 ## Quickstart
 
 ```bash
-python3 scripts/verify_entity_pipeline.py
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_site.py
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py
 python3 scripts/build_hf_logo_dataset.py
 python3 scripts/package_payload.py
 ```

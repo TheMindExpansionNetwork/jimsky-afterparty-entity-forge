@@ -20,6 +20,7 @@ Do **not** run any public launch action until an awake human explicitly confirms
 Run these from the repo root and paste the outputs into the operator notes before relaunch:
 
 ```bash
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_site.py
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py
 git diff --check
 git status --short --untracked-files=all
