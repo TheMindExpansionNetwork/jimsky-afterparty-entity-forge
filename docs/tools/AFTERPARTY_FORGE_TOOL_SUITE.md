@@ -72,6 +72,12 @@ This increment adds `contract_version: 2026-05-05.prep_only.v1` in `tools/entity
 - Outputs: route id, approval fields, closed-gate blocker list, and repo-only follow-up checklist.
 - Closed gate: no follow-up sending, checkout/payment links, manual invoice workflow, revenue/affiliation claim, HF upload/token printing, GPU/training/model downloads, public posting, or cron mutation without fresh awake approval.
 
+
+### 13. Private Follow-up Draft Builder
+- Purpose: prepare one private follow-up draft after an awake-approved demo receipt and next-action route.
+- Outputs: draft-only message fields, proof-path list, single bounded next-step question, and closed-gate reminder block.
+- Closed gate: no sending/scheduling, checkout/payment links, manual invoice workflow, revenue/affiliation claim, HF upload/token printing, GPU/training/model downloads, public posting, or cron mutation without fresh awake approval.
+
 ## First awake command
 
 Review the public explainer page, then pick one route:
@@ -118,3 +124,7 @@ The checkout matrix is prep-only: it helps an awake operator choose `private_dem
 ## Wake-operator next action router
 
 `docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes `wake_operator_next_action_router`, paired with the `wake-operator-next-action-router` tool contract and a timestamped usage skill. It is a **draft-only, exactly-one-route chooser** for after an approved demo receipt, post-demo outcome, scope/quote worksheet, or dataset question. It can recommend repo-only proof building, a private follow-up draft, manual invoice planning, or a private-default HF dataset check, but it keeps follow-up sending, checkout/payment links, manual invoice execution, revenue/affiliation claims, HF upload/token printing, GPU/training/model downloads, public posting, and cron mutation closed until separate awake approval.
+
+## Private follow-up draft template
+
+`docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes `private_followup_draft_template`, paired with the `private-followup-draft-builder` tool contract. It is a **draft-only, not-sent** template for an already awake-approved private demo context: it records the approved receipt, route, recipient/channel, message path, proof paths, and one bounded next-step question. It keeps follow-up sending/scheduling, checkout/payment links, manual invoice workflow, revenue/affiliation claims, HF upload/token printing, GPU/training/model downloads, public posting, and cron mutation closed until separate awake approval.

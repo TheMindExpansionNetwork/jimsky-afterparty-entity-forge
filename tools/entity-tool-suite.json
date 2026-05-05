@@ -316,6 +316,33 @@
       "money_actions_enabled": false,
       "external_delivery_enabled": false,
       "training_or_gpu_enabled": false
+    },
+    {
+      "id": "private-followup-draft-builder",
+      "name": "Private Follow-up Draft Builder",
+      "requires_human_approval": true,
+      "closed_until_human_yes": true,
+      "input_contract": [
+        "approved private demo receipt id",
+        "approved next-action route id",
+        "approved recipient and channel",
+        "approved message path and expiration"
+      ],
+      "output_contract": [
+        "draft-only private follow-up message fields",
+        "repo-local proof path list",
+        "single bounded next-step question",
+        "closed-gate reminder block"
+      ],
+      "verification": [
+        "private_followup_draft_template stays draft_only_not_sent",
+        "follow-up proof paths exist before use",
+        "no sending/checkout/manual-invoice/HF upload/GPU/training claims introduced"
+      ],
+      "human_handoff": "Awake operator approves recipient/channel, exact copy, message path, and expiration before any follow-up is sent or scheduled.",
+      "money_actions_enabled": false,
+      "external_delivery_enabled": false,
+      "training_or_gpu_enabled": false
     }
   ],
   "safety": "No spend, outreach, payment collection, fake revenue, fake affiliation, secret exposure, training, GPU jobs, or wallet actions while unattended.",

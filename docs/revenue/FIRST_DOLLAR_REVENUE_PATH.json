@@ -25,7 +25,7 @@
     "datasets/logo-seed/metadata.jsonl"
   ],
   "tool_suite_manifest": "tools/entity-tool-suite.json",
-  "prep_only_increment": "2026-05-05-wake-operator-next-action-router-v1",
+  "prep_only_increment": "2026-05-05-private-followup-draft-template-v1",
   "buyer_facing_offer_draft": {
     "headline": "Turn your AI agent idea into a safe, forkable entity launch kit.",
     "audience": [
@@ -673,6 +673,45 @@
         "mutating cron jobs"
       ],
       "verification_note": "Run PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py and git diff --check before using this next-action router in any buyer-facing workflow."
+    },
+    "private_followup_draft_template": {
+      "status": "draft_only_not_sent",
+      "purpose": "Prepare a single private follow-up message draft only after an awake-approved demo receipt and next-action route, without sending, scheduling, invoicing, uploading, posting, or claiming revenue.",
+      "allowed_trigger": "wake_operator_next_action_router.route_id == approve_private_followup_draft with approved recipient, channel, message path, and expiration supplied by an awake operator",
+      "draft_fields": [
+        "approved_demo_receipt_id",
+        "approved_route_id",
+        "approved_recipient",
+        "approved_channel",
+        "approved_message_path",
+        "proof_paths_referenced",
+        "followup_question_or_next_step",
+        "approval_expires_utc"
+      ],
+      "message_constraints": [
+        "State this is a private follow-up draft for an already-approved demo context only.",
+        "Reference only repo-local proof paths that exist and were shown or approved.",
+        "Ask for one bounded next decision instead of pushing urgency or guaranteed outcomes.",
+        "Include the line: payment, invoice, upload, public posting, GPU/training, and revenue claims remain closed until a separate human approval."
+      ],
+      "required_proof_paths": [
+        "docs/proof/AFTERPARTY_PROOF_LEDGER.json",
+        "docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json",
+        "tools/entity-tool-suite.json",
+        "docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md"
+      ],
+      "forbidden_until_approval": [
+        "sending or scheduling the follow-up",
+        "creating checkout or payment links",
+        "starting a manual invoice workflow",
+        "claiming revenue before payment is verified",
+        "claiming affiliation or sponsorship",
+        "uploading private data or publishing datasets",
+        "printing HF tokens or credential-store contents",
+        "starting GPU/training/model-download jobs",
+        "mutating cron jobs"
+      ],
+      "verification_note": "Run PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py and git diff --check before any awake operator copies this follow-up draft into an external channel."
     }
   },
   "local_lead_schema": [

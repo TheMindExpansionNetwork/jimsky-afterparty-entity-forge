@@ -177,6 +177,20 @@ for field in ['approved_route_id','approved_human_operator','approved_recipient_
 for forbidden in ['sending follow-up messages','creating checkout or payment links','starting a manual invoice workflow','claiming revenue before payment is verified','claiming affiliation or sponsorship','uploading private data or publishing datasets','printing HF tokens or credential-store contents','starting GPU/training/model-download jobs','mutating cron jobs']:
     assert forbidden in next_router.get('forbidden_until_approval',[]), forbidden
 assert 'verify_entity_pipeline.py' in next_router.get('verification_note','')
+followup_template=offer.get('private_followup_draft_template',{})
+assert followup_template.get('status') == 'draft_only_not_sent'
+assert 'follow-up message draft' in followup_template.get('purpose','').lower()
+assert followup_template.get('allowed_trigger','').startswith('wake_operator_next_action_router.route_id == approve_private_followup_draft')
+for field in ['approved_demo_receipt_id','approved_route_id','approved_recipient','approved_channel','approved_message_path','proof_paths_referenced','followup_question_or_next_step','approval_expires_utc']:
+    assert field in followup_template.get('draft_fields',[]), field
+assert len(followup_template.get('message_constraints',[])) >= 4
+assert any('payment, invoice, upload' in item for item in followup_template.get('message_constraints',[]))
+for rel in followup_template.get('required_proof_paths',[]):
+    assert not rel.startswith('/') and '..' not in Path(rel).parts
+    assert (root/rel).exists(), f"follow-up template proof path missing: {rel}"
+for forbidden in ['sending or scheduling the follow-up','creating checkout or payment links','starting a manual invoice workflow','claiming revenue before payment is verified','claiming affiliation or sponsorship','uploading private data or publishing datasets','printing HF tokens or credential-store contents','starting GPU/training/model-download jobs','mutating cron jobs']:
+    assert forbidden in followup_template.get('forbidden_until_approval',[]), forbidden
+assert 'verify_entity_pipeline.py' in followup_template.get('verification_note','')
 lead_schema=rm.get('local_lead_schema',[])
 assert any(f.get('field')=='approval_status' and f.get('default')=='draft_only' for f in lead_schema)
 dataset_release=rm.get('dataset_release_readiness',{})
@@ -270,6 +284,7 @@ assert 'post-demo-outcome-router' in tool_ids
 assert 'scope-quote-sheet-builder' in tool_ids
 assert 'private-demo-delivery-receipt-kit' in tool_ids
 assert 'wake-operator-next-action-router' in tool_ids
+assert 'private-followup-draft-builder' in tool_ids
 post_demo_tool=next(tool for tool in tm.get('tools',[]) if tool.get('id')=='post-demo-outcome-router')
 assert post_demo_tool.get('requires_human_approval') is True
 assert any('post_demo_outcome_capture' in item for item in post_demo_tool.get('verification',[]))
@@ -287,6 +302,12 @@ assert any('wake_operator_next_action_router' in item for item in next_router_to
 assert next_router_tool.get('money_actions_enabled') is False
 assert next_router_tool.get('external_delivery_enabled') is False
 assert next_router_tool.get('training_or_gpu_enabled') is False
+followup_tool=next(tool for tool in tm.get('tools',[]) if tool.get('id')=='private-followup-draft-builder')
+assert followup_tool.get('requires_human_approval') is True
+assert any('private_followup_draft_template' in item for item in followup_tool.get('verification',[]))
+assert followup_tool.get('money_actions_enabled') is False
+assert followup_tool.get('external_delivery_enabled') is False
+assert followup_tool.get('training_or_gpu_enabled') is False
 assert 'payment links or checkout activation' in tm.get('forbidden_unattended_actions', [])
 for tool in tm.get('tools', []):
     assert tool.get('closed_until_human_yes') is True
