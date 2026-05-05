@@ -68,3 +68,7 @@ The checkout matrix is prep-only: it helps an awake operator choose `private_dem
 ## Hugging Face dataset streaming check plan
 
 `docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes `hf_dataset_streaming_check_plan` for the logo-seed image/text lane. It is a **local verification and awake-operator handoff only**: parse 10 metadata rows, open 10 local PNGs, confirm captions, then run `PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py`. Optional remote streaming checks are documented for a later human-approved private Hugging Face upload using `HF_TOKEN`/`HUGGINGFACE_HUB_TOKEN` from the secure environment, but unattended upload, public release, private media movement, GPU/training, model downloads, token printing, and remote-verified claims remain closed.
+
+## Wake-operator private demo packet
+
+`docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes `wake_operator_private_demo_packet`. It compresses the proof ledger, tool contracts, first-dollar draft, and existing static site into a three-minute private walkthrough script for an awake operator. The packet is **draft-only and not sent**: recipient, channel, message path, offer tier, and expiration must be approved before use. It explicitly keeps sending, checkout/payment links, cold outreach/forms, revenue or affiliation claims, private upload/dataset publishing, GPU/training/model downloads, and cron mutation closed until a separate human yes.

@@ -72,6 +72,22 @@ assert all(c.get('evidence_required') for c in criteria)
 for forbidden in ['sending outreach or forms','creating checkout or payment links','starting GPU/training jobs or uploading private data']:
     assert forbidden in lead_rubric.get('forbidden_uses',[])
 assert 'draft-only' in lead_rubric.get('verification_note','')
+demo_packet=offer.get('wake_operator_private_demo_packet',{})
+assert demo_packet.get('status') == 'draft_only_not_sent'
+assert 'private demo' in demo_packet.get('packet_title','').lower()
+assert 'not earned revenue' in demo_packet.get('operator_script_intro','').lower()
+assets=demo_packet.get('demo_assets',[])
+assert len(assets) >= 5
+for asset in assets:
+    rel=asset.get('path','')
+    assert rel and not rel.startswith('/') and '..' not in Path(rel).parts
+    assert (root/rel).exists(), f"demo packet asset missing: {rel}"
+assert len(demo_packet.get('three_minute_flow',[])) >= 4
+for field in ['approved_demo_recipient','approved_demo_channel','approved_message_path','approval_expires_utc']:
+    assert field in demo_packet.get('approval_required_before_use',[]), field
+for forbidden in ['sending the demo packet','creating checkout or payment links','cold outreach or form submission','claiming revenue or affiliation','uploading private data or publishing datasets','starting GPU/training/model-download jobs','mutating cron jobs']:
+    assert forbidden in demo_packet.get('forbidden_until_approval',[]), forbidden
+assert 'verify_entity_pipeline.py' in demo_packet.get('verification_note','')
 lead_schema=rm.get('local_lead_schema',[])
 assert any(f.get('field')=='approval_status' and f.get('default')=='draft_only' for f in lead_schema)
 dataset_release=rm.get('dataset_release_readiness',{})
