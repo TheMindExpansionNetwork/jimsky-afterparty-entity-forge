@@ -299,5 +299,70 @@
       ],
       "default": "draft_only"
     }
-  ]
+  ],
+  "dataset_release_readiness": {
+    "status": "local_metadata_ready_upload_closed_until_human_yes",
+    "purpose": "Prepare the 10-image logo seed lane for an awake operator to review before any Hugging Face upload, private media movement, or training job.",
+    "source_manifest": "datasets/logo-seed/metadata.jsonl",
+    "image_root": "datasets/logo-seed/images",
+    "contact_sheet": "assets/brand/logo-seed/contact_sheet.jpg",
+    "local_row_count": 10,
+    "expected_image_count": 10,
+    "image_dimensions_policy": "all current logo seed images are verified square PNG concepts before release use",
+    "sample_image_records": [
+      {
+        "file_name": "images/afterparty_forge_logo_01.png",
+        "dimensions": [
+          1024,
+          1024
+        ],
+        "caption_present": true,
+        "sha256_16": "a6cf7671f7dda34b"
+      },
+      {
+        "file_name": "images/afterparty_forge_logo_02.png",
+        "dimensions": [
+          1024,
+          1024
+        ],
+        "caption_present": true,
+        "sha256_16": "2dbe0f701c0eda32"
+      },
+      {
+        "file_name": "images/afterparty_forge_logo_03.png",
+        "dimensions": [
+          1024,
+          1024
+        ],
+        "caption_present": true,
+        "sha256_16": "b2e30e1fa8d2015a"
+      }
+    ],
+    "hf_release_default": {
+      "repo_type": "dataset",
+      "privacy": "private",
+      "upload_allowed_unattended": false,
+      "requires_human_approval": true,
+      "approved_repo_id": null
+    },
+    "training_status": {
+      "training_started": false,
+      "gpu_jobs_started": false,
+      "model_downloads_started": false
+    },
+    "pre_release_checklist": [
+      "Review the contact sheet and individual PNGs for unwanted text/logo artifacts.",
+      "Confirm captions are non-secret and match image intent.",
+      "Run PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py.",
+      "If approved while awake, upload privately first and verify remote row/file count before any public claim."
+    ],
+    "forbidden_until_approval": [
+      "Hugging Face upload",
+      "public dataset release",
+      "private media upload",
+      "GPU or training job",
+      "model download",
+      "claiming dataset availability on HF"
+    ]
+  }
 }

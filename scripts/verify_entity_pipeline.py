@@ -74,6 +74,33 @@ for forbidden in ['sending outreach or forms','creating checkout or payment link
 assert 'draft-only' in lead_rubric.get('verification_note','')
 lead_schema=rm.get('local_lead_schema',[])
 assert any(f.get('field')=='approval_status' and f.get('default')=='draft_only' for f in lead_schema)
+dataset_release=rm.get('dataset_release_readiness',{})
+assert dataset_release.get('status') == 'local_metadata_ready_upload_closed_until_human_yes'
+assert dataset_release.get('source_manifest') == 'datasets/logo-seed/metadata.jsonl'
+assert (root/dataset_release.get('source_manifest','')).exists()
+assert dataset_release.get('image_root') == 'datasets/logo-seed/images'
+assert (root/dataset_release.get('image_root','')).exists()
+assert dataset_release.get('contact_sheet') == 'assets/brand/logo-seed/contact_sheet.jpg'
+assert (root/dataset_release.get('contact_sheet','')).exists()
+assert dataset_release.get('local_row_count') == 10
+assert dataset_release.get('expected_image_count') == 10
+hf_release=dataset_release.get('hf_release_default',{})
+assert hf_release.get('repo_type') == 'dataset'
+assert hf_release.get('privacy') == 'private'
+assert hf_release.get('upload_allowed_unattended') is False
+assert hf_release.get('requires_human_approval') is True
+training_status=dataset_release.get('training_status',{})
+for key in ['training_started','gpu_jobs_started','model_downloads_started']:
+    assert training_status.get(key) is False, key
+assert len(dataset_release.get('sample_image_records',[])) >= 3
+for rec in dataset_release.get('sample_image_records',[]):
+    assert rec.get('file_name','').startswith('images/')
+    assert rec.get('dimensions') == [1024, 1024]
+    assert rec.get('caption_present') is True
+    assert re.fullmatch(r'[0-9a-f]{16}', rec.get('sha256_16',''))
+for forbidden in ['Hugging Face upload','public dataset release','GPU or training job','claiming dataset availability on HF']:
+    assert forbidden in dataset_release.get('forbidden_until_approval',[])
+assert any('verify_entity_pipeline.py' in item for item in dataset_release.get('pre_release_checklist',[]))
 pl=json.loads((root/'docs/proof/AFTERPARTY_PROOF_LEDGER.json').read_text())
 assert pl.get('status') == 'prep_only_claims_mapped_closed_gates'
 assert pl.get('closed_gates',{}).get('payment_links') is False
