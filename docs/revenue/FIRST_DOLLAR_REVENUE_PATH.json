@@ -112,7 +112,40 @@
         "objection": "What proof exists right now?",
         "safe_response": "Use the proof ledger paths and verifier command to inspect repo-local payload, site, dataset, and offer artifacts before any public claim."
       }
-    ]
+    ],
+    "private_demo_acceptance_checklist": {
+      "status": "draft_only_not_sent",
+      "purpose": "Give the awake operator a pass/fail gate before any private demo, payment discussion, outreach, upload, GPU/training, or public posting action is approved.",
+      "proof_paths_required": [
+        "docs/entity/IDENTITY.md",
+        "docs/proof/AFTERPARTY_PROOF_LEDGER.json",
+        "tools/entity-tool-suite.json",
+        "docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json"
+      ],
+      "must_pass_before_demo": [
+        "The proof ledger still labels only verified repo-local claims as green.",
+        "The exact buyer/recipient and channel were selected by an awake operator.",
+        "The demo script forbidden lines are reviewed and kept out of spoken/written copy.",
+        "No checkout/payment URL, outreach automation, wallet, GPU/training job, or private upload is enabled.",
+        "The verifier command passes immediately before the demo is delivered."
+      ],
+      "operator_decision_fields": [
+        "approved_demo_recipient",
+        "approved_demo_channel",
+        "approved_offer_tier_usd",
+        "approved_followup_question",
+        "approval_expires_utc"
+      ],
+      "closed_gate_confirmation": {
+        "payment_links": false,
+        "outreach_automation": false,
+        "public_posting": false,
+        "gpu_or_training": false,
+        "private_upload": false,
+        "revenue_claim": false,
+        "affiliation_claim": false
+      }
+    }
   },
   "local_lead_schema": [
     {

@@ -34,6 +34,18 @@ assert len(objections) >= 3
 assert all(o.get('objection') and o.get('safe_response') for o in objections)
 assert any('payment' in o.get('safe_response','').lower() for o in objections)
 assert any('training' in o.get('safe_response','').lower() for o in objections)
+acceptance=offer.get('private_demo_acceptance_checklist',{})
+assert acceptance.get('status') == 'draft_only_not_sent'
+assert len(acceptance.get('proof_paths_required',[])) >= 4
+for rel in acceptance.get('proof_paths_required',[]):
+    assert not rel.startswith('/') and '..' not in Path(rel).parts
+    assert (root/rel).exists(), f"acceptance proof path missing: {rel}"
+assert len(acceptance.get('must_pass_before_demo',[])) >= 5
+assert any('verifier command passes' in item.lower() for item in acceptance.get('must_pass_before_demo',[]))
+assert 'approved_demo_channel' in acceptance.get('operator_decision_fields',[])
+closed=acceptance.get('closed_gate_confirmation',{})
+for key in ['payment_links','outreach_automation','public_posting','gpu_or_training','private_upload','revenue_claim','affiliation_claim']:
+    assert closed.get(key) is False, key
 lead_schema=rm.get('local_lead_schema',[])
 assert any(f.get('field')=='approval_status' and f.get('default')=='draft_only' for f in lead_schema)
 pl=json.loads((root/'docs/proof/AFTERPARTY_PROOF_LEDGER.json').read_text())
