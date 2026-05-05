@@ -25,7 +25,7 @@
     "datasets/logo-seed/metadata.jsonl"
   ],
   "tool_suite_manifest": "tools/entity-tool-suite.json",
-  "prep_only_increment": "2026-05-05-handoff-integrity-auditor-v1",
+  "prep_only_increment": "2026-05-05-evidence-snapshot-checklist-v1",
   "buyer_facing_offer_draft": {
     "headline": "Turn your AI agent idea into a safe, forkable entity launch kit.",
     "audience": [
@@ -932,7 +932,8 @@
       "wake-operator-next-action-router",
       "private-followup-draft-builder",
       "manual-invoice-planning-checklist-builder",
-      "handoff-integrity-auditor"
+      "handoff-integrity-auditor",
+      "evidence-snapshot-builder"
     ],
     "must_confirm_before_external_use": [
       "The selected route has a matching tool contract with money_actions_enabled=false, external_delivery_enabled=false, and training_or_gpu_enabled=false.",
@@ -955,5 +956,52 @@
       "mutating cron jobs"
     ],
     "verification_note": "Run PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py and git diff --check before any awake operator uses a revenue/data handoff outside the repo."
+  },
+  "wake_operator_evidence_snapshot_checklist": {
+    "status": "draft_only_not_sent",
+    "purpose": "Create a local, timestamped evidence snapshot before an awake operator uses a buyer-facing handoff, without sending messages, creating invoices, uploading datasets, printing tokens, or starting GPU/training work.",
+    "allowed_trigger": "wake_operator_next_action_router.route_id in [keep_building_repo_proof, approve_private_followup_draft, approve_manual_invoice_planning, approve_private_hf_dataset_check]",
+    "snapshot_fields": [
+      "snapshot_id",
+      "snapshot_created_utc",
+      "approved_route_id",
+      "proof_paths_checked",
+      "verifier_command",
+      "verifier_result",
+      "git_commit_or_pages_reference",
+      "closed_gates_confirmed",
+      "operator_notes_path",
+      "approval_expires_utc"
+    ],
+    "required_proof_paths": [
+      "docs/proof/AFTERPARTY_PROOF_LEDGER.json",
+      "docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json",
+      "tools/entity-tool-suite.json",
+      "docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md",
+      "site/index.html",
+      "docs/index.html",
+      "scripts/verify_entity_pipeline.py"
+    ],
+    "must_confirm_before_snapshot_use": [
+      "The evidence snapshot is local/private review material and is not sent, posted, or used as payment copy unattended.",
+      "The verifier command passed after the latest repo edits and before the snapshot is referenced externally.",
+      "Every proof path in the selected handoff exists and matches a green/yellow truth label from the proof ledger.",
+      "The static site/docs mirror still shows closed-gate language for revenue/data handoffs.",
+      "No checkout/payment URL, invoice creation, follow-up send, HF upload, token print, public post, GPU/training, model download, spend, wallet, or cron mutation was performed unattended."
+    ],
+    "forbidden_until_approval": [
+      "sending or scheduling the snapshot",
+      "creating checkout or payment links",
+      "creating or sending invoices",
+      "starting a manual invoice workflow",
+      "claiming revenue before payment is verified",
+      "claiming affiliation or sponsorship",
+      "Hugging Face upload or public dataset release",
+      "printing HF tokens or credential-store contents",
+      "starting GPU/training/model-download jobs",
+      "public posting",
+      "mutating cron jobs"
+    ],
+    "verification_note": "Run PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py and git diff --check before any awake operator attaches this evidence snapshot to a buyer, dataset, or launch handoff."
   }
 }

@@ -88,6 +88,11 @@ This increment adds `contract_version: 2026-05-05.prep_only.v1` in `tools/entity
 - Outputs: proof-path checks, tool-contract coverage, site/docs mirror confirmation, and closed-gate blockers.
 - Closed gate: no follow-up sending, invoice creation/sending, checkout/payment links, HF upload/token printing, public posting, GPU/training/model downloads, revenue/affiliation claim, or cron mutation without fresh awake approval.
 
+### 16. Evidence Snapshot Builder
+- Purpose: prepare a local evidence snapshot that ties a selected revenue/data handoff to current proof paths and verifier output.
+- Outputs: snapshot fields, proof path checklist, closed-gate confirmations, and approval expiration fields.
+- Closed gate: no sending/scheduling, invoice creation/sending, checkout/payment links, HF upload/token printing, public posting, GPU/training/model downloads, revenue/affiliation claim, or cron mutation without fresh awake approval.
+
 ## First awake command
 
 Review the public explainer page, then pick one route:
@@ -146,3 +151,7 @@ The checkout matrix is prep-only: it helps an awake operator choose `private_dem
 ## Handoff integrity auditor
 
 `docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes `wake_operator_handoff_integrity_checklist`, paired with the `handoff-integrity-auditor` tool contract. It is a **draft-only, not-sent** integrity check for private follow-up, manual invoice planning, HF dataset checks, buyer proof FAQ, or proof-building routes. It verifies proof paths, tool contract ids, site/docs mirror language, and verifier output while keeping follow-up sending, invoice creation/sending, checkout/payment links, HF upload/token printing, public posting, GPU/training/model downloads, revenue/affiliation claims, and cron mutation closed until separate awake approval.
+
+## Evidence snapshot checklist
+
+`docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes `wake_operator_evidence_snapshot_checklist`, paired with the `evidence-snapshot-builder` tool contract. It is a **draft-only, local/private review artifact** for attaching current proof paths and verifier output to a selected next-action route. It keeps sending/scheduling, invoice creation/sending, checkout/payment links, HF upload/token printing, public posting, GPU/training/model downloads, revenue/affiliation claims, and cron mutation closed until separate awake approval.

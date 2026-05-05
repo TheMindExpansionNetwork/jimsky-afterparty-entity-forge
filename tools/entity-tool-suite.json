@@ -397,6 +397,33 @@
       "money_actions_enabled": false,
       "external_delivery_enabled": false,
       "training_or_gpu_enabled": false
+    },
+    {
+      "id": "evidence-snapshot-builder",
+      "name": "Evidence Snapshot Builder",
+      "requires_human_approval": true,
+      "closed_until_human_yes": true,
+      "input_contract": [
+        "approved next-action route id",
+        "selected proof paths",
+        "latest verifier command output",
+        "static site/docs mirror status"
+      ],
+      "output_contract": [
+        "draft-only evidence snapshot fields",
+        "proof path verification list",
+        "closed-gate confirmation list",
+        "awake-operator approval expiration fields"
+      ],
+      "verification": [
+        "wake_operator_evidence_snapshot_checklist stays draft_only_not_sent",
+        "snapshot proof paths and verifier command exist before use",
+        "no sending/invoice/checkout/HF upload/public post/GPU/training claims introduced"
+      ],
+      "human_handoff": "Awake operator approves the route, exact evidence snapshot, recipient or repo id if any, verifier output, and expiration before any external use.",
+      "money_actions_enabled": false,
+      "external_delivery_enabled": false,
+      "training_or_gpu_enabled": false
     }
   ],
   "safety": "No spend, outreach, payment collection, fake revenue, fake affiliation, secret exposure, training, GPU jobs, or wallet actions while unattended.",
