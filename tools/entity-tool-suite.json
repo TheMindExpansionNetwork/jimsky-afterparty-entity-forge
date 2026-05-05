@@ -289,6 +289,33 @@
       "money_actions_enabled": false,
       "external_delivery_enabled": false,
       "training_or_gpu_enabled": false
+    },
+    {
+      "id": "wake-operator-next-action-router",
+      "name": "Wake Operator Next Action Router",
+      "requires_human_approval": true,
+      "closed_until_human_yes": true,
+      "input_contract": [
+        "private demo receipt or post-demo outcome",
+        "scope/quote worksheet status",
+        "dataset release question status",
+        "approved route constraints"
+      ],
+      "output_contract": [
+        "single next-action route",
+        "approval-required fields",
+        "closed-gate blocker list",
+        "repo-only follow-up checklist"
+      ],
+      "verification": [
+        "wake_operator_next_action_router stays draft_only_not_sent",
+        "route options keep payment/outreach/HF upload/GPU/training gates closed",
+        "no follow-up/manual-invoice/revenue claims introduced"
+      ],
+      "human_handoff": "Awake operator approves exactly one route, recipient or repo id if any, message/invoice plan path if any, price tier if any, and expiration before any external action.",
+      "money_actions_enabled": false,
+      "external_delivery_enabled": false,
+      "training_or_gpu_enabled": false
     }
   ],
   "safety": "No spend, outreach, payment collection, fake revenue, fake affiliation, secret exposure, training, GPU jobs, or wallet actions while unattended.",

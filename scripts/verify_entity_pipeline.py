@@ -161,6 +161,22 @@ for field in ['approved_followup_recipient','approved_followup_channel','approve
 for forbidden in ['sending follow-up messages','creating checkout or payment links','starting a manual invoice workflow','claiming revenue before payment is verified','claiming affiliation or sponsorship','uploading private data or publishing datasets','starting GPU/training/model-download jobs','mutating cron jobs']:
     assert forbidden in delivery_receipt.get('forbidden_until_approval',[]), forbidden
 assert 'verify_entity_pipeline.py' in delivery_receipt.get('verification_note','')
+next_router=offer.get('wake_operator_next_action_router',{})
+assert next_router.get('status') == 'draft_only_not_sent'
+assert 'exactly one' in next_router.get('purpose','').lower()
+expected_inputs={'private_demo_delivery_receipt_kit','post_demo_outcome_capture','wake_operator_scope_quote_sheet','dataset_release_readiness','hf_dataset_streaming_check_plan'}
+assert expected_inputs <= set(next_router.get('input_receipts_allowed',[]))
+route_options=next_router.get('route_options',[])
+expected_routes={'keep_building_repo_proof','approve_private_followup_draft','approve_manual_invoice_planning','approve_private_hf_dataset_check'}
+assert expected_routes <= {route.get('route_id') for route in route_options}
+for route in route_options:
+    assert route.get('recommended_when') and route.get('allowed_repo_only_action'), route
+    assert route.get('still_closed'), route
+for field in ['approved_route_id','approved_human_operator','approved_recipient_or_repo_id_if_any','approved_message_or_invoice_plan_path_if_any','approval_expires_utc']:
+    assert field in next_router.get('approval_required_fields',[]), field
+for forbidden in ['sending follow-up messages','creating checkout or payment links','starting a manual invoice workflow','claiming revenue before payment is verified','claiming affiliation or sponsorship','uploading private data or publishing datasets','printing HF tokens or credential-store contents','starting GPU/training/model-download jobs','mutating cron jobs']:
+    assert forbidden in next_router.get('forbidden_until_approval',[]), forbidden
+assert 'verify_entity_pipeline.py' in next_router.get('verification_note','')
 lead_schema=rm.get('local_lead_schema',[])
 assert any(f.get('field')=='approval_status' and f.get('default')=='draft_only' for f in lead_schema)
 dataset_release=rm.get('dataset_release_readiness',{})
@@ -253,6 +269,7 @@ assert 'buyer-proof-faq-builder' in tool_ids
 assert 'post-demo-outcome-router' in tool_ids
 assert 'scope-quote-sheet-builder' in tool_ids
 assert 'private-demo-delivery-receipt-kit' in tool_ids
+assert 'wake-operator-next-action-router' in tool_ids
 post_demo_tool=next(tool for tool in tm.get('tools',[]) if tool.get('id')=='post-demo-outcome-router')
 assert post_demo_tool.get('requires_human_approval') is True
 assert any('post_demo_outcome_capture' in item for item in post_demo_tool.get('verification',[]))
@@ -264,6 +281,12 @@ delivery_receipt_tool=next(tool for tool in tm.get('tools',[]) if tool.get('id')
 assert delivery_receipt_tool.get('requires_human_approval') is True
 assert any('private_demo_delivery_receipt_kit' in item for item in delivery_receipt_tool.get('verification',[]))
 assert delivery_receipt_tool.get('external_delivery_enabled') is False
+next_router_tool=next(tool for tool in tm.get('tools',[]) if tool.get('id')=='wake-operator-next-action-router')
+assert next_router_tool.get('requires_human_approval') is True
+assert any('wake_operator_next_action_router' in item for item in next_router_tool.get('verification',[]))
+assert next_router_tool.get('money_actions_enabled') is False
+assert next_router_tool.get('external_delivery_enabled') is False
+assert next_router_tool.get('training_or_gpu_enabled') is False
 assert 'payment links or checkout activation' in tm.get('forbidden_unattended_actions', [])
 for tool in tm.get('tools', []):
     assert tool.get('closed_until_human_yes') is True

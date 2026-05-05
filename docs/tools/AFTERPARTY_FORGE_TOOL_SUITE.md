@@ -66,6 +66,12 @@ This increment adds `contract_version: 2026-05-05.prep_only.v1` in `tools/entity
 - Outputs: receipt fields, proof path checklist, operator attestations, and a handoff into the post-demo outcome router.
 - Closed gate: no follow-up sending, checkout/payment links, manual invoice workflow, revenue/affiliation claim, HF upload, GPU/training/model download, public posting, or cron mutation without fresh awake approval.
 
+
+### 12. Wake Operator Next Action Router
+- Purpose: choose exactly one safe next route after a receipt, post-demo outcome, scope/quote worksheet, or dataset release question.
+- Outputs: route id, approval fields, closed-gate blocker list, and repo-only follow-up checklist.
+- Closed gate: no follow-up sending, checkout/payment links, manual invoice workflow, revenue/affiliation claim, HF upload/token printing, GPU/training/model downloads, public posting, or cron mutation without fresh awake approval.
+
 ## First awake command
 
 Review the public explainer page, then pick one route:
@@ -108,3 +114,7 @@ The checkout matrix is prep-only: it helps an awake operator choose `private_dem
 ## Private demo delivery receipt kit
 
 `docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes `private_demo_delivery_receipt_kit`, paired with the `private-demo-delivery-receipt-kit` tool contract and a timestamped usage skill. It is a **local/manual receipt template only** for after an awake-approved private demo: it captures what proof paths were shown, the selected outcome label, and operator attestations before routing into the post-demo outcome capture. It keeps follow-up sending, checkout/payment links, manual invoice workflow, revenue/affiliation claims, HF upload/public dataset release/private media movement, GPU/training/model downloads, and cron mutation closed until separate awake approval.
+
+## Wake-operator next action router
+
+`docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes `wake_operator_next_action_router`, paired with the `wake-operator-next-action-router` tool contract and a timestamped usage skill. It is a **draft-only, exactly-one-route chooser** for after an approved demo receipt, post-demo outcome, scope/quote worksheet, or dataset question. It can recommend repo-only proof building, a private follow-up draft, manual invoice planning, or a private-default HF dataset check, but it keeps follow-up sending, checkout/payment links, manual invoice execution, revenue/affiliation claims, HF upload/token printing, GPU/training/model downloads, public posting, and cron mutation closed until separate awake approval.
