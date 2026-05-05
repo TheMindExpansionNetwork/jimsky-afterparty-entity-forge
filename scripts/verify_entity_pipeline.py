@@ -348,6 +348,11 @@ for rel in ['site/index.html','docs/index.html']:
     page=(root/rel).read_text()
     assert 'entity-tool-suite' in page
     assert 'Money actions remain closed until human approval' in page
+    assert 'revenue-handoff-lanes' in page
+    assert 'Prep-Only Revenue Handoff Lanes' in page
+    assert 'Private follow-up drafts and manual invoice planning' in page
+    assert 'no sending, invoice creation, checkout/payment links' in page
+    assert 'HF upload, token printing, GPU/training, model downloads' in page
 rows=[]
 for line in (root/'datasets/logo-seed/metadata.jsonl').read_text().splitlines():
     if line.strip(): rows.append(json.loads(line))
