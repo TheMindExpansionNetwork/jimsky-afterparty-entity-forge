@@ -24,5 +24,65 @@
     "assets/brand/logo-seed/contact_sheet.jpg",
     "datasets/logo-seed/metadata.jsonl"
   ],
-  "tool_suite_manifest": "tools/entity-tool-suite.json"
+  "tool_suite_manifest": "tools/entity-tool-suite.json",
+  "prep_only_increment": "2026-05-05-local-offer-draft-v1",
+  "buyer_facing_offer_draft": {
+    "headline": "Turn your AI agent idea into a safe, forkable entity launch kit.",
+    "audience": [
+      "indie creators with an agent concept",
+      "small teams needing a proof vault",
+      "hackathon builders preparing a private demo"
+    ],
+    "deliverables": [
+      "payload manifest and safety gates",
+      "proof ledger linking claims to files",
+      "private demo script and launch checklist",
+      "local verifier command handoff"
+    ],
+    "not_included_without_approval": [
+      "payment links",
+      "outreach or form submission",
+      "public posting beyond existing approved Pages/GitHub workflows",
+      "GPU training or paid provider runs"
+    ],
+    "call_to_action_draft": "Reply with the entity name, audience, and one proof artifact; I will prepare a private demo kit for awake review."
+  },
+  "local_lead_schema": [
+    {
+      "field": "lead_id",
+      "type": "string",
+      "required": true,
+      "notes": "local identifier only; no scraping required"
+    },
+    {
+      "field": "buyer_type",
+      "type": "enum",
+      "values": [
+        "creator",
+        "team",
+        "hackathon",
+        "agency",
+        "community"
+      ]
+    },
+    {
+      "field": "problem_statement",
+      "type": "string",
+      "required": true
+    },
+    {
+      "field": "proof_artifact_path",
+      "type": "string",
+      "required": false
+    },
+    {
+      "field": "approval_status",
+      "type": "enum",
+      "values": [
+        "draft_only",
+        "approved_to_contact"
+      ],
+      "default": "draft_only"
+    }
+  ]
 }

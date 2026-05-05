@@ -11,6 +11,13 @@ rm=json.loads((root/'docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json').read_text())
 assert rm.get('approved_to_execute') is False
 assert rm.get('closed_gates',{}).get('payment_links') is False
 assert rm.get('closed_gates',{}).get('outreach') is False
+offer=rm.get('buyer_facing_offer_draft',{})
+assert offer.get('headline') and 'forkable entity launch kit' in offer['headline']
+assert len(offer.get('deliverables',[])) >= 4
+assert any('payment links' in item for item in offer.get('not_included_without_approval',[]))
+assert not re.search(r'https?://[^\s]*(stripe|paypal|gumroad|checkout|buy)', json.dumps(offer, sort_keys=True), re.I)
+lead_schema=rm.get('local_lead_schema',[])
+assert any(f.get('field')=='approval_status' and f.get('default')=='draft_only' for f in lead_schema)
 tm=json.loads((root/'tools/entity-tool-suite.json').read_text())
 assert len(tm.get('tools',[])) >= 6
 for rel in ['site/index.html','docs/index.html']:

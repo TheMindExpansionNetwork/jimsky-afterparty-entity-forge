@@ -46,3 +46,9 @@ Review the public explainer page, then pick one route:
 3. Public open-source call.
 4. HF dataset public release.
 5. Keep building autonomously.
+
+## Prep-only first-dollar offer draft
+
+The current first-dollar path is a **local offer draft**, not a live storefront. The draft now names the buyer audience, deliverables, exclusions, and a local lead schema in `docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json`.
+
+Closed gates remain unchanged: no payment links, outreach, spend, revenue claims, public posting, GPU/training, wallets, or affiliation claims without an awake human yes.
