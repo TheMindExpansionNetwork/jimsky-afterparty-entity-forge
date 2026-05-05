@@ -1,0 +1,87 @@
+{
+  "ledger_id": "afterparty-forge-2045-proof-ledger",
+  "entity": "Afterparty Forge 2045",
+  "status": "prep_only_claims_mapped_closed_gates",
+  "updated_utc": "2026-05-05T06:46:18Z",
+  "purpose": "Map buyer-facing and operator-facing claims to exact repo proof paths before any public launch, outreach, payment, upload, GPU, or training action is approved.",
+  "closed_gates": {
+    "payment_links": false,
+    "outreach": false,
+    "public_posting": false,
+    "spend": false,
+    "claim_revenue": false,
+    "claim_affiliation": false,
+    "hf_upload": false,
+    "gpu_or_training": false
+  },
+  "claims": [
+    {
+      "id": "logo-seed-dataset-local",
+      "claim": "The repo contains a local 10-image logo seed dataset with metadata for Afterparty Forge 2045.",
+      "truth_label": "green",
+      "proof_paths": [
+        "datasets/logo-seed/metadata.jsonl",
+        "datasets/logo-seed/dataset_manifest.json",
+        "datasets/logo-seed/images/afterparty_forge_logo_01.png"
+      ],
+      "verifier_command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py",
+      "allowed_copy": "Local logo seed dataset exists for private review and verifier-backed handoff.",
+      "forbidden_copy": "Do not claim it was trained on, uploaded, sold, or publicly released unless separately verified."
+    },
+    {
+      "id": "payload-package-local",
+      "claim": "The entity has a local payload package and manifest that can be reviewed before install or sharing.",
+      "truth_label": "green",
+      "proof_paths": [
+        "payloads/afterparty-forge/manifest.json",
+        "dist/afterparty-forge-payload.zip",
+        "scripts/package_payload.py"
+      ],
+      "verifier_command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py",
+      "allowed_copy": "A local payload package path exists for awake operator review.",
+      "forbidden_copy": "Do not call it installed for a buyer, externally delivered, or revenue-generating without proof."
+    },
+    {
+      "id": "first-dollar-draft-only",
+      "claim": "The first-dollar path is a draft-only offer with closed money and outreach gates.",
+      "truth_label": "green",
+      "proof_paths": [
+        "docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json",
+        "docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md",
+        "tools/entity-tool-suite.json"
+      ],
+      "verifier_command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py",
+      "allowed_copy": "A private first-dollar offer draft is ready for awake review.",
+      "forbidden_copy": "Do not claim revenue, checkout availability, sent outreach, customer interest, or payment acceptance."
+    },
+    {
+      "id": "github-pages-existing-workflow",
+      "claim": "The repo includes static site files for the existing GitHub/Pages workflow.",
+      "truth_label": "green",
+      "proof_paths": [
+        "site/index.html",
+        "docs/index.html",
+        "site/data/logo-seed-manifest.json",
+        "docs/data/logo-seed-manifest.json"
+      ],
+      "verifier_command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py",
+      "allowed_copy": "Static site files are present in the repo and reference the entity tool suite.",
+      "forbidden_copy": "Do not imply a new public launch, sponsorship, event affiliation, or external posting happened during unattended work."
+    },
+    {
+      "id": "hf-dataset-upload-not-executed",
+      "claim": "Hugging Face dataset upload remains human-approved only; this repo only provides local usage and uploader materials.",
+      "truth_label": "yellow",
+      "proof_paths": [
+        "docs/datasets/HF_DATASET_USAGE.md",
+        "scripts/upload_hf_dataset.py",
+        "datasets/logo-seed/README.md"
+      ],
+      "verifier_command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py",
+      "allowed_copy": "HF upload is prepared but closed until token-backed human approval.",
+      "forbidden_copy": "Do not claim private/public HF upload, training readiness on Hub, remote streaming success, or model training unless verified after approval."
+    }
+  ],
+  "operator_next_step": "Use this ledger to choose which claims can appear in a private demo or buyer-facing draft. Keep yellow claims as caveats until their external verification is complete.",
+  "unattended_safety_note": "This ledger records proof only. It does not authorize payment links, outreach, spend, public posting, private uploads, GPU jobs, training, wallets, or affiliation claims."
+}

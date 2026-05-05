@@ -22,7 +22,8 @@ This increment adds `contract_version: 2026-05-05.prep_only.v1` in `tools/entity
 ### 3. Proof Ledger
 - Purpose: map claims to exact proof paths and verifier commands.
 - Outputs: claim/proof/status rows and red/yellow/green truth labels.
-- Closed gate: no green labels for unverifiable claims.
+- Artifact: `docs/proof/AFTERPARTY_PROOF_LEDGER.json` now records green/yellow claims, exact proof paths, allowed copy, forbidden copy, and the verifier command for each claim.
+- Closed gate: no green labels for unverifiable claims; no HF upload, revenue, outreach, payment, GPU/training, or affiliation claims without separate awake verification.
 
 ### 4. Demo Router
 - Purpose: choose a safe next demo path.

@@ -3,7 +3,7 @@ from pathlib import Path
 from PIL import Image
 import json, re, sys
 root=Path(__file__).resolve().parents[1]
-required=['README.md','automation/SAFETY_BOUNDARIES.md','docs/entity/IDENTITY.md','docs/pipeline/ENTITY_PIPELINE.md','payloads/afterparty-forge/manifest.json','datasets/logo-seed/metadata.jsonl','site/index.html','docs/index.html','docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md','docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json','tools/entity-tool-suite.json']
+required=['README.md','automation/SAFETY_BOUNDARIES.md','docs/entity/IDENTITY.md','docs/pipeline/ENTITY_PIPELINE.md','payloads/afterparty-forge/manifest.json','datasets/logo-seed/metadata.jsonl','site/index.html','docs/index.html','docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md','docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json','docs/proof/AFTERPARTY_PROOF_LEDGER.json','tools/entity-tool-suite.json']
 missing=[p for p in required if not (root/p).exists()]
 if missing: raise SystemExit('missing '+str(missing))
 json.loads((root/'payloads/afterparty-forge/manifest.json').read_text())
@@ -18,6 +18,24 @@ assert any('payment links' in item for item in offer.get('not_included_without_a
 assert not re.search(r'https?://[^\s]*(stripe|paypal|gumroad|checkout|buy)', json.dumps(offer, sort_keys=True), re.I)
 lead_schema=rm.get('local_lead_schema',[])
 assert any(f.get('field')=='approval_status' and f.get('default')=='draft_only' for f in lead_schema)
+pl=json.loads((root/'docs/proof/AFTERPARTY_PROOF_LEDGER.json').read_text())
+assert pl.get('status') == 'prep_only_claims_mapped_closed_gates'
+assert pl.get('closed_gates',{}).get('payment_links') is False
+assert pl.get('closed_gates',{}).get('outreach') is False
+assert pl.get('closed_gates',{}).get('claim_revenue') is False
+assert pl.get('closed_gates',{}).get('hf_upload') is False
+claims=pl.get('claims', [])
+assert len(claims) >= 5
+assert any(c.get('truth_label') == 'yellow' and ('HF' in c.get('claim','') or 'Hugging Face' in c.get('claim','')) for c in claims)
+for c in claims:
+    assert c.get('id') and c.get('claim') and c.get('truth_label') in {'green','yellow','red'}
+    assert c.get('verifier_command') == 'PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py'
+    assert 'forbidden_copy' in c and c['forbidden_copy']
+    for rel in c.get('proof_paths', []):
+        assert not rel.startswith('/') and '..' not in Path(rel).parts
+        assert (root/rel).exists(), f"proof path missing for {c.get('id')}: {rel}"
+    if c.get('truth_label') == 'green':
+        assert c.get('proof_paths'), c.get('id')
 tm=json.loads((root/'tools/entity-tool-suite.json').read_text())
 assert tm.get('contract_version') == '2026-05-05.prep_only.v1'
 assert len(tm.get('tools',[])) >= 6
