@@ -203,6 +203,63 @@
         "starting GPU/training jobs"
       ],
       "verification_note": "Run PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py immediately before any awake operator uses this matrix."
+    },
+    "local_lead_scoring_rubric": {
+      "status": "draft_only_not_sent",
+      "purpose": "Rank locally supplied, human-approved leads before any contact, payment discussion, or public posting is approved.",
+      "max_score": 10,
+      "score_bands": [
+        {
+          "band": "8-10",
+          "label": "private_demo_candidate",
+          "safe_next_step": "Prepare a private demo packet for awake operator approval only."
+        },
+        {
+          "band": "5-7",
+          "label": "needs_more_proof",
+          "safe_next_step": "Collect or map more repo-local proof before proposing any buyer contact."
+        },
+        {
+          "band": "0-4",
+          "label": "do_not_contact_unattended",
+          "safe_next_step": "Keep building proof; do not draft outreach for this lead."
+        }
+      ],
+      "criteria": [
+        {
+          "id": "explicit_interest",
+          "points": 3,
+          "evidence_required": "Buyer explicitly requested or welcomed a private demo."
+        },
+        {
+          "id": "proof_available",
+          "points": 2,
+          "evidence_required": "At least one non-secret proof artifact or public project link is available."
+        },
+        {
+          "id": "scope_matches_offer",
+          "points": 2,
+          "evidence_required": "Requested outcome matches payload, proof-ledger, demo-script, or launch-checklist deliverables."
+        },
+        {
+          "id": "risk_low",
+          "points": 2,
+          "evidence_required": "No wallet, KYC, guaranteed revenue, private upload, GPU/training, or affiliation claim is requested."
+        },
+        {
+          "id": "operator_capacity",
+          "points": 1,
+          "evidence_required": "Awake operator has time to review proof and approve exact recipient/channel."
+        }
+      ],
+      "forbidden_uses": [
+        "scraping or enriching leads without approval",
+        "sending outreach or forms",
+        "creating checkout or payment links",
+        "claiming revenue, affiliation, or live deployment",
+        "starting GPU/training jobs or uploading private data"
+      ],
+      "verification_note": "Verifier asserts this rubric stays draft-only, bounded to local/human-supplied leads, and keeps payment/outreach/spend/public posting closed."
     }
   },
   "local_lead_schema": [

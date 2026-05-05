@@ -60,6 +60,18 @@ assert 'approved_payment_workflow_path' in checkout_matrix.get('approval_require
 for forbidden in ['checkout URL creation','cold outreach','claiming revenue','starting GPU/training jobs']:
     assert forbidden in checkout_matrix.get('forbidden_until_approval',[])
 assert 'verify_entity_pipeline.py' in checkout_matrix.get('verification_note','')
+lead_rubric=offer.get('local_lead_scoring_rubric',{})
+assert lead_rubric.get('status') == 'draft_only_not_sent'
+assert lead_rubric.get('max_score') == 10
+assert len(lead_rubric.get('score_bands',[])) >= 3
+assert {b.get('label') for b in lead_rubric.get('score_bands',[])} >= {'private_demo_candidate','needs_more_proof','do_not_contact_unattended'}
+criteria=lead_rubric.get('criteria',[])
+assert len(criteria) >= 5
+assert sum(c.get('points',0) for c in criteria) == 10
+assert all(c.get('evidence_required') for c in criteria)
+for forbidden in ['sending outreach or forms','creating checkout or payment links','starting GPU/training jobs or uploading private data']:
+    assert forbidden in lead_rubric.get('forbidden_uses',[])
+assert 'draft-only' in lead_rubric.get('verification_note','')
 lead_schema=rm.get('local_lead_schema',[])
 assert any(f.get('field')=='approval_status' and f.get('default')=='draft_only' for f in lead_schema)
 pl=json.loads((root/'docs/proof/AFTERPARTY_PROOF_LEDGER.json').read_text())
