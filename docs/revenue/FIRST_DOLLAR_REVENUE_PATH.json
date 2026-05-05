@@ -25,7 +25,7 @@
     "datasets/logo-seed/metadata.jsonl"
   ],
   "tool_suite_manifest": "tools/entity-tool-suite.json",
-  "prep_only_increment": "2026-05-05-evidence-snapshot-archive-index-v1",
+  "prep_only_increment": "2026-05-05-evidence-snapshot-reuse-decision-matrix-v1",
   "buyer_facing_offer_draft": {
     "headline": "Turn your AI agent idea into a safe, forkable entity launch kit.",
     "audience": [
@@ -935,7 +935,8 @@
       "handoff-integrity-auditor",
       "evidence-snapshot-builder",
       "evidence-snapshot-notes-template-builder",
-      "evidence-snapshot-archive-index-builder"
+      "evidence-snapshot-archive-index-builder",
+      "evidence-snapshot-reuse-decision-matrix-builder"
     ],
     "must_confirm_before_external_use": [
       "The selected route has a matching tool contract with money_actions_enabled=false, external_delivery_enabled=false, and training_or_gpu_enabled=false.",
@@ -1062,5 +1063,106 @@
       "using archive entries as public/buyer copy without awake approval"
     ],
     "verification_note": "Run PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py and git diff --check before any awake operator relies on this local evidence snapshot archive index."
+  },
+  "wake_operator_evidence_snapshot_reuse_decision_matrix": {
+    "status": "draft_only_local_matrix_not_sent",
+    "purpose": "Let the awake operator decide whether a verified evidence snapshot archive entry can be reused as a private note, buyer proof packet, dataset handoff, or public copy draft, without sending, posting, invoicing, uploading, or claiming revenue while unattended.",
+    "allowed_trigger": "wake_operator_evidence_snapshot_archive_index.status == draft_only_local_index_not_sent and an awake-approved archive_entry_id exists",
+    "decision_fields": [
+      "archive_entry_id",
+      "snapshot_id",
+      "proposed_reuse_route",
+      "approved_human_operator",
+      "proof_paths_rechecked",
+      "verifier_command",
+      "verifier_result",
+      "copy_status",
+      "approval_expires_utc"
+    ],
+    "reuse_route_options": [
+      {
+        "route_id": "reuse_as_private_operator_note",
+        "allowed_repo_only_action": "Copy the archive entry into a local/private operator note for review.",
+        "requires_external_action_approval": false,
+        "still_closed": [
+          "sending",
+          "checkout/payment links",
+          "invoice creation",
+          "HF upload",
+          "public posting",
+          "GPU/training/model downloads"
+        ]
+      },
+      {
+        "route_id": "prepare_buyer_proof_packet_draft",
+        "allowed_repo_only_action": "Draft a buyer proof packet path from the archive entry for awake review only; do not send it.",
+        "requires_external_action_approval": true,
+        "still_closed": [
+          "sending/scheduling",
+          "checkout/payment links",
+          "invoice creation",
+          "revenue claims",
+          "affiliation claims",
+          "HF upload",
+          "GPU/training"
+        ]
+      },
+      {
+        "route_id": "prepare_dataset_handoff_draft",
+        "allowed_repo_only_action": "Map archive proof to local dataset/HF handoff notes without uploading or streaming remotely.",
+        "requires_external_action_approval": true,
+        "still_closed": [
+          "HF upload",
+          "public dataset release",
+          "token printing",
+          "private media movement",
+          "model downloads",
+          "GPU/training"
+        ]
+      },
+      {
+        "route_id": "prepare_public_copy_draft_after_approval",
+        "allowed_repo_only_action": "Create a local public-copy draft only after awake approval; do not post or publish it unattended.",
+        "requires_external_action_approval": true,
+        "still_closed": [
+          "public posting",
+          "paid promotion",
+          "checkout/payment links",
+          "revenue claims",
+          "affiliation claims",
+          "outreach automation"
+        ]
+      }
+    ],
+    "required_proof_paths": [
+      "docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json",
+      "docs/revenue/EVIDENCE_SNAPSHOT_OPERATOR_NOTES_TEMPLATE.md",
+      "tools/entity-tool-suite.json",
+      "docs/tools/AFTERPARTY_FORGE_TOOL_SUITE.md",
+      "scripts/verify_entity_pipeline.py"
+    ],
+    "must_confirm_before_reuse": [
+      "The archive entry was created from the local evidence snapshot archive index and remains local/private until separate approval.",
+      "Every proof path in the archive entry still exists and was rechecked against the current repo state.",
+      "The verifier command passed for the current repo state before the reuse decision is acted on.",
+      "The selected reuse route is exactly one of the allowed route options and does not itself send, post, invoice, upload, or start paid/GPU/training work.",
+      "No checkout/payment URL, invoice creation, follow-up send, HF upload, token print, public post, GPU/training, model download, spend, wallet, cron mutation, revenue claim, or affiliation claim was performed unattended."
+    ],
+    "forbidden_until_approval": [
+      "sending or scheduling reused notes",
+      "creating checkout or payment links",
+      "creating or sending invoices",
+      "starting a manual invoice workflow",
+      "claiming revenue before payment is verified",
+      "claiming affiliation or sponsorship",
+      "Hugging Face upload or public dataset release",
+      "printing HF tokens or credential-store contents",
+      "starting GPU/training/model-download jobs",
+      "public posting",
+      "outreach automation",
+      "mutating cron jobs",
+      "using reuse decisions as public/buyer copy without awake approval"
+    ],
+    "verification_note": "Run PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_entity_pipeline.py and git diff --check before any awake operator reuses an evidence snapshot archive entry outside the repo."
   }
 }

@@ -478,6 +478,33 @@
       "money_actions_enabled": false,
       "external_delivery_enabled": false,
       "training_or_gpu_enabled": false
+    },
+    {
+      "id": "evidence-snapshot-reuse-decision-matrix-builder",
+      "name": "Evidence Snapshot Reuse Decision Matrix Builder",
+      "requires_human_approval": true,
+      "closed_until_human_yes": true,
+      "input_contract": [
+        "approved archive entry id",
+        "selected evidence snapshot id",
+        "proposed reuse route",
+        "latest verifier result"
+      ],
+      "output_contract": [
+        "draft-only reuse decision row",
+        "allowed route option",
+        "proof path recheck list",
+        "closed-gate reminder block"
+      ],
+      "verification": [
+        "wake_operator_evidence_snapshot_reuse_decision_matrix stays draft_only_local_matrix_not_sent",
+        "reuse decision proof paths and notes template exist before use",
+        "no sending/invoice/checkout/HF upload/public post/GPU/training claims introduced"
+      ],
+      "human_handoff": "Awake operator approves whether an archive entry may become a private operator note, buyer proof packet draft, dataset handoff draft, or public copy draft after fresh verification.",
+      "money_actions_enabled": false,
+      "external_delivery_enabled": false,
+      "training_or_gpu_enabled": false
     }
   ],
   "safety": "No spend, outreach, payment collection, fake revenue, fake affiliation, secret exposure, training, GPU jobs, or wallet actions while unattended.",

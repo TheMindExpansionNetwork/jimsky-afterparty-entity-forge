@@ -105,6 +105,13 @@ This increment adds `contract_version: 2026-05-05.prep_only.v1` in `tools/entity
 - Outputs: draft-only archive entry fields, proof path checklist, verifier result reference, and closed-gate confirmation block.
 - Closed gate: archive entries are not sent, posted, attached to invoices, converted into checkout copy, used for HF upload claims, or treated as revenue/affiliation proof without separate awake approval.
 
+
+### 19. Evidence Snapshot Reuse Decision Matrix Builder
+- Purpose: decide how an approved local evidence snapshot archive entry may be reused without turning it into external copy unattended.
+- Artifact: `wake_operator_evidence_snapshot_reuse_decision_matrix` in `docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json`.
+- Outputs: draft-only reuse route, proof path rechecks, verifier result reference, and closed-gate confirmation block.
+- Closed gate: reuse decisions are not sent, posted, attached to invoices, converted into checkout copy, used for HF upload claims, or treated as revenue/affiliation proof without separate awake approval.
+
 ## First awake command
 
 Review the public explainer page, then pick one route:
@@ -171,3 +178,7 @@ The checkout matrix is prep-only: it helps an awake operator choose `private_dem
 ## Evidence snapshot operator notes template
 
 `docs/revenue/EVIDENCE_SNAPSHOT_OPERATOR_NOTES_TEMPLATE.md` now gives the awake operator a local notes template for evidence snapshots, paired with the `evidence-snapshot-notes-template-builder` contract. It is **draft-only and local/private**: notes are not sent, posted, used as invoice or checkout copy, used to claim HF upload/streaming, or used as revenue/affiliation proof until a separate awake approval and verification record exists.
+
+## Evidence snapshot reuse decision matrix
+
+`docs/revenue/FIRST_DOLLAR_REVENUE_PATH.json` now includes `wake_operator_evidence_snapshot_reuse_decision_matrix`, paired with the `evidence-snapshot-reuse-decision-matrix-builder` contract. It is a **draft-only, local/private reuse decision matrix** for an already approved evidence snapshot archive entry. It can route a snapshot toward a private operator note, buyer proof packet draft, dataset handoff draft, or public-copy draft, but it does not send, post, invoice, upload, claim revenue, claim affiliation, start GPU/training/model downloads, or mutate cron without a separate awake approval.
